@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.AddMedicineActivity">
+
+    <item
+        android:id="@+id/action_add_medicine"
+        android:title="@string/add_medicine"
+        app:showAsAction="always"/>
+    <!--SHOULD YOU WANT TO USE THE 'SEND' ICON, CHANGE 'android:title' to the code below-->
+    <!--android:icon="@drawable/ic_send_white_24dp"-->
+
+
+</menu>

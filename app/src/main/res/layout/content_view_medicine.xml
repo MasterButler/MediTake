@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_margin="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--SHOULD YOU WANT TO GO BACK TO COORDINATOR LAYOUT, USE THESE VALUES INSTEAD-->
+    <!--android:layout_marginTop="?attr/actionBarSize"-->
+    <!--android:layout_marginBottom="16sp"-->
+    <!--android:layout_marginLeft="16sp"-->
+    <!--android:layout_marginRight="16sp"-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:src="@drawable/pills_1_colored"
+            android:id="@+id/imageView"
+            android:layout_margin="8dp"
+            android:layout_height="match_parent"
+            android:layout_width="80dp"
+            android:layout_gravity="top"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:id="@+id/layout_view_brand_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="7dp"
+                android:paddingBottom="11dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp">
+            
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/brand_name"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorAccent"/>
+                <TextView
+                    android:id="@+id/tv_view_brand_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:scrollHorizontally="true"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorFont"
+
+                    android:hint="Brand Name of Medicine"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_view_generic_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="7dp"
+                android:paddingBottom="11dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/brand_name"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorAccent"/>
+                <TextView
+                    android:id="@+id/tv_view_generic_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:scrollHorizontally="true"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorFont"
+
+                    android:hint="Generic Name Of Medicine"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_view_medicine_for"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="7dp"
+        android:paddingBottom="11dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/medicine_for"
+            android:textSize="12sp"
+            android:textColor="@color/colorAccent"/>
+        <TextView
+            android:id="@+id/tv_view_medicine_for"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:maxLines="1"
+            android:lines="1"
+            android:scrollHorizontally="true"
+            android:textSize="18sp"
+            android:textColor="@color/colorFont"
+
+            android:hint="Medicine for something"
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/random"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

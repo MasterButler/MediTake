@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.EditMedicineActivity">
+
+    <item
+        android:id="@+id/action_confirm_edit_medicine"
+        android:icon="@drawable/ic_done_white_24dp"
+        android:title="@string/action_confirm_edit"
+        app:showAsAction="always"/>
+    <!--SHOULD YOU WANT TO USE WORD 'EDIT', CHANGE 'android:icon' to the code below-->
+    <!--android:title="ADD"-->
+
+
+</menu>

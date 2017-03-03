@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">MediTake</string>
+    <string name="brand_name">Brand Name</string>
+    <string name="generic_name">Generic Name</string>
+    <string name="title_activity_view_medicine">ViewMedicineActivity</string>
+    <string name="view_medicine">Medicine Info</string>
+    <string name="add_medicine">Add Medicine</string>
+    <string name="medicine_for">Medicine For</string>
+    <string name="title_add_medicine">"Add Medicine"</string>
+    <string name="action_add">Add</string>
+    <string name="title_activity_edit_medicine">EditMedicineActivity</string>
+    <string name="action_confirm_edit">Confirm Edit</string>
+    <string name="action_delete_medicine">Delete Medicine</string>
+    <string name="edit_medicine">Edit Medicine</string>
+    <string name="edit_medicine_info">Edit Medicine Info</string>
+</resources>

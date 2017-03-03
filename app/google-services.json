@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1875752234",
+    "firebase_url": "https://meditake-eb3d8.firebaseio.com",
+    "project_id": "meditake-eb3d8",
+    "storage_bucket": "meditake-eb3d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1875752234:android:2ea60e6932fa91f9",
+        "android_client_info": {
+          "package_name": "ph.edu.mobapde.meditake.meditake"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1875752234-7p2o4b602gflmsa2l225dvb8upradad1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ph.edu.mobapde.meditake.meditake",
+            "certificate_hash": "9b4fc578f54af69b3e64dc689dc2d49f33f0da03"
+          }
+        },
+        {
+          "client_id": "1875752234-nuhvl677u0hgo9hd9s83p7ggh4c0huv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByjhFUfR24j5U05MkNE2BF4biS-HCvagI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1875752234-nuhvl677u0hgo9hd9s83p7ggh4c0huv4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
