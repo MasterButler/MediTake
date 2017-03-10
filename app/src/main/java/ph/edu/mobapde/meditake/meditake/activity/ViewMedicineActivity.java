@@ -17,8 +17,6 @@ import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class ViewMedicineActivity extends AppCompatActivity {
 
-    @BindView(R.id.random)
-    Button button;
 
     @BindView(R.id.toolbar_view_medicine)
     Toolbar view_medicine_toolbar;
@@ -39,12 +37,6 @@ public class ViewMedicineActivity extends AppCompatActivity {
         setUpActionBar();
     }
 
-    @OnClick(R.id.random)
-    public void onClick(){
-        Intent i = new Intent();
-        i.setClass(getBaseContext(), AddMedicineActivity.class);
-        startActivity(i);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
