@@ -47,13 +47,21 @@ abstract public class Medicine implements Parcelable{
     }
 
     /**
-     * @return brandName if available, otherwise returns genericName
+     * @return brandName(genericName) if available, otherwise returns genericName
      */
     public String getName(){
+        String output = this.genericName;
         if(brandName == null || brandName.isEmpty()){
-            return this.genericName;
+            output = this.brandName + "(" + output + ")";
         }
-        return this.brandName;
+        return output;
+    }
+
+    /**
+     * @returns brandName if available, otherwise returns genericName
+     */
+    public String getShortName(){
+        return (brandName == null || brandName.isEmpty()) ? brandName : genericName;
     }
 
     /**

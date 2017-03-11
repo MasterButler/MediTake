@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/brand_name"
                     android:textSize="12sp"
-                    android:textColor="@color/colorAccent"/>
+                    android:textColor="?attr/colorAccent"/>
                 <TextView
                     android:id="@+id/tv_view_brand_name"
                     android:layout_width="match_parent"
@@ -74,9 +74,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/brand_name"
+                    android:text="@string/generic_name"
                     android:textSize="12sp"
-                    android:textColor="@color/colorAccent"/>
+                    android:textColor="?attr/colorAccent"/>
                 <TextView
                     android:id="@+id/tv_view_generic_name"
                     android:layout_width="match_parent"
@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:text="@string/medicine_for"
             android:textSize="12sp"
-            android:textColor="@color/colorAccent"/>
+            android:textColor="?attr/colorAccent"/>
         <TextView
             android:id="@+id/tv_view_medicine_for"
             android:layout_width="match_parent"

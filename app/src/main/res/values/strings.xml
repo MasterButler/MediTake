@@ -13,4 +13,10 @@
     <string name="action_delete_medicine">Delete Medicine</string>
     <string name="edit_medicine">Edit Medicine</string>
     <string name="edit_medicine_info">Edit Medicine Info</string>
+    <string name="title_activity_schedule_list">ScheduleListActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

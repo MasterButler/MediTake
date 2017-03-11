@@ -13,14 +13,14 @@ public class Capsule extends Medicine{
 
     public Capsule(){
         super();
-        this.modifier = " tablets";
+        this.modifier = " capsules";
         this.icon = R.drawable.pill_colored;
 
     }
 
     private Capsule(Parcel in){
         super(in);
-        this.modifier = " Capsules";
+        this.modifier = " capsules";
         this.icon = R.drawable.pill_colored;
     }
 

@@ -19,7 +19,7 @@ public class Syrup extends Medicine{
 
     private Syrup(Parcel in){
         super(in);
-        this.modifier = " Syrups";
+        this.modifier = " mL";
         this.icon = R.drawable.syrup_colored;
     }
 
