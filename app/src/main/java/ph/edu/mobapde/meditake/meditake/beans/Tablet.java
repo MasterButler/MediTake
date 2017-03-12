@@ -13,6 +13,7 @@ public class Tablet extends Medicine{
 
     public Tablet(){
         super();
+        setTabletSpecificInfo();
     }
 
     public Tablet(String brandName, String genericName, String medicineFor, double amount){

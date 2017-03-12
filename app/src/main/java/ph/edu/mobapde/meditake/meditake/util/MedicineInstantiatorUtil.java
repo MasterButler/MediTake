@@ -13,7 +13,7 @@ import ph.edu.mobapde.meditake.meditake.beans.Tablet;
  */
 
 public class MedicineInstantiatorUtil {
-    public static Medicine createMedicineFromImageView(ImageView imageView){
+    public static Medicine createMedicineInstanceFromImageView(ImageView imageView){
         if(imageView.getId() == R.id.selection_capsule){
             return new Capsule();
         }else if(imageView.getId() == R.id.selection_lozenge){
@@ -24,7 +24,7 @@ public class MedicineInstantiatorUtil {
         return null;
     }
 
-    public static Medicine createMedicineFromString(String medicineType){
+    public static Medicine createMedicineInstanceFromString(String medicineType){
         medicineType = medicineType.toLowerCase();
         if(medicineType.equals("capsule")){
             return new Capsule();
@@ -36,7 +36,7 @@ public class MedicineInstantiatorUtil {
         return null;
     }
 
-    public static Medicine createMedicineFromClass(Class clazz){
+    public static Medicine createMedicineInstanceFromClass(Class clazz){
         if(clazz.equals(Capsule.class)){
             return new Capsule();
         }else if(clazz.equals(Tablet.class)){

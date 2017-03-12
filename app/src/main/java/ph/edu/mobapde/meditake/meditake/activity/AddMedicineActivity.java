@@ -47,7 +47,6 @@ public class AddMedicineActivity extends AppCompatActivity {
     @BindView(R.id.add_medicine_type)
     LinearLayout add_medicine_type;
 
-    @BindView(R.id.action_add_medicine)
     MenuItem actionAddMedicine;
 
     MedicineUtil medicineController;
@@ -57,7 +56,6 @@ public class AddMedicineActivity extends AppCompatActivity {
         setSupportActionBar(add_medicine_toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
-        actionAddMedicine.setVisible(false);
     }
 
     @Override
@@ -75,11 +73,10 @@ public class AddMedicineActivity extends AppCompatActivity {
         add_medicine_type.setVisibility(View.GONE);
         add_medicine_information.startAnimation(slideUp);
 
-        newMedicine = MedicineInstantiatorUtil.createMedicineFromImageView(imageView);
+        newMedicine = MedicineInstantiatorUtil.createMedicineInstanceFromImageView(imageView);
         selectedMedicineType.setImageResource(newMedicine.getIcon());
 
         actionAddMedicine.setVisible(true);
-
     }
 
     public boolean addNewMedicine(){
@@ -94,7 +91,7 @@ public class AddMedicineActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.selection_lozenge, R.id.selection_capsule, R.id.selection_syrup})
-    public void onMaedicineSelctionClick(ImageView imageView){
+    public void onMedicineSelectionClick(ImageView imageView){
 
         Log.wtf("action", "Clicked a medicine type");
         showAddMedicineInformation(imageView);
@@ -104,6 +101,9 @@ public class AddMedicineActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_add_medicine, menu);
+
+        actionAddMedicine = add_medicine_toolbar.getMenu().findItem(R.id.action_add_medicine);
+        actionAddMedicine.setVisible(false);
         return true;
     }
 

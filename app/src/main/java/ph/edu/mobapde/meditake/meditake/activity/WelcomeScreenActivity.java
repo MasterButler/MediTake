@@ -15,7 +15,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThemeUtil.onActivityCreateSetTheme(this);
-        super.setActionBar(null);
+        //super.setActionBar(null);
         setContentView(R.layout.activity_welcome_screen);
 
 
