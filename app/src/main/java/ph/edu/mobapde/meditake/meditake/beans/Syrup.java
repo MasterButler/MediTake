@@ -13,25 +13,17 @@ public class Syrup extends Medicine{
 
     public Syrup(){
         super();
+        setSyrupSpecificInfo();
+    }
+
+    public Syrup(String brandName, String genericName, String medicineFor, double amount){
+        super(brandName, genericName, medicineFor, amount);
+        setSyrupSpecificInfo();
+    }
+
+
+    public void setSyrupSpecificInfo(){
         this.modifier = "mL";
-        this.icon = R.drawable.syrup_colored;
+        this.icon = R.drawable.selection_syrup_colored;
     }
-
-    private Syrup(Parcel in){
-        super(in);
-        this.modifier = " mL";
-        this.icon = R.drawable.syrup_colored;
-    }
-
-    public static final Parcelable.Creator<Syrup> CREATOR = new Parcelable.Creator<Syrup>(){
-        @Override
-        public Syrup createFromParcel(Parcel in){
-            return new Syrup(in);
-        }
-
-        @Override
-        public Syrup[] newArray(int size) {
-            return new Syrup[size];
-        }
-    };
 }

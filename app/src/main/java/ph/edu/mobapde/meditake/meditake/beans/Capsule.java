@@ -13,26 +13,16 @@ public class Capsule extends Medicine{
 
     public Capsule(){
         super();
-        this.modifier = " capsules";
-        this.icon = R.drawable.pill_colored;
-
+        setCapsuleSpecificInfo();
     }
 
-    private Capsule(Parcel in){
-        super(in);
-        this.modifier = " capsules";
-        this.icon = R.drawable.pill_colored;
+    public Capsule(String brandName, String genericName, String medicineFor, double amount){
+        super(brandName, genericName, medicineFor, amount);
+        setCapsuleSpecificInfo();
     }
 
-    public static final Parcelable.Creator<Capsule> CREATOR = new Parcelable.Creator<Capsule>(){
-        @Override
-        public Capsule createFromParcel(Parcel in){
-            return new Capsule(in);
-        }
-
-        @Override
-        public Capsule[] newArray(int size) {
-            return new Capsule[size];
-        }
-    };
+    private void setCapsuleSpecificInfo(){
+        this.modifier = " capsules";
+        this.icon = R.drawable.selection_capsule_colored;
+    }
 }

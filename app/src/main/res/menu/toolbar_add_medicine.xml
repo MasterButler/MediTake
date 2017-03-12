@@ -7,7 +7,7 @@
     <item
         android:id="@+id/action_add_medicine"
         android:title="@string/add_medicine"
-        android:icon="@drawable/ic_add_white"
+        android:icon="@drawable/ic_done_white_24dp"
         app:showAsAction="always"/>
     <!--SHOULD YOU WANT TO USE THE 'ADD' ICON, CHANGE 'android:title' to the code below-->
     <!--android:title="@string/add_medicine"-->

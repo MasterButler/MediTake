@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -67,7 +68,7 @@ public class MedicineListActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_add_medicine, menu);
+        getMenuInflater().inflate(R.menu.toolbar_medicine_list, menu);
         return true;
     }
 
@@ -98,10 +99,11 @@ public class MedicineListActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
+        Log.wtf("action", "Clicked something in app bar");
         switch(id){
             case R.id.action_add_new_medicine:
                 addNewMedicine();
+                Log.wtf("action", "GOING THERE");
                 break;
             default: Toast.makeText(getBaseContext(), "Unexpected error encountered. Please try again", Toast.LENGTH_SHORT);
         }

@@ -32,7 +32,8 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/layout_add_brand_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel">
 
                 <EditText
                     android:id="@+id/et_add_brand_name"
@@ -51,7 +52,8 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/layout_add_generic_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel">
 
                 <EditText
                     android:id="@+id/et_add_generic_name"
@@ -72,7 +74,8 @@
     <android.support.design.widget.TextInputLayout
         android:id="@+id/layout_add_medicine_for"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/TextLabel">
 
         <EditText
             android:id="@+id/et_add_medicine_for"

@@ -13,25 +13,16 @@ public class Tablet extends Medicine{
 
     public Tablet(){
         super();
-        this.modifier = " tablets";
-        this.icon = R.drawable.lozenge_colored;
     }
 
-    private Tablet(Parcel in){
-        super(in);
-        this.modifier = " tablets";
-        this.icon = R.drawable.lozenge_colored;
+    public Tablet(String brandName, String genericName, String medicineFor, double amount){
+        super(brandName, genericName, medicineFor, amount);
+        setTabletSpecificInfo();
     }
 
-    public static final Parcelable.Creator<Tablet> CREATOR = new Parcelable.Creator<Tablet>(){
-        @Override
-        public Tablet createFromParcel(Parcel in){
-            return new Tablet(in);
-        }
 
-        @Override
-        public Tablet[] newArray(int size) {
-            return new Tablet[size];
-        }
-    };
+    public void setTabletSpecificInfo(){
+        this.modifier = " tablets";
+        this.icon = R.drawable.selection_lozenge_colored;
+    }
 }

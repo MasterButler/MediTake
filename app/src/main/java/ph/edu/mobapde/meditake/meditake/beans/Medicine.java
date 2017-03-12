@@ -13,12 +13,22 @@ import android.os.Parcelable;
  *
  * @author Winfred Villaluna
  */
-abstract public class Medicine implements Parcelable{
+abstract public class Medicine {
+    public static final String TABLE = "medicine";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_BRAND_NAME = "brandName";
+    public static final String COLUMN_GENERIC_NAME = "genericName";
+    public static final String COLUMN_MEDICINE_FOR = "medicineFor";
+    public static final String COLUMN_AMOUNT = "amount";
+    public static final String COLUMN_ICON = "icon";
+    public static final String COLUMN_MODIFIER = "modifier";
+
+
     public static int NOT_SET = -999;
     public static int NOT_ENOUGH = -1;
 
     //id of the medicine in the server for easier retrieval/storage when it is already present in the cache
-    protected long nosqlid;
+    protected long sqlId;
     //brand of the Medicine
     protected String brandName;
     //generic name of the medicine
@@ -36,14 +46,11 @@ abstract public class Medicine implements Parcelable{
         modifier = " units";
     }
 
-    protected Medicine(Parcel in){
-        nosqlid = in.readLong();
-        brandName = in.readString();
-        genericName = in.readString();
-        medicineFor = in.readString();
-        amount = in.readDouble();
-        icon = in.readInt();
-        modifier = " units";
+    protected Medicine(String brandName, String genericName, String medicineFor, double amount){
+        setBrandName(brandName);
+        setGenericName(genericName);
+        setMedicineFor(medicineFor);
+        setAmount(amount);
     }
 
     /**
@@ -75,11 +82,11 @@ abstract public class Medicine implements Parcelable{
     }
 
     public long getNosqlid() {
-        return nosqlid;
+        return sqlId;
     }
 
     public void setNosqlid(long nosqlid) {
-        this.nosqlid = nosqlid;
+        this.sqlId = nosqlid;
     }
 
     public String getBrandName() {
@@ -130,20 +137,5 @@ abstract public class Medicine implements Parcelable{
         this.modifier = modifier;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(nosqlid);
-        dest.writeString(brandName);
-        dest.writeString(genericName);
-        dest.writeString(medicineFor);
-        dest.writeDouble(amount);
-        dest.writeInt(icon);
-        dest.writeString(modifier);
-    }
 
 }

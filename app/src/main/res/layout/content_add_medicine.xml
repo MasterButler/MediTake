@@ -12,67 +12,142 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="200dp"
+        android:id="@+id/add_medicine_type">
 
-        <ImageView
-            android:src="@drawable/pills_1_colored"
-            android:id="@+id/imageView"
-            android:layout_margin="8dp"
-            android:layout_height="match_parent"
-            android:layout_width="80dp"
-            android:layout_gravity="top"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select the type of medicine"
+            android:textSize="12sp"
+            android:textColor="?attr/colorPrimary"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/title_add_medicine_type"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:orientation="horizontal">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/layout_add_brand_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-                <EditText
-                    android:id="@+id/et_add_brand_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/brand_name"
-                    android:textAlignment="textStart"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:lines="1"
-                    android:scrollHorizontally="true"
-                    />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/selection_capsule_colored"
+                android:id="@+id/selection_capsule"
+                android:layout_margin="5dp"/>
 
-            </android.support.design.widget.TextInputLayout>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/layout_add_generic_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/selection_lozenge_colored"
+                android:id="@+id/selection_lozenge"
+                android:layout_margin="5dp"/>
 
-                <EditText
-                    android:id="@+id/et_add_generic_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/generic_name"
-                    android:textAlignment="textStart"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:lines="1"
-                    android:scrollHorizontally="true"/>
 
-            </android.support.design.widget.TextInputLayout>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/selection_syrup_colored"
+                android:id="@+id/selection_syrup"
+                android:layout_margin="5dp"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
         </LinearLayout>
     </LinearLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/layout_add_medicine_for"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/add_medicine_information">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:src="@drawable/pills_1_colored"
+                android:id="@+id/medicine_type"
+                android:layout_margin="8dp"
+                android:layout_height="match_parent"
+                android:layout_width="80dp"
+                android:layout_gravity="top"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/layout_add_brand_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/TextLabel">
+
+                    <EditText
+                        android:id="@+id/et_add_brand_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Brand Name"
+                        android:textAlignment="textStart"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:lines="1"
+                        android:scrollHorizontally="true"
+                        />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/layout_add_generic_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/TextLabel">
+
+                    <EditText
+                        android:id="@+id/et_add_generic_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/generic_name_required"
+                        android:textAlignment="textStart"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:lines="1"
+                        android:scrollHorizontally="true"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_add_medicine_for"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/et_add_medicine_for"
@@ -81,6 +156,16 @@
                 android:hint="@string/medicine_for"
                 android:maxLines="1"
                 android:inputType="textMultiLine"/>
-    </android.support.design.widget.TextInputLayout>
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* indicates required field"
+            android:textColor="@color/colorLogoDarkGray"
+            android:layout_marginTop="50dp"
+            android:id="@+id/textView2" />
+
+    </LinearLayout>
 
 </LinearLayout>

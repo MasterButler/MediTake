@@ -7,7 +7,7 @@ import com.google.firebase.storage.StorageReference;
  * Created by Winfred Villaluna on 2/28/2017.
  */
 
-public class FirebaseConnection {
+public class FirebaseConnection{
     private StorageReference mStorageRef;
 
     public static StorageReference getStorageReference(){
