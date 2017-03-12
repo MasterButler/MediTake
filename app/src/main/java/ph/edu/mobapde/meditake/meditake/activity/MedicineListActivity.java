@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.edu.mobapde.meditake.meditake.R;
+import ph.edu.mobapde.meditake.meditake.adapter.DrawerManager;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class MedicineListActivity extends AppCompatActivity
@@ -32,15 +34,15 @@ public class MedicineListActivity extends AppCompatActivity
     @BindView(R.id.randomMedicine)
     Button medicineButton;
 
-    @BindView(R.id.toolbar_view_medicine)
-    Toolbar view_medicine_toolbar;
+    @BindView(R.id.toolbar_medicine_list)
+    Toolbar medicine_list_toolbar;
 
     @BindView(R.id.drawer_layout_medicine_list)
     DrawerLayout drawer;
 
     public void setUpActionBar(){
-        setSupportActionBar(view_medicine_toolbar);
-        getSupportActionBar().setTitle("Schedules");
+        setSupportActionBar(medicine_list_toolbar);
+        getSupportActionBar().setTitle("Medicines");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -54,12 +56,19 @@ public class MedicineListActivity extends AppCompatActivity
         setUpActionBar();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, view_medicine_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, medicine_list_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(1).setChecked(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_add_medicine, menu);
+        return true;
     }
 
     @Override
@@ -71,13 +80,7 @@ public class MedicineListActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-/*
-    @OnClick(R.id.fab_add_medicine)
-    public void addMedicine(){
-        Intent i = new Intent(getBaseContext(), AddMedicineActivity.class);
-        startActivity(i);
-    }
-*/
+
     @OnClick(R.id.changeTheme)
     public void changeTheme(){
         int newTheme = ThemeUtil.getSelectedTheme()+1;
@@ -93,21 +96,34 @@ public class MedicineListActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_schedule) {
-            Intent i = new Intent(getBaseContext(), ScheduleListActivity.class);
-            startActivity(i);
-        } else if (id == R.id.nav_medicine) {
-            //do nothing
-        } else if(id == R.id.nav_settings) {
-
+        switch(id){
+            case R.id.action_add_new_medicine:
+                addNewMedicine();
+                break;
+            default: Toast.makeText(getBaseContext(), "Unexpected error encountered. Please try again", Toast.LENGTH_SHORT);
         }
+        return false;
+    }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_medicine_list);
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        DrawerManager.execute(this, item);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void addNewMedicine(){
+        Intent i = new Intent(getBaseContext(), AddMedicineActivity.class);
+        startActivity(i);
+    }
+/*
+    @OnClick(R.id.fab_add_medicine)
+    public void addMedicine(){
+        Intent i = new Intent(getBaseContext(), AddMedicineActivity.class);
+        startActivity(i);
+    }
+*/
 }

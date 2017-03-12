@@ -2,6 +2,7 @@ package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
+import ph.edu.mobapde.meditake.meditake.adapter.DrawerManager;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
@@ -40,11 +42,9 @@ public class ScheduleListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         ThemeUtil.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_schedule_list);
-
         ButterKnife.bind(this);
 
         setUpActionBar();
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, view_schedule_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -52,11 +52,12 @@ public class ScheduleListActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
+
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_schedule_list);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -86,22 +87,9 @@ public class ScheduleListActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_schedule) {
-            //do nothing
-        } else if (id == R.id.nav_medicine) {
-            Intent i = new Intent(getBaseContext(), MedicineListActivity.class);
-            startActivity(i);
-        } else if(id == R.id.nav_settings) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_schedule_list );
+        DrawerManager.execute(this, item);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

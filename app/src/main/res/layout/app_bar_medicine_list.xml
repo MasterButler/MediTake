@@ -5,33 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="ph.edu.mobapde.meditake.meditake.activity.ScheduleListActivity">
+    tools:context="ph.edu.mobapde.meditake.meditake.activity.MedicineListActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
+        android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_view_medicine"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
 
-    </android.support.design.widget.AppBarLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_medicine_list"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
 
-    <include layout="@layout/content_medicine_list" />
+        </android.support.design.widget.AppBarLayout>
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-    <!--android:id="@+id/fab_add_medicine"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="bottom|end"-->
-    <!--android:layout_margin="@dimen/fab_margin"-->
-    <!--android:src="@drawable/ic_add_white"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_marginRight="16dp"-->
-    <!--/>-->
+        <include layout="@layout/content_medicine_list" />
+
+    </LinearLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+    android:id="@+id/fab_add_medicine"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    android:layout_margin="@dimen/fab_margin"
+    android:src="@drawable/ic_add_white"
+    android:layout_alignParentRight="true"
+    android:layout_marginRight="16dp"
+    />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorLogoRed">#FF5252</color>
+    <color name="colorLogoLightGray">#EFEBE9</color>
+    <color name="colorLogoGray">#9E9E9E</color>
+    <color name="colorLogoDarkGray">#717171</color>
+
+
     <color name="colorBackground">#E8F5E9</color>
     <color name="colorPrimary">#43A047</color>
     <color name="colorPrimaryDark">#2E7D32</color>
