@@ -59,7 +59,7 @@
                     android:id="@+id/et_add_generic_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/generic_name"
+                    android:hint="@string/generic_name_required"
                     android:textAlignment="textStart"
                     android:inputType="text"
                     android:maxLines="1"
@@ -85,5 +85,14 @@
             android:maxLines="1"
             android:inputType="textMultiLine"/>
     </android.support.design.widget.TextInputLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/helper_text_required_fields"
+        android:textColor="@color/colorLogoDarkGray"
+        android:layout_marginTop="50dp"
+        android:id="@+id/textView2" />
 
 </LinearLayout>

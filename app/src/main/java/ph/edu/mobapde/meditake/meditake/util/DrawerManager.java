@@ -1,4 +1,4 @@
-package ph.edu.mobapde.meditake.meditake.adapter;
+package ph.edu.mobapde.meditake.meditake.util;
 
 import android.app.Activity;
 import android.content.Intent;

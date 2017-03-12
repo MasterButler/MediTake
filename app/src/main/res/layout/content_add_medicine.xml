@@ -161,7 +161,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="* indicates required field"
+            android:text="@string/helper_text_required_fields"
             android:textColor="@color/colorLogoDarkGray"
             android:layout_marginTop="50dp"
             android:id="@+id/textView2" />

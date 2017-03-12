@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
+import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 
 /**
  * Created by Winfred Villaluna on 3/6/2017.
@@ -27,35 +29,27 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         //create tables here
 
         String sql;
-        /* CREATE TABLE food
-            (idfood INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            price REAL NOT NULL);
-            sql = "CREATE TABLE " + Food.TABLE + " ( "
-                + Food.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Food.COLUMN_NAME + " TEXT NOT NULL, "
-                + Food.COLUMN_PRICE + " REAL NOT NULL);";
-        */
-
         /*
          * CREATE TABLE medicine
          * _id INTEGER PRIMARY KEY AUTOINCREMENT
          * brandName TEXT
          * genericName TEXT NOT NULL
-         * medicineFor TEXT NOT NULL
+         * medicineFor TEXT
          * amount REAL NOT NULL
-         * icon INTEGER NOT NULL
-         * modifier TEXT NOT NULL
+         * //icon INTEGER NOT NULL
+         * //modifier TEXT NOT NULL
+         * medicineType TEXT NOT NULL
          * );
          */
         sql = "CREATE TABLE " + Medicine.TABLE + " ( "
             + Medicine.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + Medicine.COLUMN_BRAND_NAME + " TEXT "
-            + Medicine.COLUMN_GENERIC_NAME + " TEXT NOT NULL "
-            + Medicine.COLUMN_MEDICINE_FOR + " TEXT NOT NULL "
-            + Medicine.COLUMN_AMOUNT + " REAL NOT NULL "
-            + Medicine.COLUMN_ICON + " INTEGER NOT NULL "
-            + Medicine.COLUMN_MODIFIER + " TEXT NOT NULL)";
+            + Medicine.COLUMN_BRAND_NAME + " TEXT, "
+            + Medicine.COLUMN_GENERIC_NAME + " TEXT NOT NULL, "
+            + Medicine.COLUMN_MEDICINE_FOR + " TEXT, "
+            + Medicine.COLUMN_AMOUNT + " REAL NOT NULL, "
+            //+ Medicine.COLUMN_ICON + " INTEGER NOT NULL, "
+            //+ Medicine.COLUMN_MODIFIER + " TEXT NOT NULL, "
+            + Medicine.COLUMN_MEDICINE_TYPE + " TEXT NOT NULL);";
 
         db.execSQL(sql);
     }
@@ -73,92 +67,97 @@ public class SQLiteConnection extends SQLiteOpenHelper{
 
     // CRUD OPERATIONS
 
-//    // create Food
-//    public long createFood(Food food){
-//
-//        ContentValues cv = new ContentValues();
-//
-//        cv.put(Food.COLUMN_NAME, food.getName());
-//        cv.put(Food.COLUMN_PRICE, food.getPrice());
-//
-//        SQLiteDatabase db = getWritableDatabase();
-//        // INSERT INTO food ('name', 'price')
-//        //             VALUES (?, ?)
-//        long id = db.insert(Food.TABLE,
-//                null, //only place a null / non empty string here when you want to enter an empty row
-//                cv);
-//
-//        db.close();
-//        return id;
-//    }
-//
-//    // retrieve all food
-//    public Cursor getAllFoods(){
-//        /*
-//        SELECT * FROM food
-//        null == '*'
-//        */
-//        SQLiteDatabase db = getReadableDatabase();
-//        return db.query(Food.TABLE, null, null, null, null, null, null);
-//    }
-//
-//    // retrieve single food
-//    public Food getFood(int id){
-//        //SELECT * FROM food WHERE _id = ?
-//        Food food = null;
-//        SQLiteDatabase db = getReadableDatabase();
-//        Cursor cursor = db.query(Food.TABLE,
-//                null,
-//                Food.COLUMN_ID + " = ?",
-//                new String[]{id+""},
-//                null,
-//                null,
-//                null);
-//
-//        if(cursor.moveToFirst()){
-//            food = new Food();
-//            String name = cursor.getString(cursor.getColumnIndex(Food.COLUMN_NAME));
-//            double price = cursor.getDouble(cursor.getColumnIndex(Food.COLUMN_PRICE));
-//
-//            food.setName(name);
-//            food.setPrice(price);
-//            food.setId(id);
-//        }
-//
-//        cursor.close();
-//        db.close();
-//        return food;
-//    }
-//
-//    // update food
-//    public int updateFood(Food food){
-//        SQLiteDatabase db = getWritableDatabase();
-//        /* UPDATE INTO food
-//                SET name = ? and price = ?
-//                WHERE id = ?
-//
-//         */
-//        ContentValues cv = new ContentValues();
-//        cv.put(Food.COLUMN_NAME, food.getName());
-//        cv.put(Food.COLUMN_PRICE, food.getPrice());
-//        int rows = db.update(Food.TABLE,
-//                    cv,
-//                    Food.COLUMN_ID + " = ? ",
-//                    new String[]{food.getId()+""});
-//
-//        db.close();
-//        return rows;
-//    }
-//
-//
-//    // delete food
-//    public int deleteFood(int id){
-//        SQLiteDatabase db = getWritableDatabase();
-//        // DELETE FROM food WHERE _id = ?
-//        int rows = db.delete(Food.TABLE,
-//                Food.COLUMN_ID + " = ? ",
-//                new String[]{id+""});
-//        db.close();
-//        return rows;
-//    }
+    // create Medicine
+    public long createMedicine(Medicine medicine){
+
+        ContentValues cv = new ContentValues();
+
+        Log.wtf("DB_ADD", "instance of " + medicine.getClass().getSimpleName() + " to be inserted");
+
+        cv.put(Medicine.COLUMN_BRAND_NAME, medicine.getBrandName());
+        cv.put(Medicine.COLUMN_GENERIC_NAME, medicine.getGenericName());
+        cv.put(Medicine.COLUMN_MEDICINE_FOR, medicine.getMedicineFor());
+        cv.put(Medicine.COLUMN_AMOUNT, medicine.getAmount());
+        cv.put(Medicine.COLUMN_MEDICINE_TYPE, medicine.getClass().getSimpleName());
+
+        SQLiteDatabase db = getWritableDatabase();
+        long id = db.insert(Medicine.TABLE, null, cv);
+
+        db.close();
+        return id;
+    }
+
+    // retrieve all food
+    public Cursor getAllMedicine(){
+        /* SELECT * FROM medicine
+         *null == '*'
+         */
+        SQLiteDatabase db = getReadableDatabase();
+        return db.query(Medicine.TABLE, null, null, null, null, null, null);
+    }
+
+    // retrieve single food
+    public Medicine getMedicine(int id){
+        //SELECT * FROM food WHERE _id = ?
+        Medicine medicine = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(Medicine.TABLE,
+                null,
+                Medicine.COLUMN_ID + " = ?",
+                new String[]{id+""},
+                null,
+                null,
+                null);
+
+        if(cursor.moveToFirst()){
+            medicine = MedicineInstantiatorUtil.createMedicineInstanceFromString(cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE)));
+            String brandName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
+            String genericName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
+            String medicineFor = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
+            double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
+
+            medicine.setBrandName(brandName);
+            medicine.setGenericName(genericName);
+            medicine.setMedicineFor(medicineFor);
+            medicine.setAmount(amount);
+        }
+
+        cursor.close();
+        db.close();
+        return medicine;
+    }
+
+    // update food
+    public int updateMedicine(Medicine medicine){
+        SQLiteDatabase db = getWritableDatabase();
+        /* UPDATE INTO medicine SET ..... WHERE id = ?
+
+         */
+        ContentValues cv = new ContentValues();
+        cv.put(Medicine.COLUMN_BRAND_NAME, medicine.getBrandName());
+        cv.put(Medicine.COLUMN_GENERIC_NAME, medicine.getGenericName());
+        cv.put(Medicine.COLUMN_MEDICINE_FOR, medicine.getMedicineFor());
+        cv.put(Medicine.COLUMN_AMOUNT, medicine.getAmount());
+        cv.put(Medicine.COLUMN_MEDICINE_FOR, medicine.getClass().getName());
+
+        int rows = db.update(Medicine.TABLE,
+                    cv,
+                    Medicine.COLUMN_ID + " = ? ",
+                    new String[]{medicine.getSqlId()+""});
+
+        db.close();
+        return rows;
+    }
+
+
+    // delete food
+    public int deleteMedicine(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        // DELETE FROM medicine WHERE _id = ?
+        int rows = db.delete(Medicine.TABLE,
+                Medicine.COLUMN_ID + " = ? ",
+                new String[]{id+""});
+        db.close();
+        return rows;
+    }
 }

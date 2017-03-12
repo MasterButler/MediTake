@@ -20,8 +20,9 @@ abstract public class Medicine {
     public static final String COLUMN_GENERIC_NAME = "genericName";
     public static final String COLUMN_MEDICINE_FOR = "medicineFor";
     public static final String COLUMN_AMOUNT = "amount";
-    public static final String COLUMN_ICON = "icon";
-    public static final String COLUMN_MODIFIER = "modifier";
+    //public static final String COLUMN_ICON = "icon";
+    //public static final String COLUMN_MODIFIER = "modifier";
+    public static final String COLUMN_MEDICINE_TYPE = "medicineType";
 
 
     public static int NOT_SET = -999;
@@ -81,11 +82,11 @@ abstract public class Medicine {
         return this.amount - toDrink > NOT_ENOUGH ? this.amount - toDrink : NOT_ENOUGH;
     }
 
-    public long getNosqlid() {
+    public long getSqlId() {
         return sqlId;
     }
 
-    public void setNosqlid(long nosqlid) {
+    public void setSqlId(long nosqlid) {
         this.sqlId = nosqlid;
     }
 

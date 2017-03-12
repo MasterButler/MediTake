@@ -34,9 +34,9 @@ public class MedicineList extends ArrayList<Medicine>{
         return null;
     }
 
-    public Medicine getUsingNosqlId(long nosqlId){
+    public Medicine getUsingNosqlId(long sqlId){
         for(Medicine inList : this){
-            if(inList.getNosqlid() == nosqlId){
+            if(inList.getSqlId() == sqlId){
                 return inList;
             }
         }

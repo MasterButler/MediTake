@@ -41,8 +41,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Medicine Type "
-                    android:id="@+id/tv_medicine_type"/>
+                    android:text="Medicine For"
+                    android:id="@+id/tv_medicine_for"/>
             </LinearLayout>
 
         </LinearLayout>

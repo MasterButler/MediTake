@@ -11,7 +11,7 @@
     <color name="colorPrimaryDark">#2E7D32</color>
     <color name="colorAccent">#FF5252</color>
     <color name="colorFont">#FFFFFF</color>
-    <color name="colorFontInBackground">#000000</color>
+    <color name="colorFontInBackground">#DE000000</color>
     <color name="colorBackgroundInSelection">#EEEEEE</color>
 
     <color name="colorBackgroundBlueTheme">#E3F2FD</color>
@@ -19,7 +19,7 @@
     <color name="colorPrimaryDarkBlueTheme">#1976D2</color>
     <color name="colorAccentBlueTheme">#FF9100</color>
     <color name="colorFontBlueTheme">#FFFFFF</color>
-    <color name="colorFontInBackgroundBlueTheme">#000000</color>
+    <color name="colorFontInBackgroundBlueTheme">#DE000000</color>
     <color name="colorBackgroundInSelectionBlueTheme">#EEEEEE</color>
 
 </resources>

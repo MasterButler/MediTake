@@ -9,9 +9,11 @@
     android:background="?android:attr/colorBackground"
     tools:context="ph.edu.mobapde.meditake.meditake.activity.AddMedicineActivity">
 
-    <include layout="@layout/row_medicine"/>
-    <include layout="@layout/row_medicine"/>
-    <include layout="@layout/row_medicine"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rv_medicine"
+        ></android.support.v7.widget.RecyclerView>
 
     <Button
         android:id="@+id/randomMedicine"

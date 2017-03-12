@@ -54,7 +54,7 @@
                     android:lines="1"
                     android:scrollHorizontally="true"
                     android:textSize="18sp"
-                    android:textColor="@color/colorFont"
+                    android:textColor="?android:attr/textColor"
 
                     android:hint="Brand Name of Medicine"
                     />
@@ -86,7 +86,7 @@
                     android:lines="1"
                     android:scrollHorizontally="true"
                     android:textSize="18sp"
-                    android:textColor="@color/colorFont"
+                    android:textColor="?android:attr/textColor"
 
                     android:hint="Generic Name Of Medicine"
                     />
@@ -120,7 +120,7 @@
             android:lines="1"
             android:scrollHorizontally="true"
             android:textSize="18sp"
-            android:textColor="@color/colorFont"
+            android:textColor="?android:attr/textColor"
 
             android:hint="Medicine for something"
             />
