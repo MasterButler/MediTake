@@ -18,6 +18,7 @@ public class MedicineUtil {
 
     public int addMedicine(Context context, Medicine medicine){
         //TODO return databaseConnection.createMedicine(medicine);
+        return 0;
     }
 
     public static void setMedicineInfo(Medicine medicine, String brandName, String genericName, String medicineFor, double amount){
