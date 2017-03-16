@@ -1,6 +1,7 @@
 package ph.edu.mobapde.meditake.meditake.util;
 
 import android.content.Context;
+import android.database.Cursor;
 
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.db.SQLiteConnection;
@@ -11,20 +12,50 @@ import ph.edu.mobapde.meditake.meditake.db.SQLiteConnection;
 
 public class MedicineUtil {
     SQLiteConnection databaseConnection;
+    Context context;
+
+    public static Medicine medicine;
+
+    public MedicineUtil(Context context){
+        this.context = context;
+    }
 
     public void initializeDBConnection(Context context){
         databaseConnection = new SQLiteConnection(context);
     }
 
-    public int addMedicine(Context context, Medicine medicine){
-        //TODO return databaseConnection.createMedicine(medicine);
-        return 0;
+    public long addMedicine(Medicine medicine){
+        initializeDBConnection(this.context);
+        return databaseConnection.createMedicine(medicine);
     }
 
-    public static void setMedicineInfo(Medicine medicine, String brandName, String genericName, String medicineFor, double amount){
+    public void setMedicineInfo(Medicine medicine, String brandName, String genericName, String medicineFor, double amount){
+        initializeDBConnection(this.context);
         medicine.setBrandName(brandName);
         medicine.setGenericName(genericName);
         medicine.setMedicineFor(medicineFor);
         medicine.setAmount(amount);
     }
+
+    public int deleteMedicine(int id){
+        initializeDBConnection(this.context);
+        return databaseConnection.deleteMedicine(id);
+    }
+
+    public int updateMedicine(Medicine medicine){
+        initializeDBConnection(this.context);
+        return databaseConnection.updateMedicine(medicine);
+    }
+
+    public Cursor getAllMedicine(){
+        initializeDBConnection(this.context);
+        return databaseConnection.getAllMedicine();
+    }
+
+    public Medicine getMedicine(int id){
+        initializeDBConnection(this.context);
+        return databaseConnection.getMedicine(id);
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package ph.edu.mobapde.meditake.meditake.beans;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -24,5 +25,7 @@ public class Capsule extends Medicine{
     private void setCapsuleSpecificInfo(){
         this.modifier = " capsules";
         this.icon = R.drawable.selection_capsule_colored;
+        this.color = Color.parseColor("#C5CAE9");
+//        this.color = Color.parseColor("#304FFE");
     }
 }

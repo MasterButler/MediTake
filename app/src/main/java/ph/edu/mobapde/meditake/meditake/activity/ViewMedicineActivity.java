@@ -72,12 +72,6 @@ public class ViewMedicineActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return false;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_delete_medicine:
@@ -85,6 +79,9 @@ public class ViewMedicineActivity extends AppCompatActivity {
                 break;
             case R.id.action_edit_medicine:
                 editMedicine();
+                break;
+            case android.R.id.home:
+                finish();
                 break;
         }
         return true;

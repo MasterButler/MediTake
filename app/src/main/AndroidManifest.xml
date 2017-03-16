@@ -11,24 +11,32 @@
         <activity
             android:name=".activity.AddMedicineActivity"
             android:label="@string/add_medicine"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="ph.edu.mobapde.meditake.meditake.activity.MedicineListActivity"/>
+
         <activity
             android:name=".activity.MedicineListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <activity
             android:name=".activity.ViewMedicineActivity"
             android:label="@string/view_medicine"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="ph.edu.mobapde.meditake.meditake.activity.MedicineListActivity"/>
+
         <activity
             android:name=".activity.EditMedicineActivity"
             android:label="@string/edit_medicine_info"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="ph.edu.mobapde.meditake.meditake.activity.ViewMedicineActivity"/>
+
         <activity
             android:name=".activity.ScheduleListActivity"
             android:label="@string/title_activity_schedule_list"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
         <activity android:name=".activity.WelcomeScreenActivity">
             <!-- INTENT FILTER NAME WILL ON -->
             <intent-filter android:label="@string/app_name">

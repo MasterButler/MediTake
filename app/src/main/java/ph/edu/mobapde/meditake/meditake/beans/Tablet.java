@@ -1,5 +1,6 @@
 package ph.edu.mobapde.meditake.meditake.beans;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -25,5 +26,7 @@ public class Tablet extends Medicine{
     public void setTabletSpecificInfo(){
         this.modifier = " tablets";
         this.icon = R.drawable.selection_lozenge_colored;
+        this.color = Color.parseColor("#DCEDC8");
+//        this.color = Color.parseColor("#00C853");
     }
 }

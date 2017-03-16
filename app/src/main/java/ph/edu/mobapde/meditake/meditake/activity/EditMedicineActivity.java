@@ -55,6 +55,12 @@ public class EditMedicineActivity extends AppCompatActivity {
             case R.id.action_confirm_edit_medicine:
                 confirmEditMedicine();
                 break;
+            case R.id.action_delete_medicine:
+
+                break;
+            case android.R.id.home:
+                finish();
+                break;
         }
         return true;
     }

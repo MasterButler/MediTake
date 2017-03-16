@@ -26,11 +26,11 @@ public class MedicineInstantiatorUtil {
 
     public static Medicine createMedicineInstanceFromString(String medicineType){
         medicineType = medicineType.toLowerCase();
-        if(medicineType.equals("capsule")){
+        if(medicineType.equals(Medicine.CAPSULE)){
             return new Capsule();
-        }else if(medicineType.equals("lozenge")){
+        }else if(medicineType.equals(Medicine.TABLET)){
             return new Tablet();
-        }else if(medicineType.equals("syrup")){
+        }else if(medicineType.equals(Medicine.SYRUP)){
             return new Syrup();
         }
         return null;

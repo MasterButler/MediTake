@@ -1,5 +1,6 @@
 package ph.edu.mobapde.meditake.meditake.beans;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -25,5 +26,7 @@ public class Syrup extends Medicine{
     public void setSyrupSpecificInfo(){
         this.modifier = "mL";
         this.icon = R.drawable.selection_syrup_colored;
+        this.color = Color.parseColor("#FFCDD2");
+//        this.color = Color.parseColor("#D50000");
     }
 }

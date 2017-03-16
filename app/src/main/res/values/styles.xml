@@ -22,6 +22,7 @@
         <item name="android:textColor">@color/colorFontInBackground</item>
         <item name="android:textColorPrimary">@color/colorFontInBackground</item>
         <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:editTextColor">@color/colorFontInBackground</item>
     </style>
 
     <style name="AppTheme.NoActionBar.BlueColorScheme">
@@ -32,6 +33,7 @@
         <item name="android:textColor">@color/colorFontInBackgroundBlueTheme</item>
         <item name="android:textColorPrimary">@color/colorFontInBackground</item>
         <item name="android:colorBackground">@color/colorBackgroundBlueTheme</item>
+        <item name="android:editTextColor">@color/colorFontInBackgroundBlueTheme</item>
     </style>
 
     <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

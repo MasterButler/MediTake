@@ -21,4 +21,8 @@
     <string name="action_settings">Settings</string>
     <string name="generic_name_required">Generic Name*</string>
     <string name="helper_text_required_fields">* indicates required field</string>
+
+    <string name="MEDICINE_ID">position</string>
+    <string name="MEDICINE_TYPE">medicineType</string>
+    <string name="MEDICINE_HOLDER">viewholder</string>
 </resources>

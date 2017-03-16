@@ -21,9 +21,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Select the type of medicine"
-            android:textSize="12sp"
+            android:textSize="25sp"
             android:textColor="?attr/colorPrimary"
             android:layout_marginBottom="5dp"
+            android:textAlignment="center"
             android:id="@+id/title_add_medicine_type"/>
 
         <LinearLayout
@@ -37,8 +38,8 @@
                 android:layout_weight="1"/>
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:src="@drawable/selection_capsule_colored"
                 android:id="@+id/selection_capsule"
                 android:layout_margin="5dp"/>
@@ -49,8 +50,8 @@
                 android:layout_weight="1"/>
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:src="@drawable/selection_lozenge_colored"
                 android:id="@+id/selection_lozenge"
                 android:layout_margin="5dp"/>
@@ -62,8 +63,8 @@
                 android:layout_weight="1"/>
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:src="@drawable/selection_syrup_colored"
                 android:id="@+id/selection_syrup"
                 android:layout_margin="5dp"/>
@@ -90,8 +91,12 @@
             <ImageView
                 android:src="@drawable/pills_1_colored"
                 android:id="@+id/medicine_type"
-                android:layout_margin="8dp"
-                android:layout_height="match_parent"
+
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_height="80dp"
                 android:layout_width="80dp"
                 android:layout_gravity="top"/>
 
@@ -107,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:theme="@style/TextLabel">
 
-                    <EditText
+                    <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_add_brand_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -117,6 +122,7 @@
                         android:maxLines="1"
                         android:lines="1"
                         android:scrollHorizontally="true"
+                        android:textCursorDrawable="@null"
                         />
 
                 </android.support.design.widget.TextInputLayout>
@@ -127,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:theme="@style/TextLabel">
 
-                    <EditText
+                    <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_add_generic_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -136,7 +142,8 @@
                         android:inputType="text"
                         android:maxLines="1"
                         android:lines="1"
-                        android:scrollHorizontally="true"/>
+                        android:scrollHorizontally="true"
+                        android:textCursorDrawable="@null"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -149,13 +156,14 @@
             android:layout_height="wrap_content"
             android:theme="@style/TextLabel">
 
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/et_add_medicine_for"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/medicine_for"
                 android:maxLines="1"
-                android:inputType="textMultiLine"/>
+                android:inputType="textMultiLine"
+                android:textCursorDrawable="@null"/>
         </android.support.design.widget.TextInputLayout>
 
         <TextView

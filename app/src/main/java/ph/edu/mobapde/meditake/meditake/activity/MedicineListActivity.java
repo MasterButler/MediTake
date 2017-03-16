@@ -1,6 +1,7 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,10 +22,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.adapter.MedicineAdapter;
-import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
-import ph.edu.mobapde.meditake.meditake.db.SQLiteConnection;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
+import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class MedicineListActivity extends AppCompatActivity
@@ -46,7 +46,7 @@ public class MedicineListActivity extends AppCompatActivity
     DrawerLayout drawer;
 
     MedicineAdapter medicineAdapter;
-    SQLiteConnection connection;
+    MedicineUtil medicineUtil;
 
     public void setUpActionBar(){
         setSupportActionBar(medicine_list_toolbar);
@@ -63,6 +63,7 @@ public class MedicineListActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setUpActionBar();
 
+        medicineUtil = new MedicineUtil(getBaseContext());
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, medicine_list_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -72,27 +73,86 @@ public class MedicineListActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(1).setChecked(true);
 
+        medicineAdapter = new MedicineAdapter(getBaseContext(), medicineUtil.getAllMedicine());
+        medicineAdapter.setHasStableIds(true);
 
-        connection = new SQLiteConnection(getBaseContext());
-        connection.createMedicine(new Capsule("Biogesic", "randomName", "Sickness", 0.0));
-
-        medicineAdapter = new MedicineAdapter(getBaseContext(), connection.getAllMedicine());
         medicineAdapter.setOnItemClickListener(new MedicineAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int id) {
-                Intent i = new Intent(getBaseContext(), ViewMedicineActivity.class);
-                i.putExtra(Medicine.COLUMN_ID, id);
-                startActivity(i);
+                expand(id);
+            }
+
+            @Override
+            public void onItemDeleteClick(int id) {
+                delete(id);
+            }
+
+            @Override
+            public void onItemEditClick(int id) {
+                Log.wtf("action", "RECEIVED ID " + id);
+                edit(id);
+            }
+
+            @Override
+            public void onItemSaveClick(Medicine medicine) {
+                save(medicine);
+            }
+
+            @Override
+            public void onItemCancelClick(int id) {
+                cancel(id);
             }
         });
 
         rvMedicine.setAdapter(medicineAdapter);
         rvMedicine.setLayoutManager(new LinearLayoutManager(
-                getBaseContext(), LinearLayoutManager.VERTICAL, false)
+                getBaseContext(), LinearLayoutManager.VERTICAL, true)
         );
 
     }
 
+    public void updateList(){
+        Cursor c = medicineUtil.getAllMedicine();
+        medicineAdapter.changeCursor(c);
+    }
+
+    public void delete(int id){
+        medicineUtil.deleteMedicine(id);
+        medicineAdapter.notifyDataSetChanged();
+        updateList();
+    }
+
+    public void expand(int id){
+        boolean isExpanded = medicineAdapter.isExpanded(id);
+        medicineAdapter.setExpandedPositionId(isExpanded ? -1 : id);
+        medicineAdapter.notifyDataSetChanged();
+    }
+
+    public void edit(int id){
+        boolean isEditing = medicineAdapter.isEditing(id);
+        Log.wtf("action", "IS EDITING (AT ID" + id + ")? " + isEditing);
+        medicineAdapter.setEditingPositionId(isEditing ? -1 : id);
+        medicineAdapter.notifyDataSetChanged();
+    }
+
+    public void save(Medicine medicine){
+        Log.wtf("action", "TO UPDATE " + medicine.getBrandName() + " WITH ID " + medicine.getSqlId());
+        medicineUtil.updateMedicine(medicine);
+        medicineAdapter.notifyDataSetChanged();
+
+        updateList();
+        returnToView(medicine.getSqlId());
+    }
+
+    public void cancel(int id){
+        returnToView(id);
+    }
+
+    public void returnToView(int id){
+        boolean isEditing = medicineAdapter.isEditing(id);
+        medicineAdapter.setEditingPositionId(isEditing ? -1 : id);
+        medicineAdapter.notifyDataSetChanged();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_medicine_list, menu);
@@ -128,10 +188,6 @@ public class MedicineListActivity extends AppCompatActivity
         int id = item.getItemId();
         Log.wtf("action", "Clicked something in app bar");
         switch(id){
-            case R.id.action_add_new_medicine:
-                addNewMedicine();
-                Log.wtf("action", "GOING THERE");
-                break;
             default: Toast.makeText(getBaseContext(), "Unexpected error encountered. Please try again", Toast.LENGTH_SHORT);
         }
         return false;
@@ -148,11 +204,10 @@ public class MedicineListActivity extends AppCompatActivity
         Intent i = new Intent(getBaseContext(), AddMedicineActivity.class);
         startActivity(i);
     }
-/*
+
     @OnClick(R.id.fab_add_medicine)
     public void addMedicine(){
-        Intent i = new Intent(getBaseContext(), AddMedicineActivity.class);
-        startActivity(i);
+        addNewMedicine();
     }
-*/
+
 }

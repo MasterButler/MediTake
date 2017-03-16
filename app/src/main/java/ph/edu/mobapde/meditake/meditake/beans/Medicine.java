@@ -24,12 +24,15 @@ abstract public class Medicine {
     //public static final String COLUMN_MODIFIER = "modifier";
     public static final String COLUMN_MEDICINE_TYPE = "medicineType";
 
+    public static final String CAPSULE = "capsule";
+    public static final String SYRUP = "syrup";
+    public static final String TABLET = "tablet";
 
     public static int NOT_SET = -999;
     public static int NOT_ENOUGH = -1;
 
     //id of the medicine in the server for easier retrieval/storage when it is already present in the cache
-    protected long sqlId;
+    protected int sqlId;
     //brand of the Medicine
     protected String brandName;
     //generic name of the medicine
@@ -42,6 +45,8 @@ abstract public class Medicine {
     protected int icon;
     //for the display, e.g. 5mL or 5 tablets where 'mL' and ' tablets' are the extensions
     protected String modifier;
+    //for the color to be used in the recyclerview
+    protected int color;
 
     protected Medicine(){
         modifier = " units";
@@ -59,7 +64,7 @@ abstract public class Medicine {
      */
     public String getName(){
         String output = this.genericName;
-        if(brandName == null || brandName.isEmpty()){
+        if(!(brandName == null || brandName.isEmpty())){
             output = this.brandName + "(" + output + ")";
         }
         return output;
@@ -82,12 +87,12 @@ abstract public class Medicine {
         return this.amount - toDrink > NOT_ENOUGH ? this.amount - toDrink : NOT_ENOUGH;
     }
 
-    public long getSqlId() {
+    public int getSqlId() {
         return sqlId;
     }
 
-    public void setSqlId(long nosqlid) {
-        this.sqlId = nosqlid;
+    public void setSqlId(int sqlid) {
+        this.sqlId = sqlid;
     }
 
     public String getBrandName() {
@@ -138,5 +143,12 @@ abstract public class Medicine {
         this.modifier = modifier;
     }
 
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
 
 }
