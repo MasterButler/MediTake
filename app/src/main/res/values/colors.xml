@@ -10,6 +10,7 @@
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#FF9100</color>
+    <color name="colorAccentDark">#FF6D00</color>
     <color name="colorFont">#FFFFFF</color>
     <color name="colorFontInBackground">#DE000000</color>
     <color name="colorBackgroundInSelection">#EEEEEE</color>

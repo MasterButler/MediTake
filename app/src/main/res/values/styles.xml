@@ -23,6 +23,9 @@
         <item name="android:textColorPrimary">@color/colorFontInBackground</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="android:editTextColor">@color/colorFontInBackground</item>
+
+        <item name="fab:fab_addButtonColorNormal">@color/colorAccent</item>
+        <color name="fab_addButtonColorPressed">@color/colorAccentDark</color>
     </style>
 
     <style name="AppTheme.NoActionBar.BlueColorScheme">
@@ -34,6 +37,11 @@
         <item name="android:textColorPrimary">@color/colorFontInBackground</item>
         <item name="android:colorBackground">@color/colorBackgroundBlueTheme</item>
         <item name="android:editTextColor">@color/colorFontInBackgroundBlueTheme</item>
+    </style>
+
+    <style name="menu_labels_style">
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:textColor">?android:attr/textColor</item>
     </style>
 
     <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
