@@ -22,4 +22,7 @@
     <color name="colorFontInBackgroundBlueTheme">#DE000000</color>
     <color name="colorBackgroundInSelectionBlueTheme">#EEEEEE</color>
 
+    <color name="medicine_background">#FFFFFF</color>
+    <color name="selected_medicine_background">#F5F5F5</color>
+
 </resources>

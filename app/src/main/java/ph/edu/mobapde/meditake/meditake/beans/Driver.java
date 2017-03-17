@@ -10,12 +10,12 @@ public class Driver {
         syrup.setAmount(100);
 
         Schedule s = new Schedule();
-        s.setMedicine(syrup);
+        s.setMedicineToDrink(syrup);
         s.setDosagePerDrinkingInterval(5);
         s.drinkMedicine();
 
         double timeToDrinkAgain = s.getLastTimeTaken().getTime() + 3*s.MILLIS_TO_SECONDS;
-        System.out.println("PRESENT: " + s.getDrinkingIntervals());
+        System.out.println("PRESENT: " + s.getDrinkingInterval());
         System.out.println("FUTURE : " + timeToDrinkAgain);
         while(System.currentTimeMillis() != timeToDrinkAgain){
             double x = System.currentTimeMillis() - s.getLastTimeTaken().getTime();

@@ -25,4 +25,5 @@
     <string name="MEDICINE_ID">position</string>
     <string name="MEDICINE_TYPE">medicineType</string>
     <string name="MEDICINE_HOLDER">viewholder</string>
+    <string name="search_medicine">Search Medicine</string>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.transition.TransitionManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.adapter.MedicineAdapter;
+import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
@@ -33,11 +35,11 @@ public class MedicineListActivity extends AppCompatActivity
     @BindView(R.id.rv_medicine)
     RecyclerView rvMedicine;
 
-    @BindView(R.id.changeTheme)
-    Button changeThemeButton;
-
-    @BindView(R.id.randomMedicine)
-    Button medicineButton;
+//    @BindView(R.id.changeTheme)
+//    Button changeThemeButton;
+//
+//    @BindView(R.id.randomMedicine)
+//    Button medicineButton;
 
     @BindView(R.id.toolbar_medicine_list)
     Toolbar medicine_list_toolbar;
@@ -47,6 +49,8 @@ public class MedicineListActivity extends AppCompatActivity
 
     MedicineAdapter medicineAdapter;
     MedicineUtil medicineUtil;
+
+    long CREATING_NEW_ITEM;
 
     public void setUpActionBar(){
         setSupportActionBar(medicine_list_toolbar);
@@ -62,6 +66,8 @@ public class MedicineListActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
         setUpActionBar();
+
+        CREATING_NEW_ITEM = -1;
 
         medicineUtil = new MedicineUtil(getBaseContext());
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -123,9 +129,15 @@ public class MedicineListActivity extends AppCompatActivity
     }
 
     public void expand(int id){
-        boolean isExpanded = medicineAdapter.isExpanded(id);
-        medicineAdapter.setExpandedPositionId(isExpanded ? -1 : id);
-        medicineAdapter.notifyDataSetChanged();
+        if(CREATING_NEW_ITEM == -1){
+            boolean isExpanded = medicineAdapter.isExpanded(id);
+            medicineAdapter.setExpandedPositionId(isExpanded ? -1 : id);
+            TransitionManager.beginDelayedTransition(rvMedicine);
+            medicineAdapter.notifyDataSetChanged();
+        }else{
+            delete((int)CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
     }
 
     public void edit(int id){
@@ -142,10 +154,18 @@ public class MedicineListActivity extends AppCompatActivity
 
         updateList();
         returnToView(medicine.getSqlId());
+
+        if(CREATING_NEW_ITEM != -1)
+            CREATING_NEW_ITEM = -1;
     }
 
     public void cancel(int id){
-        returnToView(id);
+        if(CREATING_NEW_ITEM == -1){
+            returnToView(id);
+        }else{
+            delete((int)CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
     }
 
     public void returnToView(int id){
@@ -169,19 +189,19 @@ public class MedicineListActivity extends AppCompatActivity
         }
     }
 
-    @OnClick(R.id.changeTheme)
-    public void changeTheme(){
-        int newTheme = ThemeUtil.getSelectedTheme()+1;
-        ThemeUtil.changeToTheme(this, newTheme%2);
-        Toast.makeText(getBaseContext(), "Changing theme", Toast.LENGTH_SHORT);
-    }
-
-    @OnClick(R.id.randomMedicine)
-    public void viewMedicineInfo(){
-        Intent i = new Intent();
-        i.setClass(getBaseContext(), ViewMedicineActivity.class);
-        startActivity(i);
-    }
+//    @OnClick(R.id.changeTheme)
+//    public void changeTheme(){
+//        int newTheme = ThemeUtil.getSelectedTheme()+1;
+//        ThemeUtil.changeToTheme(this, newTheme%2);
+//        Toast.makeText(getBaseContext(), "Changing theme", Toast.LENGTH_SHORT);
+//    }
+//
+//    @OnClick(R.id.randomMedicine)
+//    public void viewMedicineInfo(){
+//        Intent i = new Intent();
+//        i.setClass(getBaseContext(), ViewMedicineActivity.class);
+//        startActivity(i);
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -201,13 +221,23 @@ public class MedicineListActivity extends AppCompatActivity
     }
 
     public void addNewMedicine(){
-        Intent i = new Intent(getBaseContext(), AddMedicineActivity.class);
-        startActivity(i);
+//        Intent i = new Intent(getBaseContext(), AddMedicineActivity.class);
+//        startActivity(i);
+        if(CREATING_NEW_ITEM == -1) {
+            Medicine tempMed = new Capsule("", "", "", 0.0);
+            long tempId = medicineUtil.addMedicine(tempMed);
+            updateList();
+            rvMedicine.smoothScrollToPosition(medicineAdapter.getItemCount() - 1);
+            expand((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
+            edit((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
+            CREATING_NEW_ITEM = tempId;
+        }
     }
 
     @OnClick(R.id.fab_add_medicine)
     public void addMedicine(){
         addNewMedicine();
+        Toast.makeText(getBaseContext(), "Something", Toast.LENGTH_SHORT);
     }
 
 }

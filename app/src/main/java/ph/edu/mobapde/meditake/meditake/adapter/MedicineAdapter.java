@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
+import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 
 /**
  * Created by Winfred Villaluna on 3/12/2017.
@@ -38,9 +40,11 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
     int expandedPositionId;
     int editingPositionId;
     RecyclerView mRecyclerView;
+    Context contextHolder;
 
     public MedicineAdapter(Context context, Cursor cursor) {
         super(context, cursor);
+        this.contextHolder = context;
         expandedPositionId = -1;
         editingPositionId = -1;
         setHasStableIds(true);
@@ -83,6 +87,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
             viewHolder.tvMedicineGenericName.setText(med.getGenericName());
             viewHolder.tvMedicineFor.setText(med.getMedicineFor().isEmpty() ? NO_MEDICINE_FOR : med.getMedicineFor());
             viewHolder.tvMedicineAmount.setText(med.getAmount() <= 0 ? NO_AMOUNT : amount + " " + med.getModifier() + " remaining");
+            viewHolder.ivMedicineType.setImageResource(med.getIcon());
 
             viewHolder.etMedicineGenericName.setText(med.getGenericName());
             viewHolder.etMedicineBrandName.setText(med.getBrandName());
@@ -90,7 +95,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
             viewHolder.etMedicineAmount.setText(med.getAmount() + "");
             viewHolder.tvMedicineAmountLabel.setText(med.getModifier() + " remaining");
 
-            viewHolder.cvHolder.setCardBackgroundColor(med.getColor());
+            //viewHolder.cvHolder.setCardBackgroundColor(med.getColor());
 
             //TODO add listeners here
             boolean isExpanded = id == expandedPositionId;
@@ -214,6 +219,11 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
     }
 
     @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
+
+    @Override
     public MedicineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_medicine, parent, false);
@@ -231,6 +241,8 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
         TextView tvMedicineFor;
         @BindView(R.id.tv_medicine_amount)
         TextView tvMedicineAmount;
+        @BindView(R.id.iv_medicine_type)
+        ImageView ivMedicineType;
 
         @BindView(R.id.et_medicine_generic_name)
         EditText etMedicineGenericName;
@@ -284,6 +296,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
             tvMedicineAmount.setVisibility(View.VISIBLE);
             lineDivider.setVisibility(View.VISIBLE);
             linActionsViewinmg.setVisibility(View.VISIBLE);
+            ivMedicineType.setVisibility(View.VISIBLE);
 
             etMedicineGenericName.setVisibility(View.GONE);
             etMedicineBrandName.setVisibility(View.GONE);
@@ -302,6 +315,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
             tvMedicineAmount.setVisibility(View.GONE);
             lineDivider.setVisibility(View.GONE);
             linActionsViewinmg.setVisibility(View.GONE);
+            ivMedicineType.setVisibility(View.GONE);
 
             etMedicineGenericName.setVisibility(View.VISIBLE);
             etMedicineBrandName.setVisibility(View.VISIBLE);

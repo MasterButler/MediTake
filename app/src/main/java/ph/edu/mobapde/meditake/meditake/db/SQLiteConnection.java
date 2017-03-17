@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
+import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 
 /**
@@ -16,19 +17,20 @@ import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 
 public class SQLiteConnection extends SQLiteOpenHelper{
     public static final String SCHEMA = "MediTake";
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     public SQLiteConnection(Context context) {
         super(context, SCHEMA, null, VERSION);
     }
 
+    /**
+     * Creates the db if it is not yet exisiting in the device's local storage.
+     * @param db
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // if the db exists, it will NOT call onCreate
-        // if the db !exists, it will call onCreate
-        //create tables here
-
-        String sql;
+        String sqlMedicine;
+        String sqlSchedule;
         /*
          * CREATE TABLE medicine
          * _id INTEGER PRIMARY KEY AUTOINCREMENT
@@ -36,38 +38,59 @@ public class SQLiteConnection extends SQLiteOpenHelper{
          * genericName TEXT NOT NULL
          * medicineFor TEXT
          * amount REAL NOT NULL
-         * //icon INTEGER NOT NULL
-         * //modifier TEXT NOT NULL
          * medicineType TEXT NOT NULL
          * );
+         *
+         * CREATE TABLE schedule
+         * _id INTEGER PRIMARY KEY AUTOINCREMENT
+         * medicineToDrinkId INTEGER NOT NULL
+         * dosagePerDrinkingInterval INTEGER NOT NULL
+         * drinkingIntervals INTEGER NOT NULL
          */
-        sql = "CREATE TABLE " + Medicine.TABLE + " ( "
+
+
+        sqlMedicine = "CREATE TABLE " + Medicine.TABLE + " ( "
             + Medicine.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + Medicine.COLUMN_BRAND_NAME + " TEXT, "
             + Medicine.COLUMN_GENERIC_NAME + " TEXT NOT NULL, "
             + Medicine.COLUMN_MEDICINE_FOR + " TEXT, "
             + Medicine.COLUMN_AMOUNT + " REAL NOT NULL, "
-            //+ Medicine.COLUMN_ICON + " INTEGER NOT NULL, "
-            //+ Medicine.COLUMN_MODIFIER + " TEXT NOT NULL, "
             + Medicine.COLUMN_MEDICINE_TYPE + " TEXT NOT NULL);";
 
-        db.execSQL(sql);
+        sqlSchedule = "CREATE TABLE " + Schedule.TABLE + " ( "
+            + Schedule.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + Schedule.COLUMN_MEDICINE_TO_DRINK + " INTEGER NOT NULL, "
+            + Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL + " INTEGER NOT NULL, "
+            + Schedule.COLUMN_DRINKING_INTERVAL + " INTEGER NOT NULL);";
+
+        db.execSQL(sqlMedicine);
+        db.execSQL(sqlSchedule);
     }
 
+    /**
+     * Called whenever the newVersion is not equal to the oldVersion, updates the tables in
+     * the device.
+     * @param db
+     * @param oldVersion old version of the db
+     * @param newVersion new version of the db
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //will be called when device's version < new apk's version
-        //drop tables
-        //call oncreate again
-        String sql = "DROP TABLE IF EXISTS " + Medicine.TABLE;
-        db.execSQL(sql);
+        String sqlMedicine = "DROP TABLE IF EXISTS " + Medicine.TABLE;
+        String sqlSchedule = "DROP TABLE IF EXISTS " + Schedule.TABLE;
+        db.execSQL(sqlMedicine);
+        db.execSQL(sqlSchedule);
         onCreate(db);
 
     }
 
     // CRUD OPERATIONS
 
-    // create Medicine
+    /**
+     * Creates medicine by passing another medicine object
+     * @param medicine
+     * @return id of the created object
+     */
     public long createMedicine(Medicine medicine){
 
         ContentValues cv = new ContentValues();
@@ -87,7 +110,10 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         return id;
     }
 
-    // retrieve all food
+    /**
+     * Retrieves all medicine in the database.
+     * @return cursor containing all the medicines in the database
+     */
     public Cursor getAllMedicine(){
         /* SELECT * FROM medicine
          *null == '*'
@@ -96,7 +122,11 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         return db.query(Medicine.TABLE, null, null, null, null, null, null);
     }
 
-    // retrieve single food
+    /**
+     * Retrieves the medicine through the id.
+     * @param id value that points to the object.
+     * @return medicine object referenced by the id.
+     */
     public Medicine getMedicine(int id){
         //SELECT * FROM food WHERE _id = ?
         Medicine medicine = null;
@@ -132,7 +162,11 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         return medicine;
     }
 
-    // update food
+    /**
+     * Updates the value of the medicine
+     * @param medicine object that contains the new value and as well as the id of the object to be updated
+     * @return int containing the number of rows affected
+     */
     public int updateMedicine(Medicine medicine){
         SQLiteDatabase db = getWritableDatabase();
         /* UPDATE INTO medicine SET ..... WHERE id = ?
@@ -155,7 +189,11 @@ public class SQLiteConnection extends SQLiteOpenHelper{
     }
 
 
-    // delete food
+    /**
+     * Deletes the medicine in the through the use of its id.
+     * @param id value that points to the object
+     * @return int containing the number of rows deleted
+     */
     public int deleteMedicine(int id){
         SQLiteDatabase db = getWritableDatabase();
         // DELETE FROM medicine WHERE _id = ?

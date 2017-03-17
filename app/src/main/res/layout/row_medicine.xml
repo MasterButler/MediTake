@@ -1,392 +1,415 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/cardview_light_background"
+    card_view:cardElevation="4dp"
+    card_view:cardUseCompatPadding="true"
+    android:background="@drawable/medicine_background"
+    android:stateListAnimator="@anim/medicine_selection"
+    android:id="@+id/cv_holder"
 
-    <android.support.v7.widget.CardView
+    >
+    <!--app:cardBackgroundColor="@drawable/medicine_background"-->
+    <!--android:layout_marginLeft="4dp"-->
+    <!--android:layout_marginRight="4dp"-->
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/cardview_light_background"
-        card_view:cardElevation="8dp"
-        card_view:cardUseCompatPadding="true"
-        android:id="@+id/cv_holder">
-        <!--android:layout_marginLeft="4dp"-->
-        <!--android:layout_marginRight="4dp"-->
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="16sp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:padding="16sp">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lin_default_information"
                 android:orientation="vertical">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/lin_default_information"
-                    android:orientation="vertical">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Generic Name"
-                            android:textColor="?attr/editTextColor"
-                            android:textStyle="bold"
-                            android:id="@+id/tv_medicine_generic_name"
-                            android:textSize="20sp"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:paddingTop="10dp"
-                            android:paddingBottom="11dp"
-                            />
-
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textNoSuggestions"
-                            android:textColor="?attr/editTextColor"
-                            android:text="Generic Name"
-                            android:textStyle="bold"
-                            android:id="@+id/et_medicine_generic_name"
-                            android:textSize="20sp"
-                            android:hint="Generic Name"
-                        />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Brand Name"
-                            android:textColor="?attr/editTextColor"
-                            android:id="@+id/tv_medicine_brand_name"
-                            android:textSize="16sp"
-                            android:layout_marginTop="4sp"
-                            android:layout_marginBottom="2sp"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:paddingTop="10dp"
-                            android:paddingBottom="11dp"/>
-
-                    <EditText
+                    android:orientation="horizontal">
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Brand Name"
-                        android:inputType="textNoSuggestions"
+                        android:layout_weight="1"
+                        android:text="Generic Name"
                         android:textColor="?attr/editTextColor"
-                        android:id="@+id/et_medicine_brand_name"
-                        android:textSize="16sp"
-                        android:layout_marginTop="4sp"
-                        android:layout_marginBottom="2sp"
-                        android:hint="Brand Name"/>
+                        android:textStyle="bold"
+                        android:id="@+id/tv_medicine_generic_name"
+                        android:textSize="20sp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="11dp"
+                        />
 
-                    <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:layout_width="30dp"
-                                android:layout_height="40dp"
-                                android:src="@drawable/pills_1_colored"
-                                android:padding="2sp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_weight="0.97"
-                                android:id="@+id/tv_medicine_for"
-                                android:textColor="?attr/editTextColor"
-                                android:textSize="16sp"
-                                android:gravity="center_vertical"
-                                tools:hint="Text"
-                                android:layout_marginLeft="8dp"
-                                android:paddingLeft="4dp"
-                                android:paddingRight="4dp"
-                                android:paddingTop="8dp"
-                                android:paddingBottom="11dp"/>
-
-                            <EditText
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:inputType="textNoSuggestions"
-                                android:layout_weight="0.97"
-                                android:id="@+id/et_medicine_for"
-                                android:textColor="?attr/editTextColor"
-                                android:textSize="16sp"
-                                android:gravity="center_vertical"
-                                tools:hint="Text"
-                                android:layout_marginLeft="8dp"
-                                android:hint="Medicine for"/>
-
-                        </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/iv_medicine_type"
+                        />
                 </LinearLayout>
+
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textNoSuggestions"
+                    android:textColor="?attr/editTextColor"
+                    android:text="Generic Name"
+                    android:textStyle="bold"
+                    android:id="@+id/et_medicine_generic_name"
+                    android:textSize="20sp"
+                    android:hint="Generic Name"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Brand Name"
+                    android:textColor="?attr/editTextColor"
+                    android:id="@+id/tv_medicine_brand_name"
+                    android:textSize="16sp"
+                    android:layout_marginTop="4sp"
+                    android:layout_marginBottom="2sp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="11dp"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Brand Name"
+                    android:inputType="textNoSuggestions"
+                    android:textColor="?attr/editTextColor"
+                    android:id="@+id/et_medicine_brand_name"
+                    android:textSize="16sp"
+                    android:layout_marginTop="4sp"
+                    android:layout_marginBottom="2sp"
+                    android:hint="Brand Name"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/lin_expanded_information"
-                    android:orientation="vertical"
-                    android:paddingTop="16dp">
+                    android:layout_height="wrap_content">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        android:id="@+id/line_divider"
-                        />
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/pills_1_colored"
+                        android:padding="2sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.97"
+                        android:id="@+id/tv_medicine_for"
+                        android:textColor="?attr/editTextColor"
+                        android:textSize="16sp"
+                        android:gravity="center_vertical"
+                        tools:hint="Text"
+                        android:layout_marginLeft="8dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="11dp"/>
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:inputType="textNoSuggestions"
+                        android:layout_weight="0.97"
+                        android:id="@+id/et_medicine_for"
+                        android:textColor="?attr/editTextColor"
+                        android:textSize="16sp"
+                        android:gravity="center_vertical"
+                        tools:hint="Text"
+                        android:layout_marginLeft="8dp"
+                        android:hint="Medicine for"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lin_expanded_information"
+                android:orientation="vertical"
+                android:paddingTop="16dp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"
+                    android:id="@+id/line_divider"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/editTextColor"
+                    tools:hint="Amount Remaining"
+                    android:id="@+id/tv_medicine_amount"
+                    android:textSize="14sp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/lin_edit_amount">
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="?attr/editTextColor"
+                        android:inputType="textNoSuggestions"
+                        tools:hint="50"
+                        android:id="@+id/et_medicine_amount"
+                        android:textSize="14sp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="10dp"
+                        android:minWidth="30dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="?attr/editTextColor"
-                        tools:hint="Amount Remaining"
-                        android:id="@+id/tv_medicine_amount"
-                        android:textSize="14sp"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="10dp"/>
+                        android:layout_weight="1"
+                        android:text=" remaining"
+                        android:id="@+id/tv_medicine_amount_label"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/lin_action_viewing_medicine">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/lin_edit_amount">
+                        android:paddingTop="2dp"
+                        android:paddingLeft="2dp"
+                        android:paddingBottom="2dp"
+                        android:paddingRight="10dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:id="@+id/lin_edit_medicine">
 
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="?attr/editTextColor"
-                            android:inputType="textNoSuggestions"
-                            tools:hint="50"
-                            android:id="@+id/et_medicine_amount"
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_mode_edit_black_24dp"
+                            android:tint="@color/colorPrimary"
+                            android:padding="2dp"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="32dp"
+                            android:text="EDIT"
                             android:textSize="14sp"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:paddingTop="16dp"
-                            android:paddingBottom="10dp"
-                            android:minWidth="30dp"/>
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:paddingLeft="2dp"
+                        android:paddingBottom="2dp"
+                        android:paddingRight="10dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:id="@+id/lin_delete_medicine">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_delete_black_24dp"
+                            android:tint="@color/colorPrimary"
+                            android:padding="2dp"
+                            android:layout_gravity="center"/>
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="?attr/editTextColor"
-                            android:layout_weight="1"
-                            android:text=" remaining"
-                            android:id="@+id/tv_medicine_amount_label"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/lin_action_viewing_medicine">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="2dp"
+                            android:layout_height="32dp"
+                            android:text="DELETE"
+                            android:textSize="14sp"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
                             android:paddingLeft="2dp"
-                            android:paddingBottom="2dp"
-                            android:paddingRight="10dp"
-                            android:background="?attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:id="@+id/lin_edit_medicine">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_mode_edit_black_24dp"
-                                android:tint="@color/colorPrimary"
-                                android:padding="2dp"
-                                android:layout_gravity="center"/>
-
-                            <TextView
-                                android:layout_width="40dp"
-                                android:layout_height="32dp"
-                                android:text="EDIT"
-                                android:textSize="14sp"
-                                android:paddingTop="8dp"
-                                android:paddingBottom="8dp"
-                                android:paddingLeft="2dp"
-                                android:paddingRight="2dp"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
-                                android:textStyle="bold"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="2dp"
-                            android:paddingLeft="2dp"
-                            android:paddingBottom="2dp"
-                            android:paddingRight="10dp"
-                            android:background="?attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:id="@+id/lin_delete_medicine">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_delete_black_24dp"
-                                android:tint="@color/colorPrimary"
-                                android:padding="2dp"
-                                android:layout_gravity="center"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="32dp"
-                                android:text="DELETE"
-                                android:textSize="14sp"
-                                android:paddingTop="8dp"
-                                android:paddingBottom="8dp"
-                                android:paddingLeft="2dp"
-                                android:paddingRight="2dp"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
-                                android:textStyle="bold"/>
-
-                        </LinearLayout>
+                            android:paddingRight="2dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"/>
 
                     </LinearLayout>
 
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/lin_action_editing_medicine">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/lin_action_editing_medicine">
+                        android:paddingTop="2dp"
+                        android:paddingLeft="2dp"
+                        android:paddingBottom="2dp"
+                        android:paddingRight="10dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:id="@+id/lin_save_medicine">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="2dp"
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_done_black_24dp"
+                            android:tint="@color/colorPrimary"
+                            android:padding="2dp"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="32dp"
+                            android:text="SAVE"
+                            android:textSize="14sp"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
                             android:paddingLeft="2dp"
-                            android:paddingBottom="2dp"
-                            android:paddingRight="10dp"
-                            android:background="?attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:id="@+id/lin_save_medicine">
+                            android:paddingRight="2dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"/>
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_done_black_24dp"
-                                android:tint="@color/colorPrimary"
-                                android:padding="2dp"
-                                android:layout_gravity="center"/>
+                    </LinearLayout>
 
-                            <TextView
-                                android:layout_width="40dp"
-                                android:layout_height="32dp"
-                                android:text="SAVE"
-                                android:textSize="14sp"
-                                android:paddingTop="8dp"
-                                android:paddingBottom="8dp"
-                                android:paddingLeft="2dp"
-                                android:paddingRight="2dp"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
-                                android:textStyle="bold"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:paddingLeft="2dp"
+                        android:paddingBottom="2dp"
+                        android:paddingRight="10dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:id="@+id/lin_cancel_medicine">
 
-                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_clear_white_24dp"
 
-                        <LinearLayout
+                            android:tint="@color/colorPrimary"
+                            android:padding="2dp"
+                            android:layout_gravity="center"/>
+
+                        <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="2dp"
+                            android:layout_height="32dp"
+                            android:text="CANCEL"
+                            android:textSize="14sp"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
                             android:paddingLeft="2dp"
-                            android:paddingBottom="2dp"
-                            android:paddingRight="10dp"
-                            android:background="?attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:id="@+id/lin_cancel_medicine">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_clear_white_24dp"
-
-                                android:tint="@color/colorPrimary"
-                                android:padding="2dp"
-                                android:layout_gravity="center"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="32dp"
-                                android:text="CANCEL"
-                                android:textSize="14sp"
-                                android:paddingTop="8dp"
-                                android:paddingBottom="8dp"
-                                android:paddingLeft="2dp"
-                                android:paddingRight="2dp"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
-                                android:textStyle="bold"/>
-
-                        </LinearLayout>
+                            android:paddingRight="2dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"/>
 
                     </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
+
         </LinearLayout>
+    </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+</android.support.v7.widget.CardView>
+<!--<LinearLayout-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
 
-   <!--<android.support.v7.widget.CardView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:cardBackgroundColor="@color/cardview_light_background"-->
-        <!--android:layout_margin="8dp"-->
-        <!--app:cardElevation="1sp">-->
+    <!---->
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:padding="16dp">-->
+   <!--&lt;!&ndash;<android.support.v7.widget.CardView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:cardBackgroundColor="@color/cardview_light_background"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_margin="8dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;app:cardElevation="1sp">&ndash;&gt;-->
 
-            <!--<ImageView-->
-                <!--android:layout_width="40dp"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:src="@drawable/syringe_colored"-->
-                <!--android:id="@+id/iv_medicine_display_image"/>-->
+        <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:orientation="horizontal"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:padding="16dp">&ndash;&gt;-->
 
-            <!--<LinearLayout-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight="1"-->
-                <!--android:orientation="vertical"-->
-                <!--android:layout_marginLeft="16dp">-->
+            <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="40dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="40dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:src="@drawable/syringe_colored"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/iv_medicine_display_image"/>&ndash;&gt;-->
 
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Brand Name (Generic Name)"-->
-                    <!--android:id="@+id/tv_medicine_display_name"-->
-                    <!--android:textSize="18sp"/>-->
+            <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="0dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_weight="1"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:orientation="vertical"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginLeft="16dp">&ndash;&gt;-->
 
-                <!--<TextView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Medicine For"-->
-                    <!--android:id="@+id/tv_medicine_for"/>-->
-            <!--</LinearLayout>-->
+                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:text="Brand Name (Generic Name)"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:id="@+id/tv_medicine_display_name"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:textSize="18sp"/>&ndash;&gt;-->
 
-        <!--</LinearLayout>-->
-    <!--</android.support.v7.widget.CardView>-->
+                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:text="Medicine For"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:id="@+id/tv_medicine_for"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;</LinearLayout>&ndash;&gt;-->
+
+        <!--&lt;!&ndash;</LinearLayout>&ndash;&gt;-->
+    <!--&lt;!&ndash;</android.support.v7.widget.CardView>&ndash;&gt;-->
 
 
-</LinearLayout>
+<!--</LinearLayout>-->

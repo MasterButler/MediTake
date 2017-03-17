@@ -25,7 +25,9 @@ public class Capsule extends Medicine{
     private void setCapsuleSpecificInfo(){
         this.modifier = " capsules";
         this.icon = R.drawable.selection_capsule_colored;
-        this.color = Color.parseColor("#C5CAE9");
+//        this.color = Color.parseColor("#C5CAE9");
 //        this.color = Color.parseColor("#304FFE");
+//        this.color = Color.parseColor("#0277BD");
+        this.color = Color.parseColor("#81D4FA");
     }
 }

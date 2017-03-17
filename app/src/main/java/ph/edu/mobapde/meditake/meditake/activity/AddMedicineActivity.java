@@ -60,7 +60,6 @@ public class AddMedicineActivity extends AppCompatActivity {
     TextInputLayout tilMedicineFor;
 
     MenuItem actionAddMedicine;
-
     Medicine newMedicine;
 
     private void setUpActionBar(){

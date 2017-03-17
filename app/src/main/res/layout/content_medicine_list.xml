@@ -15,16 +15,16 @@
         android:id="@+id/rv_medicine"
         ></android.support.v7.widget.RecyclerView>
 
-    <Button
-        android:id="@+id/randomMedicine"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="MEDICINE A"/>
+    <!--<Button-->
+        <!--android:id="@+id/randomMedicine"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="MEDICINE A"/>-->
 
-    <Button
-        android:id="@+id/changeTheme"
-        android:text="change theme"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-    </Button>
+    <!--<Button-->
+        <!--android:id="@+id/changeTheme"-->
+        <!--android:text="change theme"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="match_parent">-->
+    <!--</Button>-->
 </LinearLayout>

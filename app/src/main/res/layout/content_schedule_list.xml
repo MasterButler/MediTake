@@ -9,4 +9,5 @@
     tools:context="ph.edu.mobapde.meditake.meditake.activity.ScheduleListActivity"
     tools:showIn="@layout/app_bar_schedule_list">
 
+    <include layout="@layout/row_schedule"/>
 </RelativeLayout>
