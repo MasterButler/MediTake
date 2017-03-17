@@ -12,6 +12,8 @@ import ph.edu.mobapde.meditake.meditake.R;
 
 public class Capsule extends Medicine{
 
+    public static final String CLASS_NAME = "capsule";
+
     public Capsule(){
         super();
         setCapsuleSpecificInfo();

@@ -12,6 +12,8 @@ import ph.edu.mobapde.meditake.meditake.R;
 
 public class Syrup extends Medicine{
 
+    public static final String CLASS_NAME = "syrup";
+
     public Syrup(){
         super();
         setSyrupSpecificInfo();

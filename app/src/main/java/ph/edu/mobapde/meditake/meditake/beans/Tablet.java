@@ -12,6 +12,8 @@ import ph.edu.mobapde.meditake.meditake.R;
 
 public class Tablet extends Medicine{
 
+    public static final String CLASS_NAME = "tablet";
+
     public Tablet(){
         super();
         setTabletSpecificInfo();

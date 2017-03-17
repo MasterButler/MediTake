@@ -15,8 +15,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +30,10 @@ import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.adapter.MedicineAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
+import ph.edu.mobapde.meditake.meditake.beans.Syrup;
+import ph.edu.mobapde.meditake.meditake.beans.Tablet;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
+import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
@@ -35,11 +43,11 @@ public class MedicineListActivity extends AppCompatActivity
     @BindView(R.id.rv_medicine)
     RecyclerView rvMedicine;
 
-//    @BindView(R.id.changeTheme)
-//    Button changeThemeButton;
-//
-//    @BindView(R.id.randomMedicine)
-//    Button medicineButton;
+    @BindView(R.id.fab_add_medicine)
+    FloatingActionsMenu addMedicineMenu;
+
+    @BindView(R.id.white_overlay)
+    RelativeLayout whiteOverlay;
 
     @BindView(R.id.toolbar_medicine_list)
     Toolbar medicine_list_toolbar;
@@ -67,18 +75,21 @@ public class MedicineListActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setUpActionBar();
 
+        medicineUtil = new MedicineUtil(getBaseContext());
+
+        initializeDrawer();
+        initializeAdapter();
+        initializeFAM();
         CREATING_NEW_ITEM = -1;
 
-        medicineUtil = new MedicineUtil(getBaseContext());
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, medicine_list_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        rvMedicine.setAdapter(medicineAdapter);
+        rvMedicine.setLayoutManager(new LinearLayoutManager(
+                getBaseContext(), LinearLayoutManager.VERTICAL, true)
+        );
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(1).setChecked(true);
+    }
 
+    public void initializeAdapter(){
         medicineAdapter = new MedicineAdapter(getBaseContext(), medicineUtil.getAllMedicine());
         medicineAdapter.setHasStableIds(true);
 
@@ -109,12 +120,39 @@ public class MedicineListActivity extends AppCompatActivity
                 cancel(id);
             }
         });
+    }
 
-        rvMedicine.setAdapter(medicineAdapter);
-        rvMedicine.setLayoutManager(new LinearLayoutManager(
-                getBaseContext(), LinearLayoutManager.VERTICAL, true)
-        );
+    public void initializeDrawer(){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, medicine_list_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(1).setChecked(true);
+    }
+
+    public void initializeFAM(){
+        addMedicineMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                whiteOverlay.getBackground().setAlpha(120);
+                whiteOverlay.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        addMedicineMenu.collapse();
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                whiteOverlay.getBackground().setAlpha(0);
+                whiteOverlay.setOnTouchListener(null);
+            }
+        });
     }
 
     public void updateList(){
@@ -220,23 +258,41 @@ public class MedicineListActivity extends AppCompatActivity
         return true;
     }
 
-    public void addNewMedicine(){
-//        Intent i = new Intent(getBaseContext(), AddMedicineActivity.class);
-//        startActivity(i);
+    public void addNewMedicine(String className){
         if(CREATING_NEW_ITEM == -1) {
-            Medicine tempMed = new Capsule("", "", "", 0.0);
+            Medicine tempMed = MedicineInstantiatorUtil.createMedicineInstanceFromString(className);
+
+            tempMed.setGenericName("");
+            tempMed.setBrandName("");
+            tempMed.setMedicineFor("");
+            tempMed.setAmount(0.0);
             long tempId = medicineUtil.addMedicine(tempMed);
+
             updateList();
+
             rvMedicine.smoothScrollToPosition(medicineAdapter.getItemCount() - 1);
             expand((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
             edit((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
             CREATING_NEW_ITEM = tempId;
+            addMedicineMenu.collapse();
         }
     }
 
-    @OnClick(R.id.fab_add_medicine)
+    @OnClick(R.id.fab_option_capsule)
+    public void addCapsule(){
+        addNewMedicine(Capsule.CLASS_NAME);
+        Toast.makeText(getBaseContext(), "Something", Toast.LENGTH_SHORT);
+    }
+
+    @OnClick(R.id.fab_option_syrup)
+    public void addSyrup(){
+        addNewMedicine(Syrup.CLASS_NAME);
+        Toast.makeText(getBaseContext(), "Something", Toast.LENGTH_SHORT);
+    }
+
+    @OnClick(R.id.fab_option_tablet)
     public void addMedicine(){
-        addNewMedicine();
+        addNewMedicine(Tablet.CLASS_NAME);
         Toast.makeText(getBaseContext(), "Something", Toast.LENGTH_SHORT);
     }
 
