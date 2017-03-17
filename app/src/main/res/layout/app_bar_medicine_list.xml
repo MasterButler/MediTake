@@ -34,21 +34,6 @@
 
     </LinearLayout>
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab_add_medicine"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--android:src="@drawable/ic_add_white"-->
-        <!--android:layout_marginRight="@dimen/fab_margin"-->
-        <!--android:layout_marginLeft="@dimen/fab_margin"-->
-        <!--android:layout_marginBottom="24dp"-->
-        <!--android:elevation="4dp"-->
-        <!--android:layout_marginEnd="24dp"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:background="?attr/colorPrimary"/>-->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -76,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/medicine_tablet_selection"
-            fab:fab_colorPressed="?attr/fab_colorPressed"
+            fab:fab_colorPressed="@color/medicine_tablet_selection_pressed"
             fab:fab_plusIconColor="@color/white"
             fab:fab_icon="@drawable/aspirins_white"
             fab:fab_size="mini"
@@ -87,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/medicine_capsule_selection"
-            fab:fab_colorPressed="?attr/fab_colorPressed"
+            fab:fab_colorPressed="@color/medicine_capsule_selection_pressed"
             fab:fab_plusIconColor="@color/white"
             fab:fab_icon="@drawable/pill_capsule_white"
             fab:fab_size="mini"
@@ -98,35 +83,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/medicine_syrup_selection"
-            fab:fab_colorPressed="?attr/fab_colorPressed"
+            fab:fab_colorPressed="@color/medicine_syrup_selection_pressed"
             fab:fab_plusIconColor="@color/white"
             fab:fab_icon="@drawable/medicine_bottle_white"
             fab:fab_size="mini"
             fab:fab_title="Syrup"
             />
-
-        <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
-            <!--android:id="@+id/fab_photo"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--fab:fab_colorNormal="@color/accent"-->
-            <!--fab:fab_colorPressed="@color/accent_dark"-->
-            <!--fab:fab_plusIconColor="@color/white"-->
-            <!--fab:fab_icon="@drawable/my_icon"-->
-            <!--fab:fab_size="mini"-->
-            <!--fab:fab_title="Photographs" />-->
-
-        <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
-            <!--android:id="@+id/fab_others"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--fab:fab_colorNormal="@color/accent"-->
-            <!--fab:fab_colorPressed="@color/accent_dark"-->
-            <!--fab:fab_plusIconColor="@color/white"-->
-            <!--fab:fab_icon="@drawable/my_icon"-->
-            <!--fab:fab_size="mini"-->
-            <!--fab:fab_title="Others" />-->
-
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 

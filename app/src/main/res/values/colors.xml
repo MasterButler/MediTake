@@ -27,6 +27,10 @@
     <color name="selected_medicine_background">#F5F5F5</color>
 
     <color name="medicine_syrup_selection">#EF6C00</color>
-    <color name="medicine_tablet_selection">#283593</color>
+    <color name="medicine_tablet_selection">#2E7D32</color>
     <color name="medicine_capsule_selection">#0277BD</color>
+
+    <color name="medicine_syrup_selection_pressed">#E65100</color>
+    <color name="medicine_tablet_selection_pressed">#1B5E20</color>
+    <color name="medicine_capsule_selection_pressed">#01579B</color>
 </resources>
