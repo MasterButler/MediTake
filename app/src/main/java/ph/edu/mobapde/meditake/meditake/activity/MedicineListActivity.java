@@ -1,6 +1,5 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -17,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -32,6 +30,7 @@ import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Syrup;
 import ph.edu.mobapde.meditake.meditake.beans.Tablet;
+import ph.edu.mobapde.meditake.meditake.listener.OnMedicineClickListener;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
 import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
@@ -93,7 +92,7 @@ public class MedicineListActivity extends AppCompatActivity
         medicineAdapter = new MedicineAdapter(getBaseContext(), medicineUtil.getAllMedicine());
         medicineAdapter.setHasStableIds(true);
 
-        medicineAdapter.setOnItemClickListener(new MedicineAdapter.OnItemClickListener() {
+        medicineAdapter.setOnMedicineClickListener(new OnMedicineClickListener() {
             @Override
             public void onItemClick(int id) {
                 expand(id);
@@ -153,6 +152,8 @@ public class MedicineListActivity extends AppCompatActivity
                 whiteOverlay.setOnTouchListener(null);
             }
         });
+        whiteOverlay.getBackground().setAlpha(0);
+        addMedicineMenu.collapse();
     }
 
     public void updateList(){
@@ -226,20 +227,6 @@ public class MedicineListActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-//    @OnClick(R.id.changeTheme)
-//    public void changeTheme(){
-//        int newTheme = ThemeUtil.getSelectedTheme()+1;
-//        ThemeUtil.changeToTheme(this, newTheme%2);
-//        Toast.makeText(getBaseContext(), "Changing theme", Toast.LENGTH_SHORT);
-//    }
-//
-//    @OnClick(R.id.randomMedicine)
-//    public void viewMedicineInfo(){
-//        Intent i = new Intent();
-//        i.setClass(getBaseContext(), ViewMedicineActivity.class);
-//        startActivity(i);
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

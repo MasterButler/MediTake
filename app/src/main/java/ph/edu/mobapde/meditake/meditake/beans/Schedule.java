@@ -24,6 +24,8 @@ public class Schedule {
     public static long MILLIS_TO_HOURS = 60 * 60 * 1000;
     public static long MILLIS_TO_DAYS = 24 * 60 * 60 * 1000;
 
+    //id of the medicine in the server for easier retrieval/storage when it is already present in the cache
+    private int sqlId;
     //the medicine to drink
     private Medicine medicineToDrink;
     //dosage needed to drink
@@ -89,11 +91,23 @@ public class Schedule {
         }
     }
 
+    public int getSqlId() {
+        return sqlId;
+    }
+
+    public void setSqlId(int sqlId) {
+        this.sqlId = sqlId;
+    }
+
+    public void setDrinkingInterval(double drinkingInterval) {
+        this.drinkingInterval = drinkingInterval;
+    }
+
     public long getLastTimeTaken(){
         return this.lastTimeTaken;
     }
 
-    private void setLastTimeTaken(long lastTimeTaken){
+    public void setLastTimeTaken(long lastTimeTaken){
         this.lastTimeTaken = lastTimeTaken - (lastTimeTaken%MILLIS_TO_SECONDS);
     }
 }

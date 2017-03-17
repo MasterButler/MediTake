@@ -14,8 +14,6 @@ public class MedicineUtil {
     SQLiteConnection databaseConnection;
     Context context;
 
-    public static Medicine medicine;
-
     public MedicineUtil(Context context){
         this.context = context;
     }

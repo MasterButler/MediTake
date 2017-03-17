@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
@@ -61,7 +62,8 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             + Schedule.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + Schedule.COLUMN_MEDICINE_TO_DRINK + " INTEGER NOT NULL, "
             + Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL + " INTEGER NOT NULL, "
-            + Schedule.COLUMN_DRINKING_INTERVAL + " INTEGER NOT NULL);";
+            + Schedule.COLUMN_DRINKING_INTERVAL + " INTEGER NOT NULL"
+            + Schedule.COLUMN_LAST_TIME_TAKEN + " INTEGER NOT NULL);";
 
         db.execSQL(sqlMedicine);
         db.execSQL(sqlSchedule);
@@ -84,7 +86,9 @@ public class SQLiteConnection extends SQLiteOpenHelper{
 
     }
 
-    // CRUD OPERATIONS
+    /****************
+     * MEDICINE CRUD
+     ****************/
 
     /**
      * Creates medicine by passing another medicine object
@@ -203,4 +207,131 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         db.close();
         return rows;
     }
+
+    /****************
+     * SCHEDULE CRUD
+     ****************/
+    /**
+     * Creates schedule by passing another scheudle object
+     * @param schedule
+     * @return id of the created object
+     */
+    public long createSchedule(Schedule schedule){
+        ContentValues cv = new ContentValues();
+
+        //Log.wtf("DB_ADD", "instance of " + schedule.getClass().getSimpleName() + " to be inserted");
+
+        cv.put(Schedule.COLUMN_MEDICINE_TO_DRINK, schedule.getMedicineToDrink().getSqlId());
+        cv.put(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL, schedule.getDosagePerDrinkingInterval());
+        cv.put(Schedule.COLUMN_DRINKING_INTERVAL, schedule.getDosagePerDrinkingInterval());
+        cv.put(Schedule.COLUMN_LAST_TIME_TAKEN, schedule.getLastTimeTaken());
+
+        SQLiteDatabase db = getWritableDatabase();
+        long id = db.insert(Schedule.TABLE, null, cv);
+
+        db.close();
+        return id;
+    }
+
+    /**
+     * Retrieves all schedules in the database.
+     * @return cursor containing all the schedule in the database
+     */
+    public Cursor getAllSchedule(){
+        /* SELECT * FROM schedule
+         *null == '*'
+         */
+        SQLiteDatabase db = getReadableDatabase();
+        return db.query(Schedule.TABLE, null, null, null, null, null, null);
+    }
+
+    private Schedule getSchedule(int id){
+        Schedule toReturn = getScheduleWithoutMedicineInfo(id);
+        toReturn.setMedicineToDrink(getMedicine(toReturn.getMedicineToDrink().getSqlId()));
+        return toReturn;
+    }
+
+    /**
+     * Retrieves the schedule through the id.
+     * @param id value that points to the object.
+     * @return schedule object referenced by the id.
+     */
+    public Schedule getScheduleWithoutMedicineInfo(int id){
+        //SELECT * FROM schedule WHERE _id = ?
+        Schedule schedule = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(Schedule.TABLE,
+                null,
+                Schedule.COLUMN_ID + " = ?",
+                new String[]{id+""},
+                null,
+                null,
+                null);
+
+        if(cursor.moveToFirst()){
+            schedule = new Schedule();
+            long medicineToDrinkId = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_MEDICINE_TO_DRINK));
+            double dosagePerDrinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL));
+            double drinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DRINKING_INTERVAL));
+            long lastTimeTaken = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_LAST_TIME_TAKEN));
+
+            Medicine medTempHolder = new Capsule();
+            medTempHolder.setSqlId((int) medicineToDrinkId);
+
+            Log.wtf("IN SQLITE CONNECTION", "FOUND " + id);
+
+            schedule.setSqlId(id);
+            schedule.setMedicineToDrink(medTempHolder);
+            schedule.setDosagePerDrinkingInterval(dosagePerDrinkingInterval);
+            schedule.setDosagePerDrinkingInterval(drinkingInterval);
+            schedule.setLastTimeTaken(lastTimeTaken);
+        }
+
+        cursor.close();
+        db.close();
+        return schedule;
+    }
+
+    /**
+     * Updates the value of the medicine
+     * @param schedule object that contains the new value and as well as the id of the object to be updated
+     * @return int containing the number of rows affected
+     */
+    public int updateSchedule(Schedule schedule){
+        SQLiteDatabase db = getWritableDatabase();
+        /* UPDATE INTO schedule SET ..... WHERE id = ?
+
+         */
+        ContentValues cv = new ContentValues();
+        cv.put(Schedule.COLUMN_MEDICINE_TO_DRINK, schedule.getMedicineToDrink().getSqlId());
+        cv.put(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL, schedule.getDosagePerDrinkingInterval());
+        cv.put(Schedule.COLUMN_DRINKING_INTERVAL, schedule.getDrinkingInterval());
+        cv.put(Schedule.COLUMN_LAST_TIME_TAKEN, schedule.getLastTimeTaken());
+
+        int rows = db.update(Schedule.TABLE,
+                cv,
+                Schedule.COLUMN_ID + " = ? ",
+                new String[]{schedule.getSqlId()+""});
+
+        db.close();
+        return rows;
+    }
+
+    /**
+     * Deletes the schedule in the db through the use of its id.
+     * @param id value that points to the object
+     * @return int containing the number of rows deleted
+     */
+    public int deleteSchedule(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        // DELETE FROM medicine WHERE _id = ?
+        int rows = db.delete(Schedule.TABLE,
+                Schedule.COLUMN_ID + " = ? ",
+                new String[]{id+""});
+        db.close();
+        return rows;
+    }
+
 }
+
+
