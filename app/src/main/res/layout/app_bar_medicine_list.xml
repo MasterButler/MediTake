@@ -56,21 +56,21 @@
         android:layout_gravity="right|bottom"
         fab:fab_addButtonColorNormal="?attr/fab_addButtonColorNormal"
         fab:fab_addButtonColorPressed="?attr/fab_addButtonColorPressed"
-        fab:fab_addButtonPlusIconColor="#FFFFFF"
+        fab:fab_addButtonPlusIconColor="@color/white"
         fab:fab_addButtonStrokeVisible="false"
         fab:fab_labelStyle="@style/menu_labels_style"
         fab:fab_labelsPosition="left">
 
-        <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
-            <!--android:id="@+id/fab_event"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--fab:fab_colorNormal="@color/accent"-->
-            <!--fab:fab_colorPressed="@color/accent_dark"-->
-            <!--fab:fab_plusIconColor="@color/white"-->
-            <!--fab:fab_icon="@drawable/my_icon"-->
-            <!--fab:fab_size="mini"-->
-            <!--fab:fab_title="Events" />-->
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="?attr/fab_colorNormal"
+            fab:fab_colorPressed="?attr/fab_colorPressed"
+            fab:fab_plusIconColor="@color/white"
+            fab:fab_icon="@drawable/aspirins_black"
+            fab:fab_size="mini"
+            fab:fab_title="Events" />
 
         <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
             <!--android:id="@+id/fab_photo"-->

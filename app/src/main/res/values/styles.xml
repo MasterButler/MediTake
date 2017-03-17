@@ -25,7 +25,10 @@
         <item name="android:editTextColor">@color/colorFontInBackground</item>
 
         <item name="fab:fab_addButtonColorNormal">@color/colorAccent</item>
-        <color name="fab_addButtonColorPressed">@color/colorAccentDark</color>
+        <item name="fab:fab_addButtonColorPressed">@color/colorAccentDark</item>
+        <item name="fab:fab_colorNormal">@color/colorAccent</item>
+        <item name="fab:fab_colorPressed">@color/colorAccentDark</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar.BlueColorScheme">
