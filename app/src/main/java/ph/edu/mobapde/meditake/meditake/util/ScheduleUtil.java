@@ -11,19 +11,29 @@ import ph.edu.mobapde.meditake.meditake.db.SQLiteConnection;
  */
 
 public class ScheduleUtil {
-
-    private SQLiteConnection databaseConnection;
-    private Context context;
+    SQLiteConnection databaseConnection;
+    Context context;
 
     public ScheduleUtil(Context context){
+        this.context = context;
+    }
+
+    public void initializeDBConnection(Context context){
         databaseConnection = new SQLiteConnection(context);
     }
 
     public long addNewSchedule(Schedule schedule){
+        initializeDBConnection(context);
         return databaseConnection.createSchedule(schedule);
     }
 
     public Cursor getAllSchedule(){
+        initializeDBConnection(context);
         return databaseConnection.getAllSchedule();
+    }
+
+    public int deleteSchedule(int id){
+        initializeDBConnection(context);
+        return databaseConnection.deleteMedicine(id);
     }
 }

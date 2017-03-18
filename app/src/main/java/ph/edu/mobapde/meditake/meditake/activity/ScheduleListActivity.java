@@ -1,5 +1,6 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.transition.TransitionManager;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -69,13 +71,14 @@ public class ScheduleListActivity extends AppCompatActivity
         medicine.setAmount(100);
 
         long medicineId = medicineUtil.addMedicine(medicine);
+        medicine.setSqlId((int) medicineId);
 
         Schedule schedule = new Schedule();
         schedule.setActivated(false);
         schedule.setLastTimeTaken(System.currentTimeMillis());
         schedule.setDrinkingInterval(1);
         schedule.setDosagePerDrinkingInterval(5);
-        schedule.setMedicineToDrink(medicineUtil.getMedicine((int) medicineId));
+        schedule.setMedicineToDrink(medicine);
 
         scheduleUtil.addNewSchedule(schedule);
 
@@ -84,7 +87,7 @@ public class ScheduleListActivity extends AppCompatActivity
 
         rvSchedule.setAdapter(scheduleAdapter);
         rvSchedule.setLayoutManager(new LinearLayoutManager(
-                getBaseContext(), LinearLayoutManager.VERTICAL, false)
+                getBaseContext(), LinearLayoutManager.VERTICAL, true)
         );
     }
 
@@ -99,7 +102,7 @@ public class ScheduleListActivity extends AppCompatActivity
 
             @Override
             public void onItemDeleteClick(int id) {
-
+                delete(id);
             }
 
             @Override
@@ -134,6 +137,21 @@ public class ScheduleListActivity extends AppCompatActivity
 //            delete((int)CREATING_NEW_ITEM);
 //            CREATING_NEW_ITEM = -1;
 //        }
+    }
+
+    public void delete(int id){
+        Log.wtf("CHECKER", "A");
+        scheduleUtil.deleteSchedule(id);
+        Log.wtf("CHECKER", "B");
+        scheduleAdapter.notifyDataSetChanged();
+        Log.wtf("CHECKER", "C");
+        updateList();
+        Log.wtf("CHECKER", "D");
+    }
+
+    public void updateList(){
+        Cursor c = scheduleUtil.getAllSchedule();
+        scheduleAdapter.changeCursor(c);
     }
 
     public void initializeDrawer(){

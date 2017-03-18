@@ -60,6 +60,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
 
         Log.d("ID", "EXPAND  ID: " + expandedPositionId);
         Log.d("ID", "EDITING ID: " + editingPositionId);
+        Log.d("ID", "MEDICINEID: " + id + "\n");
 
         if(id != -1){
             Medicine med = MedicineInstantiatorUtil.createMedicineInstanceFromString(medicineType);

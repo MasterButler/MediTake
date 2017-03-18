@@ -16,8 +16,10 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
+import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
+import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
@@ -26,7 +28,7 @@ import ph.edu.mobapde.meditake.meditake.util.DateUtil;
  * Created by Winfred Villaluna on 3/17/2017.
  */
 
-public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleAdapter.ScheduleViewHolder>{
+public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolder>{
 
     int expandedPositionId;
     int editingPositionId;
@@ -42,14 +44,11 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleAdapter.S
 
     public ScheduleAdapter(Context context, Cursor cursor) {
         super(context, cursor);
-        medicineUtil = new MedicineUtil(contextHolder);
         this.contextHolder = context;
         expandedPositionId = -1;
         editingPositionId = -1;
         setHasStableIds(true);
 
-        scheduleUtil = new ScheduleUtil(context);
-        medicineUtil = new MedicineUtil(context);
         isMilitary = false;
     }
 
@@ -60,7 +59,12 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleAdapter.S
     }
 
     @Override
-    public void onBindViewHolder(ScheduleAdapter.ScheduleViewHolder viewHolder, Cursor cursor) {
+    public void onBindViewHolder(ScheduleViewHolder viewHolder, int position) {
+        super.onBindViewHolder(viewHolder, position);
+    }
+
+    @Override
+    public void onBindViewHolder(ScheduleViewHolder viewHolder, Cursor cursor) {
         int id = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_ID));
         int medicineId = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_MEDICINE_TO_DRINK));
         double dosagePerDrinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL));
@@ -68,12 +72,38 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleAdapter.S
         long lastTimeTaken = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_LAST_TIME_TAKEN));
         boolean isActivated = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_IS_ACTIVATED)) == 1 ? true : false;
 
+        String brandName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
+        String genericName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
+        String medicineFor =  cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
+        double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
+        String medicineType = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE));
+
         Log.d("ID", "EXPAND  ID: " + expandedPositionId);
         Log.d("ID", "EDITING ID: " + editingPositionId);
 
         if(id != -1){
+            Log.wtf("action", "GENERATED ID FOR MEDICINE");
+
+            Log.d("ID", "SCHEDULE ID: " + id);
+            Log.d("ID", "MEDICINE ID: " + medicineId);
+
+            Medicine med = MedicineInstantiatorUtil.createMedicineInstanceFromString(medicineType);
+            med.setBrandName(brandName);
+            med.setGenericName(genericName);
+            med.setMedicineFor(medicineFor);
+            med.setAmount(amount);
+
+            if(med == null){
+                Log.wtf("action", "MEDICINE IS N");
+                Log.wtf("action", "MEDICINE IS NULLLLLLLL");
+                Log.wtf("action", "MEDICINE IS N");
+            }else{
+                Log.wtf("action", "MEDICINE IS " + med);
+            }
+
             Schedule sched = new Schedule();
-            sched.setMedicineToDrink(medicineUtil.getMedicine(medicineId));
+            sched.setSqlId(id);
+            sched.setMedicineToDrink(med);
             sched.setDosagePerDrinkingInterval(dosagePerDrinkingInterval);
             sched.setDrinkingInterval(drinkingInterval);
             sched.setLastTimeTaken(lastTimeTaken);
@@ -90,7 +120,7 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleAdapter.S
                 viewHolder.tvScheduleTimePeriod.setText(displayTime.split("\\s")[1]);
             }
             String medicineDisplay = dosagePerDrinkingInterval
-                    + sched.getMedicineToDrink().getModifier() + " of " + sched.getMedicineToDrink().getName();
+                     + sched.getMedicineToDrink().getModifier() + " of " + sched.getMedicineToDrink().getName();
             viewHolder.tvMedicineToDrink.setText(medicineDisplay);
             viewHolder.scheduleSwitch.setChecked(isActivated);
             viewHolder.tvDrinkingInterval.setText("Medicine taken every " + sched.getDrinkingInterval() + " hours.");
@@ -109,15 +139,45 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleAdapter.S
                 public void onClick(View v) {
                     if(onScheduleClickListener != null){
                         int value = (int)v.getTag();
+                        Log.d("action", "EXPANDING ITEM WITH ID OF " + value /*+ " AND MEDICINE ID OF " +*/);
                         onScheduleClickListener.onItemClick(value);
                     }
                 }
             });
+
+            boolean isEditing = id == editingPositionId;
+            viewHolder.linEditSchedule.setTag(id);
+            setMode(viewHolder, isEditing ? MedicineViewHolder.EDIT_MODE : MedicineViewHolder.VIEW_MODE);
+            viewHolder.linEditSchedule.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(onScheduleClickListener != null){
+                        int value = (int)v.getTag();
+                        onScheduleClickListener.onItemEditClick(value);
+                    }
+                }
+            });
+
+            viewHolder.linDeleteSchedule.setTag(id);
+            viewHolder.linDeleteSchedule.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(onScheduleClickListener != null){
+                        int value = (int)v.getTag();
+                        if(value != -1){
+                            Log.wtf("action", "DELETING SCHEDULE WITH ID OF " + value);
+                            onScheduleClickListener.onItemDeleteClick(value);
+                        }
+                    }
+                }
+            });
+
+
         }
     }
 
     @Override
-    public ScheduleAdapter.ScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_schedule, parent, false);
         return new ScheduleViewHolder(v);
@@ -147,83 +207,10 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleAdapter.S
         this.editingPositionId = editingPositionId;
     }
 
-    public class ScheduleViewHolder extends RecyclerView.ViewHolder{
-
-        View parentView;
-        @BindView(R.id.switch_schedule)
-        Switch scheduleSwitch;
-        @BindView(R.id.tv_schedule_medicine_to_drink)
-        TextView tvMedicineToDrink;
-        @BindView(R.id.tv_schedule_time)
-        TextView tvScheduleTime;
-        @BindView(R.id.tv_schedule_time_period)
-        TextView tvScheduleTimePeriod;
-        @BindView(R.id.tv_medicine_drinking_interval)
-        TextView tvDrinkingInterval;
-        @BindView(R.id.tv_medicine_last_taken)
-        TextView tvLastTaken;
-
-        @BindView(R.id.et_schedule_time)
-        EditText etScheduleTime;
-        @BindView(R.id.et_schedule_time_period)
-        TextView etScheduleTimePeriod;
-        @BindView(R.id.list_medicine_to_drink)
-        Spinner spinnerMedicineToDrink;
-        @BindView(R.id.et_schedule_dosage)
-        EditText etDosagePerDrinkingInterval;
-        @BindView(R.id.et_medicine_drinking_interval)
-        EditText etDrinkingIntervals;
-
-        @BindView(R.id.lin_edit_schedule)
-        LinearLayout linEditMedicine;
-        @BindView(R.id.lin_delete_schedule)
-        LinearLayout linDeleteMedicine;
-
-        @BindView(R.id.lin_save_schedule)
-        LinearLayout linSaveMedicine;
-        @BindView(R.id.lin_cancel_schedule)
-        LinearLayout linCancelMedicine;
-
-        @BindView(R.id.lin_schedule_expanded_information)
-        LinearLayout linExpandedInformation;
-        @BindView(R.id.card_view_schedule)
-        LinearLayout viewSchedule;
-        @BindView(R.id.card_edit_schedule)
-        LinearLayout editSchedule;
-
-        private boolean isMilitary;
-        public static final int VIEW_MODE = 1;
-        public static final int EDIT_MODE = 2;
-
-
-        public ScheduleViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            parentView = itemView;
-
-            setMode(VIEW_MODE);
-        }
-
-        public ScheduleViewHolder(View itemView, boolean isMilitary) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            parentView = itemView;
-
-            this.isMilitary = isMilitary;
-
-        }
-
-        public void setMode(int mode){
-            int view_mode = mode == VIEW_MODE ? View.VISIBLE : View.GONE;
-            int edit_mode = mode == EDIT_MODE ? View.VISIBLE : View.GONE;
-
-            viewSchedule.setVisibility(view_mode);
-            tvScheduleTimePeriod.setVisibility(isMilitary ? View.GONE : view_mode);
-            editSchedule.setVisibility(edit_mode);
-            etScheduleTimePeriod.setVisibility(isMilitary ? View.GONE : view_mode);
-
-        }
+    public void setMode(ScheduleViewHolder viewHolder, int mode){
+        viewHolder.setMode(mode);
     }
+
 
     public void setOnScheduleClickListener(OnScheduleClickListener onScheduleClickListener) {
         this.onScheduleClickListener = onScheduleClickListener;

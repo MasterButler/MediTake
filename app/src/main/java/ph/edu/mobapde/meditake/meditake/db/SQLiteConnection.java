@@ -135,7 +135,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
      * @return medicine object referenced by the id.
      */
     public Medicine getMedicine(int id){
-        //SELECT * FROM food WHERE _id = ?
+        //SELECT * FROM medicine WHERE _id = ?
         Medicine medicine = null;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(Medicine.TABLE,
@@ -161,11 +161,11 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             medicine.setGenericName(genericName);
             medicine.setMedicineFor(medicineFor);
             medicine.setAmount(amount);
+            Log.wtf("FULL INFO", medicine.getSqlId() + ": " + medicine.getBrandName() + ", " + medicine.getGenericName() + ", " + medicine.getMedicineFor());
         }
 
         cursor.close();
         db.close();
-        Log.wtf("FULL INFO", medicine.getSqlId() + ": " + medicine.getBrandName() + ", " + medicine.getGenericName() + ", " + medicine.getMedicineFor());
         return medicine;
     }
 
@@ -222,7 +222,9 @@ public class SQLiteConnection extends SQLiteOpenHelper{
     public long createSchedule(Schedule schedule){
         ContentValues cv = new ContentValues();
 
-        cv.put(Schedule.COLUMN_MEDICINE_TO_DRINK, schedule.getMedicineToDrink().getSqlId());
+        if(schedule.getMedicineToDrink() != null){
+            cv.put(Schedule.COLUMN_MEDICINE_TO_DRINK, schedule.getMedicineToDrink().getSqlId());
+        }
         cv.put(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL, schedule.getDosagePerDrinkingInterval());
         cv.put(Schedule.COLUMN_DRINKING_INTERVAL, schedule.getDosagePerDrinkingInterval());
         cv.put(Schedule.COLUMN_LAST_TIME_TAKEN, schedule.getLastTimeTaken());
@@ -246,7 +248,11 @@ public class SQLiteConnection extends SQLiteOpenHelper{
          *null == '*'
          */
         SQLiteDatabase db = getReadableDatabase();
-        return db.query(Schedule.TABLE, null, null, null, null, null, null);
+        //db.query(Schedule.TABLE, null, null, null, null, null, null);
+        String sql = "SELECT * FROM " + Schedule.TABLE + ", " + Medicine.TABLE +
+                " WHERE " + Schedule.TABLE + "." + Schedule.COLUMN_MEDICINE_TO_DRINK +
+                " = " + Medicine.TABLE + "." + Medicine.COLUMN_ID;
+        return db.rawQuery(sql, null);
     }
 
     private Schedule getSchedule(int id){
@@ -259,11 +265,17 @@ public class SQLiteConnection extends SQLiteOpenHelper{
      * Retrieves the schedule through the id.
      * @param id value that points to the object.
      * @return schedule object referenced by the id.
+     * @deprecated use getScheduleInstead(), this will only break the code.
      */
+    @Deprecated
     public Schedule getScheduleWithoutMedicineInfo(int id){
         //SELECT * FROM schedule WHERE _id = ?
         Schedule schedule = null;
         SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM " + Schedule.TABLE + ", " + Medicine.TABLE +
+                " WHERE " + Schedule.TABLE + "." + Schedule.COLUMN_MEDICINE_TO_DRINK +
+                " = " + Medicine.TABLE + "." + Medicine.COLUMN_ID
+                + " AND " + Schedule.TABLE + "." + Medicine.COLUMN_ID + " = " + id;
         Cursor cursor = db.query(Schedule.TABLE,
                 null,
                 Schedule.COLUMN_ID + " = ?",
