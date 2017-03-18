@@ -23,12 +23,15 @@ public class DateUtil {
     private static final String DEFAULT_TIME_FORMAT_PERIOD_12 = "hh:mm a";
     private static final String DEFAULT_TIME_FORMAT_PERIOD_24 = "HH:mm";
 
-    public static String parseFromTime(long time, String format){
+    private static final String DEFAULT_DATETIME_FORMAT_PERIOD_12 = "MM/dd hh:mm a";
+    private static final String DEFAULT_DATETIME_FORMAT_PERIOD_24 = "MM/dd HH:mm";
+
+    public static String parseFromLong(long time, String format){
         DateFormat df = new SimpleDateFormat(format);
         return df.format(new Date(time));
     }
 
-    public static long parseToTime(String time, String format){
+    public static long parseToLong(String time, String format){
         DateFormat df =  new SimpleDateFormat(format);
         try{
             return df.parse(time).getTime();
@@ -38,7 +41,11 @@ public class DateUtil {
     }
 
     public static String getTime(long time, boolean isMilitaryTime){
-        return isMilitaryTime ? parseFromTime(time, DEFAULT_TIME_FORMAT_PERIOD_24) : parseFromTime(time, DEFAULT_TIME_FORMAT_PERIOD_12);
+        return isMilitaryTime ? parseFromLong(time, DEFAULT_TIME_FORMAT_PERIOD_24) : parseFromLong(time, DEFAULT_TIME_FORMAT_PERIOD_12);
+    }
+
+    public static String getDateTime(long datetime, boolean isMilitaryTime){
+        return isMilitaryTime ? parseFromLong(datetime, DEFAULT_DATETIME_FORMAT_PERIOD_24) : parseFromLong(datetime, DEFAULT_DATETIME_FORMAT_PERIOD_12);
     }
 
     public static int compareTime(String timeA, String timeB){
@@ -49,8 +56,8 @@ public class DateUtil {
     }
 
     public static int compareTime(String timeA, String timeB, String format){
-        long timeValueA = parseToTime(timeA, format);
-        long timeValueB = parseToTime(timeB, format);
+        long timeValueA = parseToLong(timeA, format);
+        long timeValueB = parseToLong(timeB, format);
         return timeValueA < timeValueB ? TIME_EARLIER : timeValueA == timeValueB ? TIME_EQUAL : TIME_LATER;
     }
 

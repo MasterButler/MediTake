@@ -99,7 +99,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
 
             boolean isEditing = id == editingPositionId;
             viewHolder.linEditMedicine.setTag(id);
-            setMode(viewHolder, isEditing ? MODE_EDIT : MODE_VIEW);
+            setMode(viewHolder, isEditing ? MedicineViewHolder.EDIT_MODE : MedicineViewHolder.VIEW_MODE);
             viewHolder.linEditMedicine.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -111,7 +111,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
             });
 
             boolean isDone = !(id == editingPositionId);
-            setMode(viewHolder, isDone ? MODE_VIEW : MODE_EDIT);
+            setMode(viewHolder, isDone ? MedicineViewHolder.VIEW_MODE : MedicineViewHolder.EDIT_MODE);
             viewHolder.linCancelMedicine.setTag(id);
             viewHolder.linCancelMedicine.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -202,12 +202,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
     }
 
     public void setMode(MedicineViewHolder viewHolder, int mode){
-        switch(mode){
-            case MODE_EDIT: viewHolder.setToEditMode();
-                break;
-            case MODE_VIEW:
-            default:        viewHolder.setToViewMode();
-        }
+        viewHolder.setMode(mode);
     }
 
     public void setOnMedicineClickListener(OnMedicineClickListener onMedicineClickListener) {

@@ -49,7 +49,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.lin_action_editing_medicine)
     LinearLayout linActionsEditing;
     @BindView(R.id.lin_action_viewing_medicine)
-    LinearLayout linActionsViewinmg;
+    LinearLayout linActionsViewing;
 
     @BindView(R.id.lin_edit_medicine)
     LinearLayout linEditMedicine;
@@ -67,49 +67,25 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.cv_holder)
     CardView cvHolder;
 
+    @BindView(R.id.card_view_medicine)
+    LinearLayout viewLayout;
+    @BindView(R.id.card_edit_medicine)
+    LinearLayout editLayout;
+    public static final int VIEW_MODE = 1;
+    public static final int EDIT_MODE = 2;
+
     public MedicineViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.parentView = itemView;
 
-        setToViewMode();
+        setMode(VIEW_MODE);
     }
 
-    public void setToViewMode(){
-        Log.wtf("action", "NOW VIEWING");
-        tvMedicineGenericName.setVisibility(View.VISIBLE);
-        tvMedicineBrandName.setVisibility(View.VISIBLE);
-        tvMedicineFor.setVisibility(View.VISIBLE);
-        tvMedicineAmount.setVisibility(View.VISIBLE);
-        lineDivider.setVisibility(View.VISIBLE);
-        linActionsViewinmg.setVisibility(View.VISIBLE);
-        ivMedicineType.setVisibility(View.VISIBLE);
-
-        etMedicineGenericName.setVisibility(View.GONE);
-        etMedicineBrandName.setVisibility(View.GONE);
-        etMedicineFor.setVisibility(View.GONE);
-        linEditAmount.setVisibility(View.GONE);
-        etMedicineAmount.setVisibility(View.GONE);
-        tvMedicineAmountLabel.setVisibility(View.GONE);
-        linActionsEditing.setVisibility(View.GONE);
-    }
-
-    public void setToEditMode(){
-        Log.wtf("action", "NOW EDITING");
-        tvMedicineGenericName.setVisibility(View.GONE);
-        tvMedicineBrandName.setVisibility(View.GONE);
-        tvMedicineFor.setVisibility(View.GONE);
-        tvMedicineAmount.setVisibility(View.GONE);
-        lineDivider.setVisibility(View.GONE);
-        linActionsViewinmg.setVisibility(View.GONE);
-        ivMedicineType.setVisibility(View.GONE);
-
-        etMedicineGenericName.setVisibility(View.VISIBLE);
-        etMedicineBrandName.setVisibility(View.VISIBLE);
-        etMedicineFor.setVisibility(View.VISIBLE);
-        linEditAmount.setVisibility(View.VISIBLE);
-        etMedicineAmount.setVisibility(View.VISIBLE);
-        tvMedicineAmountLabel.setVisibility(View.VISIBLE);
-        linActionsEditing.setVisibility(View.VISIBLE);
+    public void setMode(int mode){
+        int view_mode = mode == VIEW_MODE ? View.VISIBLE : View.GONE;
+        int edit_mode = mode == EDIT_MODE ? View.VISIBLE : View.GONE;
+        viewLayout.setVisibility(view_mode);
+        editLayout.setVisibility(edit_mode);
     }
 }

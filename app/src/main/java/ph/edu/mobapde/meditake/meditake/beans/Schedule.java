@@ -1,8 +1,6 @@
 package ph.edu.mobapde.meditake.meditake.beans;
 
-import java.util.Date;
-
-import ph.edu.mobapde.meditake.meditake.util.TimeUtil;
+import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 
 /**
  * Main class for maintaining the schedule of the person's dosage of the medicines.
@@ -52,7 +50,7 @@ public class Schedule {
      * @param
      */
     public long getNextDrinkingTime(){
-        return (long) (this.lastTimeTaken + drinkingInterval * TimeUtil.MILLIS_TO_HOURS);
+        return (long) (this.lastTimeTaken + drinkingInterval * DateUtil.MILLIS_TO_HOURS);
     }
 
     public void setMedicineToDrink(Medicine medicineToDrink){
@@ -107,7 +105,7 @@ public class Schedule {
     }
 
     public void setLastTimeTaken(long lastTimeTaken){
-        this.lastTimeTaken = lastTimeTaken - (lastTimeTaken % TimeUtil.MILLIS_TO_SECONDS);
+        this.lastTimeTaken = lastTimeTaken - (lastTimeTaken % DateUtil.MILLIS_TO_SECONDS);
     }
 
     public boolean isActivated() {

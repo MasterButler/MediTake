@@ -22,218 +22,408 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="11dp"
-                android:text="09:00"
-                android:textSize="36sp"
-                android:id="@+id/tv_schedule_time"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/card_view_schedule">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                tools:hint="AM"
-                android:id="@+id/tv_schedule_time_period"
-                android:gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="11dp"
+                    android:text="09:00"
+                    android:textSize="36sp"
+                    android:id="@+id/tv_schedule_time"
+                    android:textColor="?attr/editTextColor"/>
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    tools:hint="AM"
+                    android:id="@+id/tv_schedule_time_period"
+                    android:gravity="center"
+                    android:textColor="?attr/editTextColor"/>
 
-            <Switch
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/switch_schedule"/>
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/switch_schedule"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pills_1_colored"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Drink medicineToDrink"
+                    android:textColor="?attr/editTextColor"
+                    android:textSize="16sp"
+                    android:gravity="center_vertical"
+                    tools:hint="Text"
+                    android:layout_marginLeft="8dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="11dp"
+                    android:id="@+id/tv_schedule_medicine_to_drink"/>
+
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/pills_1_colored"/>-->
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/lin_schedule_expanded_information">
+
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Drink medicineToDrink"
+                tools:hint="Medicine taken every X hours"
+                android:id="@+id/tv_medicine_drinking_interval"
                 android:textColor="?attr/editTextColor"
-                android:textSize="16sp"
-                android:gravity="center_vertical"
-                tools:hint="Text"
                 android:layout_marginLeft="8dp"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:paddingTop="8dp"
-                android:paddingBottom="11dp"
-                android:id="@+id/tv_schedule_medicine_to_drink"/>
+                android:paddingBottom="11dp"/>
 
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:hint="Last taken: 03/18/2017   03:00 AM"
+                android:id="@+id/tv_medicine_last_taken"
+                android:textColor="?attr/editTextColor"
+                android:layout_marginLeft="8dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="11dp"/>
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/lin_action_viewing_schedule">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingRight="10dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/lin_edit_schedule">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_mode_edit_black_24dp"
+                        android:tint="@color/colorPrimary"
+                        android:padding="2dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="32dp"
+                        android:text="EDIT"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingRight="10dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/lin_delete_schedule">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_delete_black_24dp"
+                        android:tint="@color/colorPrimary"
+                        android:padding="2dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="DELETE"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/card_edit_schedule">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="11dp"
+                    android:text="09:00"
+                    android:textSize="36sp"
+                    android:id="@+id/et_schedule_time"
+                    android:textColor="?attr/editTextColor"
+                    android:focusable="false"
+                    android:cursorVisible="false"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    tools:hint="AM"
+                    android:id="@+id/et_schedule_time_period"
+                    android:gravity="center"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pills_1_colored"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:inputType="numberDecimal"
+                    android:layout_marginLeft="8dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="11dp"
+                    android:textSize="14sp"
+                    android:hint="Qty"
+                    android:id="@+id/et_schedule_dosage"/>
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Drink medicineToDrink"
+                    android:textColor="?attr/editTextColor"
+                    android:textSize="16sp"
+                    android:gravity="center_vertical"
+                    tools:hint="Text"
+                    android:layout_marginLeft="8dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="11dp"
+                    android:id="@+id/list_medicine_to_drink"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:hint="Medicine taken every"
+                        android:id="@+id/tv_medicine_taken_every"
+                        android:textColor="?attr/editTextColor"
+                        android:layout_marginLeft="8dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="11dp"/>
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:hint="5"
+                        android:id="@+id/et_medicine_drinking_interval"
+                        android:textColor="?attr/editTextColor"
+                        android:layout_marginLeft="8dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="11dp"
+                        android:minWidth="20dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:hint="hours"
+                        android:id="@+id/tv_every_hours"
+                        android:textColor="?attr/editTextColor"
+                        android:layout_marginLeft="8dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="11dp"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:hint="Last taken: 03/18/2017   03:00 AM"
+                    android:id="@id/tv_medicine_last_taken"
+                    android:textColor="?attr/editTextColor"
+                    android:layout_marginLeft="8dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="11dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/lin_action_editing_schedule">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingRight="10dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/lin_save_schedule">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_done_black_24dp"
+                        android:tint="@color/colorPrimary"
+                        android:padding="2dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="32dp"
+                        android:text="SAVE"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingRight="10dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/lin_cancel_schedule">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_clear_white_24dp"
+
+                        android:tint="@color/colorPrimary"
+                        android:padding="2dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="CANCEL"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
+
+
 </android.support.v7.widget.CardView>
-
-<!--<LinearLayout-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:orientation="horizontal"-->
-<!--android:id="@+id/lin_action_viewing_schedule">-->
-
-<!--<LinearLayout-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingTop="2dp"-->
-    <!--android:paddingLeft="2dp"-->
-    <!--android:paddingBottom="2dp"-->
-    <!--android:paddingRight="10dp"-->
-    <!--android:background="?attr/selectableItemBackground"-->
-    <!--android:clickable="true"-->
-    <!--android:id="@+id/lin_edit_schedule">-->
-
-    <!--<ImageView-->
-        <!--android:layout_width="24dp"-->
-        <!--android:layout_height="24dp"-->
-        <!--android:src="@drawable/ic_mode_edit_black_24dp"-->
-        <!--android:tint="@color/colorPrimary"-->
-        <!--android:padding="2dp"-->
-        <!--android:layout_gravity="center"/>-->
-
-    <!--<TextView-->
-        <!--android:layout_width="40dp"-->
-        <!--android:layout_height="32dp"-->
-        <!--android:text="EDIT"-->
-        <!--android:textSize="14sp"-->
-        <!--android:paddingTop="8dp"-->
-        <!--android:paddingBottom="8dp"-->
-        <!--android:paddingLeft="2dp"-->
-        <!--android:paddingRight="2dp"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textColor="@color/colorPrimary"-->
-        <!--android:textStyle="bold"/>-->
-
-<!--</LinearLayout>-->
-
-<!--<LinearLayout-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingTop="2dp"-->
-    <!--android:paddingLeft="2dp"-->
-    <!--android:paddingBottom="2dp"-->
-    <!--android:paddingRight="10dp"-->
-    <!--android:background="?attr/selectableItemBackground"-->
-    <!--android:clickable="true"-->
-    <!--android:id="@+id/lin_delete_schedule">-->
-
-    <!--<ImageView-->
-        <!--android:layout_width="24dp"-->
-        <!--android:layout_height="24dp"-->
-        <!--android:src="@drawable/ic_delete_black_24dp"-->
-        <!--android:tint="@color/colorPrimary"-->
-        <!--android:padding="2dp"-->
-        <!--android:layout_gravity="center"/>-->
-
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="32dp"-->
-        <!--android:text="DELETE"-->
-        <!--android:textSize="14sp"-->
-        <!--android:paddingTop="8dp"-->
-        <!--android:paddingBottom="8dp"-->
-        <!--android:paddingLeft="2dp"-->
-        <!--android:paddingRight="2dp"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textColor="@color/colorPrimary"-->
-        <!--android:textStyle="bold"/>-->
-
-<!--</LinearLayout>-->
-
-<!--</LinearLayout>-->
-
-
-<!--<LinearLayout-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:orientation="horizontal"-->
-<!--android:id="@+id/lin_action_editing_schedule">-->
-
-<!--<LinearLayout-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingTop="2dp"-->
-    <!--android:paddingLeft="2dp"-->
-    <!--android:paddingBottom="2dp"-->
-    <!--android:paddingRight="10dp"-->
-    <!--android:background="?attr/selectableItemBackground"-->
-    <!--android:clickable="true"-->
-    <!--android:id="@+id/lin_save_schedule">-->
-
-    <!--<ImageView-->
-        <!--android:layout_width="24dp"-->
-        <!--android:layout_height="24dp"-->
-        <!--android:src="@drawable/ic_done_black_24dp"-->
-        <!--android:tint="@color/colorPrimary"-->
-        <!--android:padding="2dp"-->
-        <!--android:layout_gravity="center"/>-->
-
-    <!--<TextView-->
-        <!--android:layout_width="40dp"-->
-        <!--android:layout_height="32dp"-->
-        <!--android:text="SAVE"-->
-        <!--android:textSize="14sp"-->
-        <!--android:paddingTop="8dp"-->
-        <!--android:paddingBottom="8dp"-->
-        <!--android:paddingLeft="2dp"-->
-        <!--android:paddingRight="2dp"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textColor="@color/colorPrimary"-->
-        <!--android:textStyle="bold"/>-->
-
-<!--</LinearLayout>-->
-
-<!--<LinearLayout-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingTop="2dp"-->
-    <!--android:paddingLeft="2dp"-->
-    <!--android:paddingBottom="2dp"-->
-    <!--android:paddingRight="10dp"-->
-    <!--android:background="?attr/selectableItemBackground"-->
-    <!--android:clickable="true"-->
-    <!--android:id="@+id/lin_cancel_schedule">-->
-
-    <!--<ImageView-->
-        <!--android:layout_width="24dp"-->
-        <!--android:layout_height="24dp"-->
-        <!--android:src="@drawable/ic_clear_white_24dp"-->
-
-        <!--android:tint="@color/colorPrimary"-->
-        <!--android:padding="2dp"-->
-        <!--android:layout_gravity="center"/>-->
-
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="32dp"-->
-        <!--android:text="CANCEL"-->
-        <!--android:textSize="14sp"-->
-        <!--android:paddingTop="8dp"-->
-        <!--android:paddingBottom="8dp"-->
-        <!--android:paddingLeft="2dp"-->
-        <!--android:paddingRight="2dp"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textColor="@color/colorPrimary"-->
-        <!--android:textStyle="bold"/>-->
-
-<!--</LinearLayout>-->
-
-<!--</LinearLayout>-->

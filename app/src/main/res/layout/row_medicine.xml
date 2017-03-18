@@ -28,7 +28,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/card_view_medicine">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -61,19 +62,6 @@
                         />
                 </LinearLayout>
 
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textNoSuggestions"
-                    android:textColor="?attr/editTextColor"
-                    android:text="Generic Name"
-                    android:textStyle="bold"
-                    android:id="@+id/et_medicine_generic_name"
-                    android:textSize="20sp"
-                    android:hint="Generic Name"
-                    />
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -87,18 +75,6 @@
                     android:paddingRight="4dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="11dp"/>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Brand Name"
-                    android:inputType="textNoSuggestions"
-                    android:textColor="?attr/editTextColor"
-                    android:id="@+id/et_medicine_brand_name"
-                    android:textSize="16sp"
-                    android:layout_marginTop="4sp"
-                    android:layout_marginBottom="2sp"
-                    android:hint="Brand Name"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -124,19 +100,6 @@
                         android:paddingRight="4dp"
                         android:paddingTop="8dp"
                         android:paddingBottom="11dp"/>
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:inputType="textNoSuggestions"
-                        android:layout_weight="0.97"
-                        android:id="@+id/et_medicine_for"
-                        android:textColor="?attr/editTextColor"
-                        android:textSize="16sp"
-                        android:gravity="center_vertical"
-                        tools:hint="Text"
-                        android:layout_marginLeft="8dp"
-                        android:hint="Medicine for"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -166,36 +129,6 @@
                     android:paddingRight="4dp"
                     android:paddingTop="16dp"
                     android:paddingBottom="10dp"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/lin_edit_amount">
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="?attr/editTextColor"
-                        android:inputType="textNoSuggestions"
-                        tools:hint="50"
-                        android:id="@+id/et_medicine_amount"
-                        android:textSize="14sp"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="10dp"
-                        android:minWidth="30dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="?attr/editTextColor"
-                        android:layout_weight="1"
-                        android:text=" remaining"
-                        android:id="@+id/tv_medicine_amount_label"
-                        />
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -273,6 +206,108 @@
 
                 </LinearLayout>
 
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:id="@+id/card_edit_medicine">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textNoSuggestions"
+                    android:textColor="?attr/editTextColor"
+                    android:text="Generic Name"
+                    android:textStyle="bold"
+                    android:id="@+id/et_medicine_generic_name"
+                    android:textSize="20sp"
+                    android:hint="Generic Name"
+                    />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Brand Name"
+                    android:inputType="textNoSuggestions"
+                    android:textColor="?attr/editTextColor"
+                    android:id="@+id/et_medicine_brand_name"
+                    android:textSize="16sp"
+                    android:layout_marginTop="4sp"
+                    android:layout_marginBottom="2sp"
+                    android:hint="Brand Name"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/pills_1_colored"
+                        android:padding="2sp"/>
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:inputType="textNoSuggestions"
+                        android:layout_weight="0.97"
+                        android:id="@+id/et_medicine_for"
+                        android:textColor="?attr/editTextColor"
+                        android:textSize="16sp"
+                        android:gravity="center_vertical"
+                        tools:hint="Text"
+                        android:layout_marginLeft="8dp"
+                        android:hint="Medicine for"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="16dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/lin_edit_amount">
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="?attr/editTextColor"
+                        android:inputType="textNoSuggestions"
+                        tools:hint="50"
+                        android:id="@+id/et_medicine_amount"
+                        android:textSize="14sp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="10dp"
+                        android:minWidth="30dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="?attr/editTextColor"
+                        android:layout_weight="1"
+                        android:text=" remaining"
+                        android:id="@+id/tv_medicine_amount_label"
+                        />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

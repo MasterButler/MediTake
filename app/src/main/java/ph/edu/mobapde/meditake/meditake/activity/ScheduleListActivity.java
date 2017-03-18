@@ -2,6 +2,7 @@ package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.transition.TransitionManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +21,7 @@ import ph.edu.mobapde.meditake.meditake.adapter.ScheduleAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.beans.Syrup;
+import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
@@ -89,6 +91,49 @@ public class ScheduleListActivity extends AppCompatActivity
     public void initializeAdapter(){
         scheduleAdapter = new ScheduleAdapter(getBaseContext(), scheduleUtil.getAllSchedule());
         scheduleAdapter.setHasStableIds(true);
+        scheduleAdapter.setOnScheduleClickListener(new OnScheduleClickListener() {
+            @Override
+            public void onItemClick(int id) {
+                expand(id);
+            }
+
+            @Override
+            public void onItemDeleteClick(int id) {
+
+            }
+
+            @Override
+            public void onItemEditClick(int id) {
+
+            }
+
+            @Override
+            public void onItemSaveClick(Medicine medicine) {
+
+            }
+
+            @Override
+            public void onItemCancelClick(int id) {
+
+            }
+
+            @Override
+            public void onSwitchClick(int id) {
+
+            }
+        });
+    }
+
+    public void expand(int id){
+//        if(CREATING_NEW_ITEM == -1){
+            boolean isExpanded = scheduleAdapter.isExpanded(id);
+            scheduleAdapter.setExpandedPositionId(isExpanded ? -1 : id);
+            TransitionManager.beginDelayedTransition(rvSchedule);
+            scheduleAdapter.notifyDataSetChanged();
+//        }else{
+//            delete((int)CREATING_NEW_ITEM);
+//            CREATING_NEW_ITEM = -1;
+//        }
     }
 
     public void initializeDrawer(){
