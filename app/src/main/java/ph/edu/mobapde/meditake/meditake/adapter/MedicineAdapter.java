@@ -49,12 +49,6 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
     }
 
     @Override
-    public void onBindViewHolder(MedicineViewHolder viewHolder, int position) {
-        super.onBindViewHolder(viewHolder, position);
-
-    }
-
-    @Override
     public void onBindViewHolder(MedicineViewHolder viewHolder, Cursor cursor) {
 
         int id = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_ID));

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_medicine_list"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="?android:attr/colorBackground"
     tools:context="ph.edu.mobapde.meditake.meditake.activity.AddMedicineActivity">
@@ -12,19 +12,6 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rv_medicine"
-        ></android.support.v7.widget.RecyclerView>
+        android:id="@+id/rv_medicine" />
 
-    <!--<Button-->
-        <!--android:id="@+id/randomMedicine"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="MEDICINE A"/>-->
-
-    <!--<Button-->
-        <!--android:id="@+id/changeTheme"-->
-        <!--android:text="change theme"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="match_parent">-->
-    <!--</Button>-->
 </LinearLayout>

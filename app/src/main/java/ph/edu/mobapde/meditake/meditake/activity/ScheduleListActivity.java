@@ -6,6 +6,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +15,14 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
+import ph.edu.mobapde.meditake.meditake.adapter.MedicineAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.ScheduleAdapter;
+import ph.edu.mobapde.meditake.meditake.beans.Medicine;
+import ph.edu.mobapde.meditake.meditake.beans.Schedule;
+import ph.edu.mobapde.meditake.meditake.beans.Syrup;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
+import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
+import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class ScheduleListActivity extends AppCompatActivity
@@ -24,6 +33,14 @@ public class ScheduleListActivity extends AppCompatActivity
 
     @BindView(R.id.drawer_layout_schedule_list)
     DrawerLayout drawer;
+
+    @BindView(R.id.rv_schedule)
+    RecyclerView rvSchedule;
+
+    ScheduleAdapter scheduleAdapter;
+
+    ScheduleUtil scheduleUtil;
+    MedicineUtil medicineUtil;
 
     public void setUpActionBar(){
         setSupportActionBar(view_schedule_toolbar);
@@ -36,9 +53,45 @@ public class ScheduleListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         ThemeUtil.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_schedule_list);
-        ButterKnife.bind(this);
 
+        ButterKnife.bind(this);
         setUpActionBar();
+
+        scheduleUtil = new ScheduleUtil(getBaseContext());
+        medicineUtil = new MedicineUtil(getBaseContext());
+
+        Medicine medicine = new Syrup();
+        medicine.setBrandName("brand Medicine");
+        medicine.setGenericName("generic Medicine");
+        medicine.setMedicineFor("for something");
+        medicine.setAmount(100);
+
+        long medicineId = medicineUtil.addMedicine(medicine);
+
+        Schedule schedule = new Schedule();
+        schedule.setActivated(false);
+        schedule.setLastTimeTaken(System.currentTimeMillis());
+        schedule.setDrinkingInterval(1);
+        schedule.setDosagePerDrinkingInterval(5);
+        schedule.setMedicineToDrink(medicineUtil.getMedicine((int) medicineId));
+
+        scheduleUtil.addNewSchedule(schedule);
+
+        initializeDrawer();
+        initializeAdapter();
+
+        rvSchedule.setAdapter(scheduleAdapter);
+        rvSchedule.setLayoutManager(new LinearLayoutManager(
+                getBaseContext(), LinearLayoutManager.VERTICAL, false)
+        );
+    }
+
+    public void initializeAdapter(){
+        scheduleAdapter = new ScheduleAdapter(getBaseContext(), scheduleUtil.getAllSchedule());
+        scheduleAdapter.setHasStableIds(true);
+    }
+
+    public void initializeDrawer(){
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, view_schedule_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);

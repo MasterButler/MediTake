@@ -2,6 +2,8 @@ package ph.edu.mobapde.meditake.meditake.beans;
 
 import java.util.Date;
 
+import ph.edu.mobapde.meditake.meditake.util.TimeUtil;
+
 /**
  * Main class for maintaining the schedule of the person's dosage of the medicines.
  * @author Winfred Villaluna
@@ -13,16 +15,12 @@ public class Schedule {
     public static final String COLUMN_MEDICINE_TO_DRINK = "medicineToDrink";
     public static final String COLUMN_DRINKING_INTERVAL = "drinkingInterval";
     public static final String COLUMN_LAST_TIME_TAKEN = "lastTimeTaken";
+    public static final String COLUMN_IS_ACTIVATED = "isActivated";
 
     public static final int TIMES_A_DAY = 0;
     public static final int EVERY_NTH_HOUR = 1;
     public static final int EVERY_DAY = 2;
     public static final int EVERY_OTHER_DAY = 3;
-
-    public static long MILLIS_TO_SECONDS = 1000;
-    public static long MILLIS_TO_MINUTES = 60 * 1000;
-    public static long MILLIS_TO_HOURS = 60 * 60 * 1000;
-    public static long MILLIS_TO_DAYS = 24 * 60 * 60 * 1000;
 
     //id of the medicine in the server for easier retrieval/storage when it is already present in the cache
     private int sqlId;
@@ -34,6 +32,7 @@ public class Schedule {
     private double drinkingInterval;
 
     private long lastTimeTaken;
+    private boolean isActivated;
 
     /**
      * Operation that controls if theperson has successfuly drank the medicineToDrink.
@@ -52,8 +51,8 @@ public class Schedule {
      * returns next drinking time relative to last time taken and the interval between drinks.
      * @param
      */
-    public Date getNextDrinkingTime(){
-        return new Date((long) (this.lastTimeTaken + drinkingInterval * MILLIS_TO_HOURS));
+    public long getNextDrinkingTime(){
+        return (long) (this.lastTimeTaken + drinkingInterval * TimeUtil.MILLIS_TO_HOURS);
     }
 
     public void setMedicineToDrink(Medicine medicineToDrink){
@@ -76,7 +75,11 @@ public class Schedule {
         return this.drinkingInterval;
     }
 
-    public void setDrinkingIntervals(int value, int mode){
+    public void setDrinkingInterval(double drinkingInterval) {
+        this.drinkingInterval = drinkingInterval;
+    }
+
+    public void setDrinkingInterval(int value, int mode){
         switch(mode){
             case TIMES_A_DAY: drinkingInterval = 24 / value;
                 break;
@@ -99,15 +102,19 @@ public class Schedule {
         this.sqlId = sqlId;
     }
 
-    public void setDrinkingInterval(double drinkingInterval) {
-        this.drinkingInterval = drinkingInterval;
-    }
-
     public long getLastTimeTaken(){
         return this.lastTimeTaken;
     }
 
     public void setLastTimeTaken(long lastTimeTaken){
-        this.lastTimeTaken = lastTimeTaken - (lastTimeTaken%MILLIS_TO_SECONDS);
+        this.lastTimeTaken = lastTimeTaken - (lastTimeTaken % TimeUtil.MILLIS_TO_SECONDS);
+    }
+
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
     }
 }
