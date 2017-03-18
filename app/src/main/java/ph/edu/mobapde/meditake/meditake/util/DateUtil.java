@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by Winfred Villaluna on 3/18/2017.
  */
 
-public class TimeUtil {
+public class DateUtil {
 
     public static final int TIME_EARLIER = -1;
     public static final int TIME_LATER = 0;
@@ -20,8 +20,8 @@ public class TimeUtil {
     public static long MILLIS_TO_HOURS = 60 * 60 * 1000;
     public static long MILLIS_TO_DAYS = 24 * 60 * 60 * 1000;
 
-    private static final String DEFAULT_TIME_FORMAT_PERIOD_12 = "HH:mm a";
-    private static final String DEFAULT_TIME_FORMAT_PERIOD_24 = "hh:mm";
+    private static final String DEFAULT_TIME_FORMAT_PERIOD_12 = "hh:mm a";
+    private static final String DEFAULT_TIME_FORMAT_PERIOD_24 = "HH:mm";
 
     public static String parseFromTime(long time, String format){
         DateFormat df = new SimpleDateFormat(format);
