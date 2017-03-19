@@ -1,7 +1,11 @@
 package ph.edu.mobapde.meditake.meditake.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -104,6 +108,10 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
 
             long nextTimeToTake = sched.getNextDrinkingTime();
             String displayTime = DateUtil.getTime(nextTimeToTake, isMilitary);
+
+            viewHolder.cardBackground.setImageResource(DateUtil.pickBackground(sched.getNextDrinkingTime()));
+            viewHolder.cardBackground.setColorFilter(Color.parseColor("#AAFFFFFF"), PorterDuff.Mode.SRC_ATOP);
+
             if(isMilitary){
                 viewHolder.tvScheduleTimePeriod.setVisibility(View.GONE);
                 viewHolder.tvScheduleTime.setText(displayTime);

@@ -3,6 +3,7 @@ package ph.edu.mobapde.meditake.meditake.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -11,10 +12,13 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
+import ph.edu.mobapde.meditake.meditake.util.TopCropImageView;
 
 public class ScheduleViewHolder extends RecyclerView.ViewHolder{
 
     View parentView;
+    @BindView(R.id.card_background)
+    TopCropImageView cardBackground;
     @BindView(R.id.switch_schedule)
     Switch scheduleSwitch;
     @BindView(R.id.tv_schedule_medicine_to_drink)

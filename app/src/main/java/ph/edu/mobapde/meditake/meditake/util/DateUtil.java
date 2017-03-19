@@ -1,9 +1,13 @@
 package ph.edu.mobapde.meditake.meditake.util;
 
+import android.util.Log;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import ph.edu.mobapde.meditake.meditake.R;
 
 /**
  * Created by Winfred Villaluna on 3/18/2017.
@@ -25,6 +29,25 @@ public class DateUtil {
 
     private static final String DEFAULT_DATETIME_FORMAT_PERIOD_12 = "MM/dd hh:mm a";
     private static final String DEFAULT_DATETIME_FORMAT_PERIOD_24 = "MM/dd HH:mm";
+
+    public static int pickBackground(long time){
+        long value = time % MILLIS_TO_DAYS;
+        Log.wtf("action", "TIME IS " + value);
+        Log.wtf("action", "TIME IS " + getTime(value, false));
+        Log.wtf("action", "TIME IS " + 1.0*value/MILLIS_TO_HOURS);
+
+        if(value < MILLIS_TO_HOURS * 3){
+            return R.drawable.schedule_evening;
+        }else if(value < MILLIS_TO_HOURS * 6){
+            return R.drawable.schedule_early;
+        }else if(value < MILLIS_TO_HOURS * 12){
+            return R.drawable.schedule_morning;
+        }else if(value < MILLIS_TO_HOURS * 18){
+            return R.drawable.schedule_afternoon;
+        }else{
+            return R.drawable.schedule_evening;
+        }
+    }
 
     public static String parseFromLong(long time, String format){
         DateFormat df = new SimpleDateFormat(format);
