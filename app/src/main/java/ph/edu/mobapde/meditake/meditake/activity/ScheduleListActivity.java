@@ -110,15 +110,12 @@ public class ScheduleListActivity extends AppCompatActivity
 
             @Override
             public void onItemEditClick(int id) {
-                boolean isEditing = scheduleAdapter.isEditing(id);
-                Log.wtf("action", "IS EDITING (AT ID" + id + ")? " + isEditing);
-                scheduleAdapter.setEditingPositionId(isEditing ? -1 : id);
-                scheduleAdapter.notifyDataSetChanged();
+                edit(id);
             }
 
             @Override
             public void onItemSaveClick(Medicine medicine) {
-
+                //save(medicine);
             }
 
             @Override
@@ -152,6 +149,13 @@ public class ScheduleListActivity extends AppCompatActivity
         returnToView(id);
     }
 
+    public void edit(int id){
+        boolean isEditing = scheduleAdapter.isEditing(id);
+        Log.wtf("action", "IS EDITING (AT ID" + id + ")? " + isEditing);
+        scheduleAdapter.setEditingPositionId(isEditing ? -1 : id);
+        scheduleAdapter.notifyDataSetChanged();
+    }
+
     public void delete(int id){
         Log.d("click", "ON DELETE");
         Log.wtf("CHECKER", "A");
@@ -174,6 +178,10 @@ public class ScheduleListActivity extends AppCompatActivity
 //            delete((int)CREATING_NEW_ITEM);
 //            CREATING_NEW_ITEM = -1;
 //        }
+    }
+
+    public void save(Schedule schedule){
+
     }
 
     public void updateList(){

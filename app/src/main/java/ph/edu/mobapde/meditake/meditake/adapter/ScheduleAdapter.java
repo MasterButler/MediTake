@@ -109,8 +109,11 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
             long nextTimeToTake = sched.getNextDrinkingTime();
             String displayTime = DateUtil.getTime(nextTimeToTake, isMilitary);
 
-            viewHolder.cardBackground.setImageResource(DateUtil.pickBackground(sched.getNextDrinkingTime()));
-            viewHolder.cardBackground.setColorFilter(Color.parseColor("#AAFFFFFF"), PorterDuff.Mode.SRC_ATOP);
+            viewHolder.cardViewBackground.setImageResource(DateUtil.pickBackground(sched.getNextDrinkingTime()));
+            viewHolder.cardViewBackground.setColorFilter(Color.parseColor("#AAFFFFFF"), PorterDuff.Mode.SRC_ATOP);
+
+            viewHolder.cardEditBackground.setImageResource(DateUtil.pickBackground(sched.getNextDrinkingTime()));
+            viewHolder.cardEditBackground.setColorFilter(Color.parseColor("#AAFFFFFF"), PorterDuff.Mode.SRC_ATOP);
 
             if(isMilitary){
                 viewHolder.tvScheduleTimePeriod.setVisibility(View.GONE);

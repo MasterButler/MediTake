@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -17,8 +18,10 @@ import ph.edu.mobapde.meditake.meditake.util.TopCropImageView;
 public class ScheduleViewHolder extends RecyclerView.ViewHolder{
 
     View parentView;
-    @BindView(R.id.card_background)
-    TopCropImageView cardBackground;
+    @BindView(R.id.card_view_background)
+    TopCropImageView cardViewBackground;
+    @BindView(R.id.card_edit_background)
+    TopCropImageView cardEditBackground;
     @BindView(R.id.switch_schedule)
     Switch scheduleSwitch;
     @BindView(R.id.tv_schedule_medicine_to_drink)
@@ -88,8 +91,11 @@ public class ScheduleViewHolder extends RecyclerView.ViewHolder{
 
         viewSchedule.setVisibility(view_mode);
         tvScheduleTimePeriod.setVisibility(isMilitary ? View.GONE : view_mode);
+        cardViewBackground.setVisibility(view_mode);
+
         editSchedule.setVisibility(edit_mode);
         etScheduleTimePeriod.setVisibility(isMilitary ? View.GONE : edit_mode);
+        cardEditBackground.setVisibility(edit_mode);
 
     }
 }
