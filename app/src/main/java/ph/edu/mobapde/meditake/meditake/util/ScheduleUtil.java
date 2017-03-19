@@ -38,6 +38,11 @@ public class ScheduleUtil {
     }
     public int deleteSchedule(int id){
         initializeDBConnection(context);
-        return databaseConnection.deleteMedicine(id);
+        return databaseConnection.deleteSchedule(id);
+    }
+
+    public int updateSchedule(Schedule schedule){
+        initializeDBConnection(context);
+        return databaseConnection.updateSchedule(schedule);
     }
 }

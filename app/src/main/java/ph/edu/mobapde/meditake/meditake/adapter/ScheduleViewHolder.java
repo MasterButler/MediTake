@@ -85,7 +85,7 @@ public class ScheduleViewHolder extends RecyclerView.ViewHolder{
         viewSchedule.setVisibility(view_mode);
         tvScheduleTimePeriod.setVisibility(isMilitary ? View.GONE : view_mode);
         editSchedule.setVisibility(edit_mode);
-        etScheduleTimePeriod.setVisibility(isMilitary ? View.GONE : view_mode);
+        etScheduleTimePeriod.setVisibility(isMilitary ? View.GONE : edit_mode);
 
     }
 }

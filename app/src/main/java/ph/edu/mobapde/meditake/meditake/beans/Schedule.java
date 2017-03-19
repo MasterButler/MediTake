@@ -52,10 +52,6 @@ public class Schedule {
      * @param
      */
     public long getNextDrinkingTime(){
-        Log.wtf("computation", "INTERVAL: " + drinkingInterval);
-        Log.wtf("computation", "INTERVAL: " + drinkingInterval*DateUtil.MILLIS_TO_HOURS);
-        Log.wtf("computation", "FROM " + lastTimeTaken + " to " + (this.lastTimeTaken + (drinkingInterval * DateUtil.MILLIS_TO_HOURS)));
-        Log.wtf("computation", "FROM " + DateUtil.getTime(lastTimeTaken, false) + " to " + DateUtil.getTime(DateUtil.addHours(lastTimeTaken, drinkingInterval), false));
         return DateUtil.addHours(lastTimeTaken, drinkingInterval);
     }
 

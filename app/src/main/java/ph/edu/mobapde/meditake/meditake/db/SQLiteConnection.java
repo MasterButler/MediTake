@@ -248,7 +248,6 @@ public class SQLiteConnection extends SQLiteOpenHelper{
          *null == '*'
          */
         SQLiteDatabase db = getReadableDatabase();
-        //db.query(Schedule.TABLE, null, null, null, null, null, null);
         String sql = "SELECT * FROM " + Schedule.TABLE + ", " + Medicine.TABLE +
                 " WHERE " + Schedule.TABLE + "." + Schedule.COLUMN_MEDICINE_TO_DRINK +
                 " = " + Medicine.TABLE + "." + Medicine.COLUMN_ID;
@@ -274,7 +273,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         if(cursor.moveToFirst()){
             schedule = new Schedule();
 
-            long medicineToDrinkId = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_MEDICINE_TO_DRINK));
+            int medicineToDrinkId = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_MEDICINE_TO_DRINK));
             double dosagePerDrinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL));
             double drinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DRINKING_INTERVAL));
             long lastTimeTaken = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_LAST_TIME_TAKEN));
@@ -287,6 +286,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             String medicineType = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE));
 
             Medicine med = MedicineInstantiatorUtil.createMedicineInstanceFromString(medicineType);
+            med.setSqlId(medicineToDrinkId);
             med.setBrandName(brandName);
             med.setGenericName(genericName);
             med.setMedicineFor(medicineFor);
@@ -362,7 +362,25 @@ public class SQLiteConnection extends SQLiteOpenHelper{
      * @param schedule object that contains the new value and as well as the id of the object to be updated
      * @return int containing the number of rows affected
      */
-    public int updateSchedule(Schedule schedule){
+    public int  updateSchedule(Schedule schedule){
+//        SQLiteDatabase db = getWritableDatabase();
+//        /* UPDATE INTO medicine SET ..... WHERE id = ?
+//
+//         */
+//        ContentValues cv = new ContentValues();
+//        cv.put(Medicine.COLUMN_BRAND_NAME, medicine.getBrandName());
+//        cv.put(Medicine.COLUMN_GENERIC_NAME, medicine.getGenericName());
+//        cv.put(Medicine.COLUMN_MEDICINE_FOR, medicine.getMedicineFor());
+//        cv.put(Medicine.COLUMN_AMOUNT, medicine.getAmount());
+//        cv.put(Medicine.COLUMN_MEDICINE_TYPE, medicine.getClass().getSimpleName());
+//
+//        int rows = db.update(Medicine.TABLE,
+//                cv,
+//                Medicine.COLUMN_ID + " = ? ",
+//                new String[]{medicine.getSqlId()+""});
+//
+//        db.close();
+//        return rows;
         SQLiteDatabase db = getWritableDatabase();
         /* UPDATE INTO schedule SET ..... WHERE id = ?
 
@@ -374,11 +392,16 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         cv.put(Schedule.COLUMN_LAST_TIME_TAKEN, schedule.getLastTimeTaken());
         cv.put(Schedule.COLUMN_IS_ACTIVATED, schedule.isActivated());
 
+        Log.wtf("check", "UPDATING MEDICINE ID OF " + schedule.getSqlId() + " TO " + schedule.getMedicineToDrink().getSqlId());
+        Log.wtf("check", "UPDATING DOSAGE OF " + schedule.getSqlId() + " TO " + schedule.getDosagePerDrinkingInterval());
+        Log.wtf("check", "UPDATING INTERVAL OF " + schedule.getSqlId() + " TO " + schedule.getDrinkingInterval());
+        Log.wtf("check", "UPDATING LAST TIME OF " + schedule.getLastTimeTaken() + " TO " + schedule.getLastTimeTaken());
+        Log.wtf("check", "UPDATING ISACTIVATED OF " + schedule.getSqlId() + " TO " + schedule.isActivated());
         int rows = db.update(Schedule.TABLE,
                 cv,
                 Schedule.COLUMN_ID + " = ? ",
                 new String[]{schedule.getSqlId()+""});
-
+        Log.d("ROWS AFFECTED", rows+"");
         db.close();
         return rows;
     }
@@ -395,25 +418,8 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 Schedule.COLUMN_ID + " = ? ",
                 new String[]{id+""});
         db.close();
+        Log.wtf("DELETE", "deleted item with id " + id);
         return rows;
-    }
-
-    public int toggleScheduleSwitch(int id, boolean isActivated){
-        SQLiteDatabase db = getWritableDatabase();
-        /* UPDATE INTO schedule SET ..... WHERE id = ?
-
-         */
-        ContentValues cv = new ContentValues();
-        cv.put(Schedule.COLUMN_IS_ACTIVATED, isActivated);
-
-        int rows = db.update(Schedule.TABLE,
-                cv,
-                Schedule.COLUMN_ID + " = ? ",
-                new String[]{id+""});
-
-        db.close();
-        return rows;
-
     }
 }
 

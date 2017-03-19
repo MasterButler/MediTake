@@ -110,7 +110,10 @@ public class ScheduleListActivity extends AppCompatActivity
 
             @Override
             public void onItemEditClick(int id) {
-
+                boolean isEditing = scheduleAdapter.isEditing(id);
+                Log.wtf("action", "IS EDITING (AT ID" + id + ")? " + isEditing);
+                scheduleAdapter.setEditingPositionId(isEditing ? -1 : id);
+                scheduleAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -120,19 +123,48 @@ public class ScheduleListActivity extends AppCompatActivity
 
             @Override
             public void onItemCancelClick(int id) {
-
+                cancel(id);
             }
 
             @Override
-            public void onSwitchClick(int id) {
-                Schedule sched = scheduleUtil.getSchedule(id);
-                Log.d("com", "actual interval is " + sched.getDrinkingInterval());
-                Toast.makeText(getBaseContext(), "Alarm set for " + DateUtil.getDifferenceInMinutes(System.currentTimeMillis(), sched.getNextDrinkingTime()) + " from now.", Toast.LENGTH_SHORT).show();
+            public void onSwitchClick(Schedule schedule) {
+                Log.d("click", "ON SWITCH");
+                schedule.setActivated(!schedule.isActivated());
+                Log.d("com", "actual interval is " + schedule.getDrinkingInterval());
+                Log.d("com", "switching to " + schedule.isActivated());
+                scheduleUtil.updateSchedule(schedule);
+                scheduleAdapter.notifyDataSetChanged();
+                if(schedule.isActivated()){
+                    Toast.makeText(getBaseContext(), "Alarm set for " + DateUtil.getDifferenceInMinutes(System.currentTimeMillis(), schedule.getNextDrinkingTime()) + " from now.", Toast.LENGTH_SHORT).show();
+                }
+                updateList();
             }
         });
     }
 
+    private void returnToView(int id) {
+        boolean isEditing = scheduleAdapter.isEditing(id);
+        scheduleAdapter.setEditingPositionId(isEditing ? -1 : id);
+        scheduleAdapter.notifyDataSetChanged();
+    }
+
+    public void cancel(int id){
+        returnToView(id);
+    }
+
+    public void delete(int id){
+        Log.d("click", "ON DELETE");
+        Log.wtf("CHECKER", "A");
+        scheduleUtil.deleteSchedule(id);
+        Log.wtf("CHECKER", "B");
+        scheduleAdapter.notifyDataSetChanged();
+        Log.wtf("CHECKER", "C");
+        updateList();
+        Log.wtf("CHECKER", "D");
+    }
+
     public void expand(int id){
+        Log.d("click", "ON EXPAND");
 //        if(CREATING_NEW_ITEM == -1){
             boolean isExpanded = scheduleAdapter.isExpanded(id);
             scheduleAdapter.setExpandedPositionId(isExpanded ? -1 : id);
@@ -142,16 +174,6 @@ public class ScheduleListActivity extends AppCompatActivity
 //            delete((int)CREATING_NEW_ITEM);
 //            CREATING_NEW_ITEM = -1;
 //        }
-    }
-
-    public void delete(int id){
-        Log.wtf("CHECKER", "A");
-        scheduleUtil.deleteSchedule(id);
-        Log.wtf("CHECKER", "B");
-        scheduleAdapter.notifyDataSetChanged();
-        Log.wtf("CHECKER", "C");
-        updateList();
-        Log.wtf("CHECKER", "D");
     }
 
     public void updateList(){

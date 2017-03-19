@@ -28,4 +28,6 @@
     <string name="search_medicine">Search Medicine</string>
     <string name="notf_schedule_delete">Schedule successfully deleted.</string>
     <string name="notif_medicine_delete">Medicine successfully deleted.</string>
+    <string name="schedule_id">schedule_id</string>
+    <string name="schedule_isActivated">schedule_isActivated</string>
 </resources>

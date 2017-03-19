@@ -78,11 +78,15 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
         double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
         String medicineType = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE));
 
+        Log.d("ID", "STR");
         Log.d("ID", "EXPAND  ID: " + expandedPositionId);
         Log.d("ID", "EDITING ID: " + editingPositionId);
+        Log.d("ID", "SCHEDULEID: " + id);
+        Log.d("ID", "END");
 
         if(id != -1){
             Medicine med = MedicineInstantiatorUtil.createMedicineInstanceFromString(medicineType);
+            med.setSqlId(medicineId);
             med.setBrandName(brandName);
             med.setGenericName(genericName);
             med.setMedicineFor(medicineFor);
@@ -95,6 +99,8 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
             sched.setDrinkingInterval(drinkingInterval);
             sched.setLastTimeTaken(lastTimeTaken);
             sched.setActivated(isActivated);
+
+            Log.d("CHECK", "SCHEDULEID: " + sched.getSqlId());
 
             long nextTimeToTake = sched.getNextDrinkingTime();
             String displayTime = DateUtil.getTime(nextTimeToTake, isMilitary);
@@ -174,16 +180,14 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                 }
             });
 
-            viewHolder.scheduleSwitch.setTag(id);
+            viewHolder.scheduleSwitch.setTag(sched);
             viewHolder.scheduleSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(onScheduleClickListener != null){
-                        int value = (int)v.getTag();
-                        if(value != -1){
-                            Log.wtf("action", "DELETING SCHEDULE WITH ID OF " + value);
-                            onScheduleClickListener.onSwitchClick(value);
-                        }
+                        Schedule value = (Schedule) v.getTag();
+                        Log.wtf("action", "SWITCHING SCHEDULE WITH ID OF " + value.getSqlId());
+                        onScheduleClickListener.onSwitchClick(value);
                     }
                 }
             });
