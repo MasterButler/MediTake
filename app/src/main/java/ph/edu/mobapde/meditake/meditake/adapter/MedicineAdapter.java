@@ -49,7 +49,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
     }
 
     @Override
-    public void onBindViewHolder(MedicineViewHolder viewHolder, Cursor cursor) {
+    public void onBindViewHolder(final MedicineViewHolder viewHolder, Cursor cursor) {
 
         int id = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_ID));
         String brandName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
@@ -134,30 +134,38 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
                 public void onClick(View v) {
                     Log.wtf("action", "SAVING EDITS");
                     if(onMedicineClickListener != null){
-                        MedicineViewHolder holder = (MedicineViewHolder) v.getTag(R.string.MEDICINE_HOLDER);
-                        Class clazz = (Class)v.getTag(R.string.MEDICINE_TYPE);
-                        int id = (int)v.getTag(R.string.MEDICINE_ID);
+                        boolean isGenericNameEmpty = viewHolder.etMedicineGenericName.getText().toString().trim().isEmpty();
+                        boolean isAmountEmpty = viewHolder.etMedicineAmount.getText().toString().trim().isEmpty();
 
-                        Medicine updatedMedicine = null;
+                        if(isGenericNameEmpty || isAmountEmpty){
+                            viewHolder.etMedicineGenericName.setError(isGenericNameEmpty ? "Generic name must not be empty" : null);
+                            viewHolder.etMedicineAmount.setError(isAmountEmpty ? "Amount must not be empty" : null);
+                        }else {
+                            MedicineViewHolder holder = (MedicineViewHolder) v.getTag(R.string.MEDICINE_HOLDER);
+                            Class clazz = (Class) v.getTag(R.string.MEDICINE_TYPE);
+                            int id = (int) v.getTag(R.string.MEDICINE_ID);
 
-                        updatedMedicine = MedicineInstantiatorUtil.createMedicineInstanceFromString(clazz.getSimpleName());
-                        String updatedBrandName = holder.etMedicineBrandName.getText().toString();
-                        String updatedGenericName = holder.etMedicineGenericName.getText().toString();
-                        Double updatedAmount = Double.valueOf(holder.etMedicineAmount.getText().toString());
-                        String updatedMedicineFor = holder.etMedicineFor.getText().toString();
+                            Medicine updatedMedicine = null;
 
-                        updatedMedicine.setSqlId(id);
-                        updatedMedicine.setBrandName(updatedBrandName);
-                        updatedMedicine.setGenericName(updatedGenericName);
-                        updatedMedicine.setAmount(updatedAmount);
-                        updatedMedicine.setMedicineFor(updatedMedicineFor);
+                            updatedMedicine = MedicineInstantiatorUtil.createMedicineInstanceFromString(clazz.getSimpleName());
+                            String updatedBrandName = holder.etMedicineBrandName.getText().toString();
+                            String updatedGenericName = holder.etMedicineGenericName.getText().toString();
+                            Double updatedAmount = Double.valueOf(holder.etMedicineAmount.getText().toString());
+                            String updatedMedicineFor = holder.etMedicineFor.getText().toString();
 
-                        Log.wtf("before the checking", "BRAND NAME: " + updatedMedicine.getBrandName());
-                        Log.wtf("before the checking", "GENERIC NM: " + updatedMedicine.getGenericName());
-                        Log.wtf("before the checking", "MEDICN  FOR: " + updatedMedicine.getMedicineFor());
-                        Log.wtf("before the checking", "MED AMOUNT: " + updatedMedicine.getAmount()+"");
+                            updatedMedicine.setSqlId(id);
+                            updatedMedicine.setBrandName(updatedBrandName);
+                            updatedMedicine.setGenericName(updatedGenericName);
+                            updatedMedicine.setAmount(updatedAmount);
+                            updatedMedicine.setMedicineFor(updatedMedicineFor);
 
-                        onMedicineClickListener.onItemSaveClick(updatedMedicine);
+                            Log.wtf("before the checking", "BRAND NAME: " + updatedMedicine.getBrandName());
+                            Log.wtf("before the checking", "GENERIC NM: " + updatedMedicine.getGenericName());
+                            Log.wtf("before the checking", "MEDICN  FOR: " + updatedMedicine.getMedicineFor());
+                            Log.wtf("before the checking", "MED AMOUNT: " + updatedMedicine.getAmount() + "");
+
+                            onMedicineClickListener.onItemSaveClick(updatedMedicine);
+                        }
                     }
                 }
             });
