@@ -10,6 +10,8 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
@@ -40,7 +42,7 @@ public class ScheduleViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.et_schedule_time_period)
     TextView etScheduleTimePeriod;
     @BindView(R.id.list_medicine_to_drink)
-    Spinner spinnerMedicineToDrink;
+    TextView tvToFragmentMedicineToDrink;
     @BindView(R.id.et_schedule_dosage)
     EditText etDosagePerDrinkingInterval;
     @BindView(R.id.et_medicine_drinking_interval)

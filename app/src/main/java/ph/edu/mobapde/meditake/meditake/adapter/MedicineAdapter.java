@@ -128,7 +128,6 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
 
             viewHolder.linSaveMedicine.setTag(R.string.MEDICINE_TYPE, med.getClass());
             viewHolder.linSaveMedicine.setTag(R.string.MEDICINE_ID, id);
-            viewHolder.linSaveMedicine.setTag(R.string.MEDICINE_HOLDER, viewHolder);
             viewHolder.linSaveMedicine.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -141,17 +140,16 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
                             viewHolder.etMedicineGenericName.setError(isGenericNameEmpty ? "Generic name must not be empty" : null);
                             viewHolder.etMedicineAmount.setError(isAmountEmpty ? "Amount must not be empty" : null);
                         }else {
-                            MedicineViewHolder holder = (MedicineViewHolder) v.getTag(R.string.MEDICINE_HOLDER);
                             Class clazz = (Class) v.getTag(R.string.MEDICINE_TYPE);
                             int id = (int) v.getTag(R.string.MEDICINE_ID);
 
                             Medicine updatedMedicine = null;
 
                             updatedMedicine = MedicineInstantiatorUtil.createMedicineInstanceFromString(clazz.getSimpleName());
-                            String updatedBrandName = holder.etMedicineBrandName.getText().toString();
-                            String updatedGenericName = holder.etMedicineGenericName.getText().toString();
-                            Double updatedAmount = Double.valueOf(holder.etMedicineAmount.getText().toString());
-                            String updatedMedicineFor = holder.etMedicineFor.getText().toString();
+                            String updatedBrandName = viewHolder.etMedicineBrandName.getText().toString();
+                            String updatedGenericName = viewHolder.etMedicineGenericName.getText().toString();
+                            Double updatedAmount = Double.valueOf(viewHolder.etMedicineAmount.getText().toString());
+                            String updatedMedicineFor = viewHolder.etMedicineFor.getText().toString();
 
                             updatedMedicine.setSqlId(id);
                             updatedMedicine.setBrandName(updatedBrandName);
@@ -198,12 +196,28 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
         return (id == expandedPositionId) ? true : false;
     }
 
-    public boolean isEditing(int id){
-        return (id == editingPositionId) ? true: false;
+    public boolean isExpanded(){
+        return expandedPositionId != -1 ? true : false;
+    }
+
+    public int getExpandedPositionId() {
+        return expandedPositionId;
     }
 
     public void setExpandedPositionId(int expandedPositionId) {
         this.expandedPositionId = expandedPositionId;
+    }
+
+    public boolean isEditing(int id){
+        return (id == editingPositionId) ? true : false;
+    }
+
+    public boolean isEditing(){
+        return (editingPositionId != -1) ? true : false;
+    }
+
+    public int getEditingPositionId() {
+        return editingPositionId;
     }
 
     public void setEditingPositionId(int editingPositionId) {

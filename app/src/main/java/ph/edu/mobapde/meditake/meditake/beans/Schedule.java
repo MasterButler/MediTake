@@ -16,6 +16,7 @@ public class Schedule {
     public static final String COLUMN_DRINKING_INTERVAL = "drinkingInterval";
     public static final String COLUMN_LAST_TIME_TAKEN = "lastTimeTaken";
     public static final String COLUMN_IS_ACTIVATED = "isActivated";
+    public static final String COLUMN_CUSTOM_NEXT_DRINKING_TIME = "customNextDrinkingTime";
 
     public static final int TIMES_A_DAY = 0;
     public static final int EVERY_NTH_HOUR = 1;
@@ -31,8 +32,15 @@ public class Schedule {
     //intervals in between drinking the medicineToDrink. stored in terms of HOURS
     private double drinkingInterval;
 
+    //when user decides to set next drinking time just because
+    private long customNextDrinkingTime;
+
     private long lastTimeTaken;
     private boolean isActivated;
+
+    public Schedule(){
+        customNextDrinkingTime = 0;
+    }
 
     /**
      * Operation that controls if theperson has successfuly drank the medicineToDrink.
@@ -52,7 +60,7 @@ public class Schedule {
      * @param
      */
     public long getNextDrinkingTime(){
-        return DateUtil.addHours(lastTimeTaken, drinkingInterval);
+        return customNextDrinkingTime == 0 ? DateUtil.addHours(lastTimeTaken, drinkingInterval) : customNextDrinkingTime;
     }
 
     public void setMedicineToDrink(Medicine medicineToDrink){
@@ -117,4 +125,13 @@ public class Schedule {
     public void setActivated(boolean activated) {
         isActivated = activated;
     }
+
+    public long getCustomNextDrinkingTime() {
+        return customNextDrinkingTime;
+    }
+
+    public void setCustomNextDrinkingTime(long customNextDrinkingTime) {
+        this.customNextDrinkingTime = customNextDrinkingTime;
+    }
+
 }

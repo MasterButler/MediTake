@@ -54,8 +54,17 @@ public class DateUtil {
         return df.format(new Date(time));
     }
 
-    public static long parseToLong(String time, String format){
-        DateFormat df =  new SimpleDateFormat(format);
+    public static long parseToLong(String time, String am_pm){
+        DateFormat df =  new SimpleDateFormat(DEFAULT_TIME_FORMAT_PERIOD_12);
+        try{
+            return df.parse(time + " " + am_pm).getTime();
+        }catch (ParseException e) {
+            return 0;
+        }
+    }
+
+    public static long parseToLong(String time){
+        DateFormat df =  new SimpleDateFormat(DEFAULT_TIME_FORMAT_PERIOD_24);
         try{
             return df.parse(time).getTime();
         }catch (ParseException e) {
@@ -65,6 +74,11 @@ public class DateUtil {
 
     public static String getTime(long time, boolean isMilitaryTime){
         return isMilitaryTime ? parseFromLong(time, DEFAULT_TIME_FORMAT_PERIOD_24) : parseFromLong(time, DEFAULT_TIME_FORMAT_PERIOD_12);
+    }
+
+    private static long getDate(long time){
+        long val = time/MILLIS_TO_DAYS;
+        return val*MILLIS_TO_DAYS;
     }
 
     public static String getDateTime(long datetime, boolean isMilitaryTime){
@@ -101,5 +115,12 @@ public class DateUtil {
         }else{
             return (remainingTime / 60) + " hours and " + (remainingTime % 60) + " minutes";
         }
+    }
+
+    public static long addDate(long time){
+        if(time < MILLIS_TO_DAYS){
+            return time;
+        }
+        return getDate(time) + time > System.currentTimeMillis() ? getDate(time) + time : getDate(time) + time + MILLIS_TO_DAYS;
     }
 }

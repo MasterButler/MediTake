@@ -2,6 +2,7 @@ package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.transition.TransitionManager;
 import android.support.v4.view.GravityCompat;
@@ -162,10 +163,26 @@ public class MedicineListActivity extends AppCompatActivity
         medicineAdapter.changeCursor(c);
     }
 
+    public void cancel(int id){
+        if(CREATING_NEW_ITEM == -1){
+            returnToView(id);
+        }else{
+            delete((int)CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
+    }
+
     public void delete(int id){
         medicineUtil.deleteMedicine(id);
         medicineAdapter.notifyDataSetChanged();
         updateList();
+    }
+
+    public void edit(int id){
+        boolean isEditing = medicineAdapter.isEditing(id);
+        Log.wtf("action", "IS EDITING (AT ID" + id + ")? " + isEditing);
+        medicineAdapter.setEditingPositionId(isEditing ? -1 : id);
+        medicineAdapter.notifyDataSetChanged();
     }
 
     public void expand(int id){
@@ -180,13 +197,6 @@ public class MedicineListActivity extends AppCompatActivity
         }
     }
 
-    public void edit(int id){
-        boolean isEditing = medicineAdapter.isEditing(id);
-        Log.wtf("action", "IS EDITING (AT ID" + id + ")? " + isEditing);
-        medicineAdapter.setEditingPositionId(isEditing ? -1 : id);
-        medicineAdapter.notifyDataSetChanged();
-    }
-
     public void save(Medicine medicine){
         Log.wtf("action", "TO UPDATE " + medicine.getBrandName() + " WITH ID " + medicine.getSqlId());
         medicineUtil.updateMedicine(medicine);
@@ -197,15 +207,6 @@ public class MedicineListActivity extends AppCompatActivity
 
         if(CREATING_NEW_ITEM != -1)
             CREATING_NEW_ITEM = -1;
-    }
-
-    public void cancel(int id){
-        if(CREATING_NEW_ITEM == -1){
-            returnToView(id);
-        }else{
-            delete((int)CREATING_NEW_ITEM);
-            CREATING_NEW_ITEM = -1;
-        }
     }
 
     public void returnToView(int id){
@@ -224,6 +225,10 @@ public class MedicineListActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_medicine_list);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if(medicineAdapter.isEditing()){
+            cancel(medicineAdapter.getEditingPositionId());
+        } else if(medicineAdapter.isExpanded()){
+            expand(medicineAdapter.getExpandedPositionId());
         } else {
             super.onBackPressed();
         }

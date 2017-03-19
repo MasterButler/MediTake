@@ -18,7 +18,7 @@ import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 
 public class SQLiteConnection extends SQLiteOpenHelper{
     public static final String SCHEMA = "MediTake";
-    public static final int VERSION = 5;
+    public static final int VERSION = 6;
 
     public SQLiteConnection(Context context) {
         super(context, SCHEMA, null, VERSION);
@@ -66,7 +66,8 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             + Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL + " REAL, "
             + Schedule.COLUMN_DRINKING_INTERVAL + " REAL, "
             + Schedule.COLUMN_LAST_TIME_TAKEN + " REAL, "
-            + Schedule.COLUMN_IS_ACTIVATED + " NUMERIC NOT NULL);";
+            + Schedule.COLUMN_IS_ACTIVATED + " NUMERIC NOT NULL, "
+            + Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME + " REAL);";
 
         db.execSQL(sqlMedicine);
         db.execSQL(sqlSchedule);
@@ -86,7 +87,6 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         db.execSQL(sqlMedicine);
         db.execSQL(sqlSchedule);
         onCreate(db);
-
     }
 
     /****************
@@ -226,9 +226,10 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             cv.put(Schedule.COLUMN_MEDICINE_TO_DRINK, schedule.getMedicineToDrink().getSqlId());
         }
         cv.put(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL, schedule.getDosagePerDrinkingInterval());
-        cv.put(Schedule.COLUMN_DRINKING_INTERVAL, schedule.getDosagePerDrinkingInterval());
+        cv.put(Schedule.COLUMN_DRINKING_INTERVAL, schedule.getDrinkingInterval());
         cv.put(Schedule.COLUMN_LAST_TIME_TAKEN, schedule.getLastTimeTaken());
         cv.put(Schedule.COLUMN_IS_ACTIVATED, schedule.isActivated());
+        cv.put(Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME, schedule.getCustomNextDrinkingTime());
 
         SQLiteDatabase db = getWritableDatabase();
         long id = db.insert(Schedule.TABLE, null, cv);
@@ -278,6 +279,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             double drinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DRINKING_INTERVAL));
             long lastTimeTaken = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_LAST_TIME_TAKEN));
             boolean isActivated = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_IS_ACTIVATED)) == 1 ? true : false;
+            long customNextDrinkingTime = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME));
 
             String brandName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
             String genericName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
@@ -301,6 +303,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             schedule.setDrinkingInterval(drinkingInterval);
             schedule.setLastTimeTaken(lastTimeTaken);
             schedule.setActivated(isActivated);
+            schedule.setCustomNextDrinkingTime(customNextDrinkingTime);
         }
 
         cursor.close();
@@ -391,12 +394,14 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         cv.put(Schedule.COLUMN_DRINKING_INTERVAL, schedule.getDrinkingInterval());
         cv.put(Schedule.COLUMN_LAST_TIME_TAKEN, schedule.getLastTimeTaken());
         cv.put(Schedule.COLUMN_IS_ACTIVATED, schedule.isActivated());
+        cv.put(Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME, schedule.getCustomNextDrinkingTime());
 
         Log.wtf("check", "UPDATING MEDICINE ID OF " + schedule.getSqlId() + " TO " + schedule.getMedicineToDrink().getSqlId());
         Log.wtf("check", "UPDATING DOSAGE OF " + schedule.getSqlId() + " TO " + schedule.getDosagePerDrinkingInterval());
         Log.wtf("check", "UPDATING INTERVAL OF " + schedule.getSqlId() + " TO " + schedule.getDrinkingInterval());
         Log.wtf("check", "UPDATING LAST TIME OF " + schedule.getLastTimeTaken() + " TO " + schedule.getLastTimeTaken());
         Log.wtf("check", "UPDATING ISACTIVATED OF " + schedule.getSqlId() + " TO " + schedule.isActivated());
+        Log.wtf("check", "UPDATING CUSTOM NEXT DRINK TIME OF " + schedule.getSqlId() + " TO " + schedule.getCustomNextDrinkingTime());
         int rows = db.update(Schedule.TABLE,
                 cv,
                 Schedule.COLUMN_ID + " = ? ",

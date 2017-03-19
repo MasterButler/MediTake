@@ -7,12 +7,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/cardview_light_background"
-    card_view:cardElevation="4dp"
+    card_view:cardElevation="2dp"
     card_view:cardUseCompatPadding="true"
     android:background="@drawable/medicine_background"
     android:stateListAnimator="@anim/medicine_selection"
     android:id="@+id/cv_holder"
-
+    android:clickable="true"
     >
     <!--app:cardBackgroundColor="@drawable/medicine_background"-->
     <!--android:layout_marginLeft="4dp"-->

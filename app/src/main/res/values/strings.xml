@@ -30,4 +30,7 @@
     <string name="notif_medicine_delete">Medicine successfully deleted.</string>
     <string name="schedule_id">schedule_id</string>
     <string name="schedule_isActivated">schedule_isActivated</string>
+    <string name="SCHEDULE_ID">schedule_id</string>
+    <string name="SCHEDULE_HOLDER">schedule_holder</string>
+    <string name="SCHEDULE">schedule</string>
 </resources>
