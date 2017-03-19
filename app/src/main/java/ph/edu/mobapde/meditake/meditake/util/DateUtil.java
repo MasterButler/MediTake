@@ -48,6 +48,10 @@ public class DateUtil {
         return isMilitaryTime ? parseFromLong(datetime, DEFAULT_DATETIME_FORMAT_PERIOD_24) : parseFromLong(datetime, DEFAULT_DATETIME_FORMAT_PERIOD_12);
     }
 
+    public static long addHours(long referenceTime, long numHours){
+        return referenceTime + (numHours*MILLIS_TO_HOURS);
+    }
+
     public static int compareTime(String timeA, String timeB){
         if(timeA.toLowerCase().contains("am") || timeA.toLowerCase().contains("pm")){
             return compareTime(timeA, timeB, DEFAULT_TIME_FORMAT_PERIOD_12);
@@ -63,5 +67,16 @@ public class DateUtil {
 
     public static long addHours(long lastTimeTaken, double hours) {
         return (long) (lastTimeTaken + hours*MILLIS_TO_HOURS);
+    }
+
+    public static String getDifferenceInMinutes(long referenceTime, long nextDrinkingTime) {
+        long remainingTime = (nextDrinkingTime - referenceTime) / MILLIS_TO_MINUTES;
+        if(remainingTime == 0){
+            return "0";
+        }else if(remainingTime % 60 == 0){
+            return remainingTime/60 + "hours ";
+        }else{
+            return (remainingTime / 60) + " hours and " + (remainingTime % 60) + " minutes";
+        }
     }
 }

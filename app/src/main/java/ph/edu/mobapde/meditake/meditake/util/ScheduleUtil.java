@@ -32,6 +32,10 @@ public class ScheduleUtil {
         return databaseConnection.getAllSchedule();
     }
 
+    public Schedule getSchedule(int id){
+        initializeDBConnection(context);
+        return databaseConnection.getSchedule(id);
+    }
     public int deleteSchedule(int id){
         initializeDBConnection(context);
         return databaseConnection.deleteMedicine(id);

@@ -101,6 +101,7 @@ public class MedicineListActivity extends AppCompatActivity
             @Override
             public void onItemDeleteClick(int id) {
                 delete(id);
+                Toast.makeText(getBaseContext(), R.string.notif_medicine_delete, Toast.LENGTH_SHORT).show();
             }
 
             @Override

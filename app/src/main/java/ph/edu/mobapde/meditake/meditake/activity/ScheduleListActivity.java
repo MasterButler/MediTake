@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +25,7 @@ import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.beans.Syrup;
 import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
+import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
@@ -103,6 +105,7 @@ public class ScheduleListActivity extends AppCompatActivity
             @Override
             public void onItemDeleteClick(int id) {
                 delete(id);
+                Toast.makeText(getBaseContext(), R.string.notf_schedule_delete, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -122,7 +125,9 @@ public class ScheduleListActivity extends AppCompatActivity
 
             @Override
             public void onSwitchClick(int id) {
-
+                Schedule sched = scheduleUtil.getSchedule(id);
+                Log.d("com", "actual interval is " + sched.getDrinkingInterval());
+                Toast.makeText(getBaseContext(), "Alarm set for " + DateUtil.getDifferenceInMinutes(System.currentTimeMillis(), sched.getNextDrinkingTime()) + " from now.", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -82,24 +82,11 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
         Log.d("ID", "EDITING ID: " + editingPositionId);
 
         if(id != -1){
-            Log.wtf("action", "GENERATED ID FOR MEDICINE");
-
-            Log.d("ID", "SCHEDULE ID: " + id);
-            Log.d("ID", "MEDICINE ID: " + medicineId);
-
             Medicine med = MedicineInstantiatorUtil.createMedicineInstanceFromString(medicineType);
             med.setBrandName(brandName);
             med.setGenericName(genericName);
             med.setMedicineFor(medicineFor);
             med.setAmount(amount);
-
-            if(med == null){
-                Log.wtf("action", "MEDICINE IS N");
-                Log.wtf("action", "MEDICINE IS NULLLLLLLL");
-                Log.wtf("action", "MEDICINE IS N");
-            }else{
-                Log.wtf("action", "MEDICINE IS " + med);
-            }
 
             Schedule sched = new Schedule();
             sched.setSqlId(id);
@@ -158,6 +145,21 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                 }
             });
 
+            boolean isDone = !(id == editingPositionId);
+            setMode(viewHolder, isDone ? MedicineViewHolder.VIEW_MODE : MedicineViewHolder.EDIT_MODE);
+            viewHolder.linCancelSchedule.setTag(id);
+            viewHolder.linCancelSchedule.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(onScheduleClickListener != null){
+                        int value = (int)v.getTag();
+                        if(value != -1){
+                            onScheduleClickListener.onItemCancelClick(value);
+                        }
+                    }
+                }
+            });
+
             viewHolder.linDeleteSchedule.setTag(id);
             viewHolder.linDeleteSchedule.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,6 +174,19 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                 }
             });
 
+            viewHolder.scheduleSwitch.setTag(id);
+            viewHolder.scheduleSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(onScheduleClickListener != null){
+                        int value = (int)v.getTag();
+                        if(value != -1){
+                            Log.wtf("action", "DELETING SCHEDULE WITH ID OF " + value);
+                            onScheduleClickListener.onSwitchClick(value);
+                        }
+                    }
+                }
+            });
 
         }
     }
