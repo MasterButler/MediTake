@@ -11,6 +11,7 @@ import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 public class Schedule {
     public static final String TABLE = "schedule";
     public static final String COLUMN_ID = "_id";
+    //public static final String COLUMN_SCHEDULE_ID = "_schedule_id";
     public static final String COLUMN_DOSAGE_PER_DRINKING_INTERVAL = "dosagePerDrinkingInterval";
     public static final String COLUMN_MEDICINE_TO_DRINK = "medicineToDrink";
     public static final String COLUMN_DRINKING_INTERVAL = "drinkingInterval";

@@ -84,7 +84,7 @@ public class MedicineListActivity extends AppCompatActivity
 
         rvMedicine.setAdapter(medicineAdapter);
         rvMedicine.setLayoutManager(new LinearLayoutManager(
-                getBaseContext(), LinearLayoutManager.VERTICAL, true)
+                getBaseContext(), LinearLayoutManager.VERTICAL, false)
         );
 
     }

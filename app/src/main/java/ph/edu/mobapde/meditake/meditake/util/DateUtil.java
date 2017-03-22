@@ -32,9 +32,6 @@ public class DateUtil {
 
     public static int pickBackground(long time){
         long value = time % MILLIS_TO_DAYS;
-        Log.wtf("action", "TIME IS " + value);
-        Log.wtf("action", "TIME IS " + getTime(value, false));
-        Log.wtf("action", "TIME IS " + 1.0*value/MILLIS_TO_HOURS);
 
         if(value < MILLIS_TO_HOURS * 3){
             return R.drawable.schedule_evening;
@@ -108,8 +105,13 @@ public class DateUtil {
 
     public static String getDifferenceInMinutes(long referenceTime, long nextDrinkingTime) {
         long remainingTime = (nextDrinkingTime - referenceTime) / MILLIS_TO_MINUTES;
+        Log.d("time", "currTime is " + DateUtil.getDateTime(referenceTime, false));
+        Log.d("time", "futureTime is " + DateUtil.getDateTime(nextDrinkingTime, false));
+        Log.d("time", "remaining time is " + remainingTime + " minutes");
         if(remainingTime == 0){
             return "0";
+        }else if(remainingTime < 60) {
+            return remainingTime + " minutes";
         }else if(remainingTime % 60 == 0){
             return remainingTime/60 + "hours ";
         }else{
@@ -118,9 +120,8 @@ public class DateUtil {
     }
 
     public static long addDate(long time){
-        if(time < MILLIS_TO_DAYS){
-            return time;
-        }
-        return getDate(time) + time > System.currentTimeMillis() ? getDate(time) + time : getDate(time) + time + MILLIS_TO_DAYS;
+        time = time % MILLIS_TO_DAYS;
+        time = getDate(System.currentTimeMillis()) + time;
+        return time < System.currentTimeMillis() ? time + MILLIS_TO_DAYS : time;
     }
 }

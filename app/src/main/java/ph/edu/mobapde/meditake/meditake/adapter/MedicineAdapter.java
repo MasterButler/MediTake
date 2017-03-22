@@ -44,7 +44,6 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-
         mRecyclerView = recyclerView;
     }
 
@@ -52,6 +51,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
     public void onBindViewHolder(final MedicineViewHolder viewHolder, Cursor cursor) {
 
         int id = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_ID));
+        int medicineId = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_ID));
         String brandName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
         String genericName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
         String medicineFor =  cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
@@ -61,6 +61,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
         Log.d("ID", "EXPAND  ID: " + expandedPositionId);
         Log.d("ID", "EDITING ID: " + editingPositionId);
         Log.d("ID", "MEDICINEID: " + id + "\n");
+        Log.d("ID", "MED_COL_ID: " + medicineId + "\n");
 
         if(id != -1){
             Medicine med = MedicineInstantiatorUtil.createMedicineInstanceFromString(medicineType);

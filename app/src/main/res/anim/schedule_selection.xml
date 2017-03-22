@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_activated="true">
+        <objectAnimator
+            android:propertyName="translationZ"
+            android:duration="@android:integer/config_shortAnimTime"
+            android:interpolator="@android:interpolator/fast_out_slow_in"
+            android:valueTo="@dimen/z_card"/>
+
+        <objectAnimator
+            android:propertyName="translationY"
+            android:duration="@android:integer/config_shortAnimTime"
+            android:interpolator="@android:interpolator/fast_out_slow_in"
+            android:valueTo="0dp"/>
+    </item>
+
+    <item>
+        <objectAnimator
+            android:propertyName="translationZ"
+            android:valueTo="0dp"
+            android:duration="@android:integer/config_shortAnimTime"
+            android:interpolator="@android:interpolator/fast_out_slow_in" />
+
+        <objectAnimator
+            android:propertyName="translationY"
+            android:valueTo="0dp"
+            android:duration="@android:integer/config_shortAnimTime"
+            android:interpolator="@android:interpolator/fast_out_slow_in" />
+    </item>
+</set>

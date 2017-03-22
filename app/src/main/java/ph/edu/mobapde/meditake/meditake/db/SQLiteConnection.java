@@ -18,7 +18,7 @@ import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 
 public class SQLiteConnection extends SQLiteOpenHelper{
     public static final String SCHEMA = "MediTake";
-    public static final int VERSION = 6;
+    public static final int VERSION = 11;
 
     public SQLiteConnection(Context context) {
         super(context, SCHEMA, null, VERSION);
@@ -265,7 +265,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 + " AND " + Schedule.TABLE + "." + Schedule.COLUMN_ID + " = " + id;
         Cursor cursor = db.query(Schedule.TABLE,
                 null,
-                Schedule.COLUMN_ID + " = ?",
+                Schedule.TABLE + "." + Schedule.COLUMN_ID + " = ?",
                 new String[]{id+""},
                 null,
                 null,
@@ -425,6 +425,36 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         db.close();
         Log.wtf("DELETE", "deleted item with id " + id);
         return rows;
+    }
+
+    public Medicine getFirstMedicineRow() {
+        //SELECT * FROM schedule WHERE _id = ?
+        Medicine medicine = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(Medicine.TABLE, null, null, null, null, null, null, "1");
+
+        if(cursor.moveToFirst()){
+            medicine = MedicineInstantiatorUtil.createMedicineInstanceFromString(cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE)));
+            long id = cursor.getLong(cursor.getColumnIndex(Medicine.COLUMN_ID));
+            String brandName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
+            String genericName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
+            String medicineFor = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
+            double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
+
+            Log.wtf("IN SQLITE CONNECTION", "FOUND " + id);
+            Log.wtf("IN SQLITE CONNECTION", "FOUND " + brandName);
+
+            medicine.setSqlId((int) id);
+            medicine.setBrandName(brandName);
+            medicine.setGenericName(genericName);
+            medicine.setMedicineFor(medicineFor);
+            medicine.setAmount(amount);
+            Log.wtf("FULL INFO", medicine.getSqlId() + ": " + medicine.getBrandName() + ", " + medicine.getGenericName() + ", " + medicine.getMedicineFor());
+        }
+
+
+        db.close();
+        return medicine;
     }
 }
 

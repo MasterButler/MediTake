@@ -16,6 +16,7 @@ import android.os.Parcelable;
 abstract public class Medicine {
     public static final String TABLE = "medicine";
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_MEDICINE_ID = "_medicine_id";
     public static final String COLUMN_BRAND_NAME = "brandName";
     public static final String COLUMN_GENERIC_NAME = "genericName";
     public static final String COLUMN_MEDICINE_FOR = "medicineFor";

@@ -57,7 +57,6 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
         expandedPositionId = -1;
         editingPositionId = -1;
         setHasStableIds(true);
-
         isMilitary = false;
     }
 
@@ -74,10 +73,10 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
 
     @Override
     public void onBindViewHolder(final ScheduleViewHolder viewHolder, Cursor cursor) {
-        int id = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_ID));
+        int id = cursor.getInt(cursor.getColumnIndex(Schedule.TABLE + "." + Schedule.COLUMN_ID));
         int medicineId = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_MEDICINE_TO_DRINK));
         double dosagePerDrinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL));
-        double drinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL));
+        final double drinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL));
         long lastTimeTaken = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_LAST_TIME_TAKEN));
         boolean isActivated = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_IS_ACTIVATED)) == 1 ? true : false;
         long customNextDrinkingTime = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME));
@@ -89,18 +88,25 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
         String medicineType = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE));
 
         Log.d("ID", "STR");
+        Log.d("ID", "STR");
         Log.d("ID", "EXPAND  ID: " + expandedPositionId);
         Log.d("ID", "EDITING ID: " + editingPositionId);
         Log.d("ID", "SCHEDULEID: " + id);
         Log.d("ID", "END");
+        Log.d("ID", "END");
 
         if(id != -1){
-            Medicine med = MedicineInstantiatorUtil.createMedicineInstanceFromString(medicineType);
-            med.setSqlId(medicineId);
-            med.setBrandName(brandName);
-            med.setGenericName(genericName);
-            med.setMedicineFor(medicineFor);
-            med.setAmount(amount);
+
+            Medicine med = null;
+
+            if(medicineId != -1){
+                med = MedicineInstantiatorUtil.createMedicineInstanceFromString(medicineType);
+                med.setSqlId(medicineId);
+                med.setBrandName(brandName);
+                med.setGenericName(genericName);
+                med.setMedicineFor(medicineFor);
+                med.setAmount(amount);
+            }
 
             Schedule sched = new Schedule();
             sched.setSqlId(id);
@@ -155,14 +161,14 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                 drinkingIntervalDisplay = String.valueOf(drinkingInterval);
             }
 
-            medicineDisplay = dosagePerDrinkingIntervalDisplay  + " "
-                    + sched.getMedicineToDrink().getModifier() + " of " + sched.getMedicineToDrink().getName();
+            medicineDisplay = med != null ?
+                    dosagePerDrinkingIntervalDisplay  + " " + sched.getMedicineToDrink().getModifier() + " of " + sched.getMedicineToDrink().getName() :
+                    "units of unentered medicine.";
             viewHolder.tvMedicineToDrink.setText(medicineDisplay);
             viewHolder.scheduleSwitch.setChecked(isActivated);
             viewHolder.tvDrinkingInterval.setText("Medicine taken every " + drinkingIntervalDisplay + " hours.");
-            viewHolder.tvLastTaken.setText("Last taken: " + DateUtil.getDateTime(sched.getLastTimeTaken(), isMilitary));
+            viewHolder.tvLastTaken.setText(lastTimeTaken == 0 ? "Not yet taken before" : "Last taken: " + DateUtil.getDateTime(sched.getLastTimeTaken(), isMilitary));
 
-            //viewHolder.spinnerMedicineToDrink.
             viewHolder.etDosagePerDrinkingInterval.setText(dosagePerDrinkingIntervalDisplay);
             viewHolder.etDrinkingIntervals.setText(String.valueOf(drinkingInterval));
 
@@ -187,7 +193,7 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
 
             boolean isEditing = id == editingPositionId;
             viewHolder.linEditSchedule.setTag(id);
-            setMode(viewHolder, isEditing ? MedicineViewHolder.EDIT_MODE : MedicineViewHolder.VIEW_MODE);
+            setMode(viewHolder, isEditing ? ScheduleViewHolder.EDIT_MODE : ScheduleViewHolder.VIEW_MODE);
             viewHolder.linEditSchedule.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -199,7 +205,7 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
             });
 
             boolean isDone = !(id == editingPositionId);
-            setMode(viewHolder, isDone ? MedicineViewHolder.VIEW_MODE : MedicineViewHolder.EDIT_MODE);
+            setMode(viewHolder, isDone ? ScheduleViewHolder.VIEW_MODE : ScheduleViewHolder.EDIT_MODE);
             viewHolder.linCancelSchedule.setTag(id);
             viewHolder.linCancelSchedule.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -236,16 +242,17 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                                 updatedTime = DateUtil.addDate(DateUtil.parseToLong(viewHolder.etScheduleTime.getText().toString(), viewHolder.etScheduleTimePeriod.getText().toString()));
                             }
 
+                            while(updatedTime < System.currentTimeMillis()){
+                                updatedTime += System.currentTimeMillis();
+                            }
+
                             Schedule sched = (Schedule) v.getTag(R.string.SCHEDULE);
                             sched.setDosagePerDrinkingInterval(updatedDosagePerDrinkingInterval);
                             sched.setDrinkingInterval(updatedDrinkingInterval);
-
                             Log.d("action", "COMPARING " + DateUtil.getTime(updatedTime,isMilitary) + " AND " + DateUtil.getTime(sched.getNextDrinkingTime(), isMilitary));
 
-                            if(!DateUtil.getTime(updatedTime, isMilitary).equals(DateUtil.getTime(sched.getNextDrinkingTime(), isMilitary))){
-                                long updatedTimeDate = DateUtil.addDate(updatedTime);
-                                Log.d("action", "CHANGING SET CUSTOM NEXT DRINKING TIME TO " + DateUtil.getTime(updatedTimeDate, isMilitary));
-                                sched.setCustomNextDrinkingTime(updatedTimeDate);
+                            if(updatedTime != sched.getLastTimeTaken() + drinkingInterval * DateUtil.MILLIS_TO_HOURS){
+                                sched.setCustomNextDrinkingTime(updatedTime);
                             }
                             onScheduleClickListener.onItemSaveClick(sched);
                         }

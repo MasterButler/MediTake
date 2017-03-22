@@ -9,6 +9,8 @@
     app:cardBackgroundColor="@color/cardview_light_background"
     card_view:cardElevation="4dp"
     card_view:cardUseCompatPadding="true"
+    android:background="@drawable/schedule_background"
+    android:stateListAnimator="@anim/schedule_selection"
     >
     <!--android:background="@drawable/schedule_background"-->
     <!--android:stateListAnimator="@anim/schedule_selection"-->

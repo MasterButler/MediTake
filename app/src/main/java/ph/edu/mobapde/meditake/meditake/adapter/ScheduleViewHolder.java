@@ -85,6 +85,7 @@ public class ScheduleViewHolder extends RecyclerView.ViewHolder{
 
         this.isMilitary = isMilitary;
 
+        setMode(VIEW_MODE);
     }
 
     public void setMode(int mode){
