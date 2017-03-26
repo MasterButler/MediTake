@@ -9,8 +9,8 @@
     <color name="colorBackground">#E0F2F1</color>
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
-    <color name="colorAccent">#FF9100</color>
-    <color name="colorAccentDark">#FF6D00</color>
+    <color name="colorAccent">#FF5252</color>
+    <color name="colorAccentDark">#FF1744</color>
     <color name="colorFont">#FFFFFF</color>
     <color name="colorFontInBackground">#DE000000</color>
     <color name="colorBackgroundInSelection">#EEEEEE</color>
@@ -18,7 +18,8 @@
     <color name="colorBackgroundBlueTheme">#E3F2FD</color>
     <color name="colorPrimaryBlueTheme">#2196F3</color>
     <color name="colorPrimaryDarkBlueTheme">#1976D2</color>
-    <color name="colorAccentBlueTheme">#FF5252</color>
+    <color name="colorAccentBlueTheme">#FFAB40</color>
+    <color name="colorAccentDarkBlueTheme">#FF9100</color>
     <color name="colorFontBlueTheme">#FFFFFF</color>
     <color name="colorFontInBackgroundBlueTheme">#DE000000</color>
     <color name="colorBackgroundInSelectionBlueTheme">#EEEEEE</color>

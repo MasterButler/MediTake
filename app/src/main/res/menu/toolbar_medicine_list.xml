@@ -7,11 +7,7 @@
         android:id="@+id/action_search_medicine"
         android:title="@string/search_medicine"
         android:icon="@drawable/ic_search_white_24dp"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
 
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
 </menu>

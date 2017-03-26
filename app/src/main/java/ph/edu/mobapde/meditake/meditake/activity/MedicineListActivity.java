@@ -1,16 +1,19 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
+import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.transition.TransitionManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -18,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -36,6 +40,7 @@ import ph.edu.mobapde.meditake.meditake.listener.OnMedicineClickListener;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
 import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
+import ph.edu.mobapde.meditake.meditake.util.SearchUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class MedicineListActivity extends AppCompatActivity
@@ -55,6 +60,10 @@ public class MedicineListActivity extends AppCompatActivity
 
     @BindView(R.id.drawer_layout_medicine_list)
     DrawerLayout drawer;
+
+    MenuItem actionSearchMedicineIcon;
+    SearchView actionSearchMedicineMenu;
+
 
     MedicineAdapter medicineAdapter;
     MedicineUtil medicineUtil;
@@ -190,6 +199,10 @@ public class MedicineListActivity extends AppCompatActivity
         medicineAdapter.changeCursor(c);
     }
 
+    public void updateList(Cursor c){
+        medicineAdapter.changeCursor(c);
+    }
+
     public void cancel(int id){
         if(CREATING_NEW_ITEM == -1){
             returnToView(id);
@@ -227,6 +240,12 @@ public class MedicineListActivity extends AppCompatActivity
         }
     }
 
+    public void returnToView(int id){
+        boolean isEditing = medicineAdapter.isEditing(id);
+        medicineAdapter.setEditingPositionId(isEditing ? -1 : id);
+        medicineAdapter.notifyDataSetChanged();
+    }
+
     public void save(Medicine medicine){
         Log.wtf("action", "TO UPDATE " + medicine.getBrandName() + " WITH ID " + medicine.getSqlId());
         medicineUtil.updateMedicine(medicine);
@@ -239,22 +258,54 @@ public class MedicineListActivity extends AppCompatActivity
             CREATING_NEW_ITEM = -1;
     }
 
-    public void returnToView(int id){
-        boolean isEditing = medicineAdapter.isEditing(id);
-        medicineAdapter.setEditingPositionId(isEditing ? -1 : id);
-        medicineAdapter.notifyDataSetChanged();
+    public void search(String query){
+        String[] conditions = SearchUtil.searchWith(query);
+        if(conditions != null) {
+            Cursor medicineList = medicineUtil.search(conditions);
+            updateList(medicineList);
+        }else{
+            updateList();
+        }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_medicine_list, menu);
+
+        actionSearchMedicineIcon = menu.findItem(R.id.action_search_medicine);
+        if(actionSearchMedicineIcon != null){
+            actionSearchMedicineMenu = (SearchView) actionSearchMedicineIcon.getActionView();
+        }
+        if(actionSearchMedicineMenu != null){
+            //change stuff here.
+            int[] attrs = {android.R.attr.color};
+            EditText searchEditText = (EditText) actionSearchMedicineMenu.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+            TypedArray typedArray = obtainStyledAttributes(attrs);
+            searchEditText.setTextColor(typedArray.getColor(0, Color.WHITE));
+            actionSearchMedicineMenu.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    search(query);
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    search(newText);
+                    return false;
+                }
+            });
+        }
+
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_medicine_list);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if(addMedicineMenu.isExpanded()){
+            addMedicineMenu.collapse();
         } else if(medicineAdapter.isEditing()){
             cancel(medicineAdapter.getEditingPositionId());
         } else if(medicineAdapter.isExpanded()){
@@ -269,6 +320,8 @@ public class MedicineListActivity extends AppCompatActivity
         int id = item.getItemId();
         Log.wtf("action", "Clicked something in app bar");
         switch(id){
+            case R.id.action_search_medicine:
+                break;
             default: Toast.makeText(getBaseContext(), "Unexpected error encountered. Please try again", Toast.LENGTH_SHORT);
         }
         return false;
@@ -283,6 +336,8 @@ public class MedicineListActivity extends AppCompatActivity
 
     public void addNewMedicine(String className){
         if(CREATING_NEW_ITEM == -1) {
+            actionSearchMedicineIcon.collapseActionView();
+
             Medicine tempMed = MedicineInstantiatorUtil.createMedicineInstanceFromString(className);
 
             tempMed.setGenericName("");
@@ -297,6 +352,7 @@ public class MedicineListActivity extends AppCompatActivity
             expand((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
             edit((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
             CREATING_NEW_ITEM = tempId;
+
             addMedicineMenu.collapse();
         }
     }
@@ -318,5 +374,4 @@ public class MedicineListActivity extends AppCompatActivity
         addNewMedicine(Tablet.CLASS_NAME);
         Toast.makeText(getBaseContext(), "Something", Toast.LENGTH_SHORT);
     }
-
 }

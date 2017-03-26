@@ -170,6 +170,55 @@ public class SQLiteConnection extends SQLiteOpenHelper{
     }
 
     /**
+     * Retrieves the medicine through the given conditions
+     * @param conditions array of strings that dictate the values being searched.
+     * @return medicines referenced by the id.
+     */
+    public Cursor getMedicine(String[] conditions) {
+        //SELECT * FROM medicine WHERE _id = ?
+        Medicine medicine = null;
+        SQLiteDatabase db = getReadableDatabase();
+
+        String brandNameLike = "";
+        String genericNameLike = "";
+        String medicineForLike = "";
+        String medicineTypeLike = "";
+        String[] newConditions = new String[conditions.length*4];
+
+        for(int i = 0; i < conditions.length; i++){
+            brandNameLike += "lower(" + Medicine.COLUMN_BRAND_NAME + ") LIKE ? ";
+            genericNameLike += "lower(" + Medicine.COLUMN_GENERIC_NAME + ") LIKE ? ";
+            medicineForLike += "lower(" + Medicine.COLUMN_MEDICINE_FOR + ") LIKE ? ";
+            medicineTypeLike += "lower(" + Medicine.COLUMN_MEDICINE_TYPE + ") LIKE ? ";
+
+            if(i != conditions.length-1){
+                brandNameLike += "OR ";
+                genericNameLike += "OR ";
+                medicineForLike += "OR ";
+                medicineTypeLike += "OR ";
+            }
+        }
+
+
+        for(int i = 0; i < newConditions.length; i++){
+            Log.wtf("AT ARRAY", " AT INDEX " + i + ": " + conditions[i%conditions.length]);
+            newConditions[i] = "%" + conditions[i%conditions.length] + "%";
+        }
+
+        Cursor cursor = db.query(Medicine.TABLE,
+                null,
+                brandNameLike + " OR " +
+                genericNameLike + " OR " +
+                medicineForLike + " OR " +
+                medicineTypeLike,
+                newConditions,
+                null,
+                null,
+                null);
+        return cursor;
+    }
+
+    /**
      * Updates the value of the medicine
      * @param medicine object that contains the new value and as well as the id of the object to be updated
      * @return int containing the number of rows affected

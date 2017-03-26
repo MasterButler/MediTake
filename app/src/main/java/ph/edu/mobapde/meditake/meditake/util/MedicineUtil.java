@@ -60,5 +60,8 @@ public class MedicineUtil {
         return databaseConnection.getMedicine(id);
     }
 
-
+    public Cursor search(String[] conditions) {
+        initializeDBConnection(this.context);
+        return databaseConnection.getMedicine(conditions);
+    }
 }
