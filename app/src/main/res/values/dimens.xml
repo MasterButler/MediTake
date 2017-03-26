@@ -7,6 +7,6 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
 
-    <dimen name="z_card">50dp</dimen>
-    <dimen name="y_card">112dp</dimen>
+    <dimen name="z_card">24dp</dimen>
+    <dimen name="y_card">0dp</dimen>
 </resources>

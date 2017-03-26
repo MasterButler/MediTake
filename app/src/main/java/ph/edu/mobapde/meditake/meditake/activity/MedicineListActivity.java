@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -82,11 +83,31 @@ public class MedicineListActivity extends AppCompatActivity
         initializeFAM();
         CREATING_NEW_ITEM = -1;
 
-        rvMedicine.setAdapter(medicineAdapter);
-        rvMedicine.setLayoutManager(new LinearLayoutManager(
-                getBaseContext(), LinearLayoutManager.VERTICAL, false)
-        );
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getBaseContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
 
+        rvMedicine.setAdapter(medicineAdapter);
+        rvMedicine.setLayoutManager(mLayoutManager);
+
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int value = (int) viewHolder.getItemId();
+                delete(value);
+                updateList();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(rvMedicine);
     }
 
     public void initializeAdapter(){
@@ -120,7 +141,13 @@ public class MedicineListActivity extends AppCompatActivity
             public void onItemCancelClick(int id) {
                 cancel(id);
             }
+
+            @Override
+            public void onItemSwipe(int id) {
+                delete(id);
+            }
         });
+
     }
 
     public void initializeDrawer(){
@@ -179,6 +206,9 @@ public class MedicineListActivity extends AppCompatActivity
     }
 
     public void edit(int id){
+        if(!medicineAdapter.isExpanded(id)){
+            expand(id);
+        }
         boolean isEditing = medicineAdapter.isEditing(id);
         Log.wtf("action", "IS EDITING (AT ID" + id + ")? " + isEditing);
         medicineAdapter.setEditingPositionId(isEditing ? -1 : id);

@@ -11,4 +11,5 @@ public interface OnMedicineClickListener {
     public void onItemEditClick(int id);
     public void onItemSaveClick(Medicine medicine);
     public void onItemCancelClick(int id);
+    public void onItemSwipe(int id);
 }

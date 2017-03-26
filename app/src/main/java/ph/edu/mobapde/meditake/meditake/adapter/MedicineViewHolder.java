@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
@@ -20,6 +21,8 @@ import ph.edu.mobapde.meditake.meditake.R;
 public class MedicineViewHolder extends RecyclerView.ViewHolder{
 
     View parentView;
+    @BindView(R.id.lin_holder)
+    LinearLayout linHolder;
     @BindView(R.id.tv_medicine_generic_name)
     TextView tvMedicineGenericName;
     @BindView(R.id.tv_medicine_brand_name)
@@ -44,6 +47,8 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder{
 
     @BindView(R.id.lin_expanded_information)
     LinearLayout linExpandedInformation;
+    @BindView(R.id.lin_expanded_edit_information)
+    LinearLayout linExpandedEditInformation;
     @BindView(R.id.lin_edit_amount)
     LinearLayout linEditAmount;
     @BindView(R.id.lin_action_editing_medicine)
@@ -65,7 +70,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder{
     View lineDivider;
 
     @BindView(R.id.cv_holder)
-    CardView cvHolder;
+    LinearLayout cvHolder;
 
     @BindView(R.id.card_view_medicine)
     LinearLayout viewLayout;

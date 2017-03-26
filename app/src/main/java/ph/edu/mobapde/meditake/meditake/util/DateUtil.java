@@ -69,6 +69,11 @@ public class DateUtil {
         }
     }
 
+    public static long getCurrentTime(){
+        long value = System.currentTimeMillis();
+        return value - (value%MILLIS_TO_SECONDS);
+    }
+
     public static String getTime(long time, boolean isMilitaryTime){
         return isMilitaryTime ? parseFromLong(time, DEFAULT_TIME_FORMAT_PERIOD_24) : parseFromLong(time, DEFAULT_TIME_FORMAT_PERIOD_12);
     }

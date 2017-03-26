@@ -5,24 +5,13 @@
             android:propertyName="translationZ"
             android:duration="@android:integer/config_shortAnimTime"
             android:interpolator="@android:interpolator/fast_out_slow_in"
-            android:valueTo="@dimen/z_card"/>
-
-        <objectAnimator
-            android:propertyName="translationY"
-            android:duration="@android:integer/config_shortAnimTime"
-            android:interpolator="@android:interpolator/fast_out_slow_in"
-            android:valueTo="0dp"/>
+            android:valueTo="@dimen/z_card"
+            />
     </item>
 
     <item>
         <objectAnimator
             android:propertyName="translationZ"
-            android:valueTo="0dp"
-            android:duration="@android:integer/config_shortAnimTime"
-            android:interpolator="@android:interpolator/fast_out_slow_in" />
-
-        <objectAnimator
-            android:propertyName="translationY"
             android:valueTo="0dp"
             android:duration="@android:integer/config_shortAnimTime"
             android:interpolator="@android:interpolator/fast_out_slow_in" />

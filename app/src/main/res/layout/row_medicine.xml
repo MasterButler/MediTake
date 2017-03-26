@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/cardview_light_background"
-    card_view:cardElevation="2dp"
-    card_view:cardUseCompatPadding="true"
-    android:background="@drawable/medicine_background"
-    android:stateListAnimator="@anim/medicine_selection"
     android:id="@+id/cv_holder"
     android:clickable="true"
+    android:background="@drawable/medicine_background"
+    android:stateListAnimator="@anim/medicine_selection"
+    android:elevation="2dp"
+    android:orientation="vertical"
+    android:layout_marginBottom="1dp"
     >
+
+<!--
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
+    <!--app:cardBackgroundColor="@color/cardview_light_background"-->
+    <!--android:layout_marginLeft="2dp"-->
+    <!--android:layout_marginRight="2dp"-->
     <!--app:cardBackgroundColor="@drawable/medicine_background"-->
     <!--android:layout_marginLeft="4dp"-->
     <!--android:layout_marginRight="4dp"-->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16sp">
+        android:padding="16sp"
+        android:id="@+id/lin_holder"
+        >
+
 
         <LinearLayout
             android:layout_width="0dp"
@@ -130,82 +137,83 @@
                     android:paddingTop="16dp"
                     android:paddingBottom="10dp"/>
 
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/lin_action_viewing_medicine">
+
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/lin_action_viewing_medicine">
+                    android:paddingTop="2dp"
+                    android:paddingLeft="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingRight="10dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/lin_edit_medicine">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="2dp"
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_mode_edit_black_24dp"
+                        android:tint="@color/colorPrimary"
+                        android:padding="2dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="32dp"
+                        android:text="EDIT"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
                         android:paddingLeft="2dp"
-                        android:paddingBottom="2dp"
-                        android:paddingRight="10dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:id="@+id/lin_edit_medicine">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_mode_edit_black_24dp"
-                            android:tint="@color/colorPrimary"
-                            android:padding="2dp"
-                            android:layout_gravity="center"/>
-
-                        <TextView
-                            android:layout_width="40dp"
-                            android:layout_height="32dp"
-                            android:text="EDIT"
-                            android:textSize="14sp"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="2dp"
-                            android:paddingRight="2dp"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorPrimary"
-                            android:textStyle="bold"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="2dp"
-                        android:paddingLeft="2dp"
-                        android:paddingBottom="2dp"
-                        android:paddingRight="10dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:id="@+id/lin_delete_medicine">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_delete_black_24dp"
-                            android:tint="@color/colorPrimary"
-                            android:padding="2dp"
-                            android:layout_gravity="center"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:text="DELETE"
-                            android:textSize="14sp"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="2dp"
-                            android:paddingRight="2dp"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorPrimary"
-                            android:textStyle="bold"/>
-
-                    </LinearLayout>
+                        android:paddingRight="2dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="2dp"
+                    android:paddingBottom="2dp"
+                    android:paddingRight="10dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/lin_delete_medicine">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_delete_black_24dp"
+                        android:tint="@color/colorPrimary"
+                        android:padding="2dp"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="DELETE"
+                        android:textSize="14sp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -277,7 +285,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="16dp">
+                android:paddingTop="16dp"
+                android:id="@+id/lin_expanded_edit_information">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -391,60 +400,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
-<!--<LinearLayout-->
-    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content">-->
-
-    <!---->
-
-   <!--&lt;!&ndash;<android.support.v7.widget.CardView&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-        <!--&lt;!&ndash;app:cardBackgroundColor="@color/cardview_light_background"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_margin="8dp"&ndash;&gt;-->
-        <!--&lt;!&ndash;app:cardElevation="1sp">&ndash;&gt;-->
-
-        <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:orientation="horizontal"&ndash;&gt;-->
-            <!--&lt;!&ndash;android:padding="16dp">&ndash;&gt;-->
-
-            <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_width="40dp"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_height="40dp"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:src="@drawable/syringe_colored"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:id="@+id/iv_medicine_display_image"/>&ndash;&gt;-->
-
-            <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_width="0dp"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_weight="1"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:orientation="vertical"&ndash;&gt;-->
-                <!--&lt;!&ndash;android:layout_marginLeft="16dp">&ndash;&gt;-->
-
-                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:text="Brand Name (Generic Name)"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:id="@+id/tv_medicine_display_name"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:textSize="18sp"/>&ndash;&gt;-->
-
-                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:text="Medicine For"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:id="@+id/tv_medicine_for"/>&ndash;&gt;-->
-            <!--&lt;!&ndash;</LinearLayout>&ndash;&gt;-->
-
-        <!--&lt;!&ndash;</LinearLayout>&ndash;&gt;-->
-    <!--&lt;!&ndash;</android.support.v7.widget.CardView>&ndash;&gt;-->
-
-
-<!--</LinearLayout>-->
+</LinearLayout>

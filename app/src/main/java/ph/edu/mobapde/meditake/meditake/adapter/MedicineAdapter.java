@@ -5,12 +5,14 @@ import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.listener.OnMedicineClickListener;
+import ph.edu.mobapde.meditake.meditake.listener.OnSwipeTouchListener;
 import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 
 /**
@@ -86,10 +88,10 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
 
             //TODO add listeners here
             boolean isExpanded = id == expandedPositionId;
-            viewHolder.parentView.setTag(id);
+            viewHolder.cvHolder.setTag(id);
             viewHolder.linExpandedInformation.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-            viewHolder.parentView.setActivated(isExpanded);
-            viewHolder.parentView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.cvHolder.setActivated(isExpanded);
+            viewHolder.cvHolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(onMedicineClickListener != null){
@@ -181,8 +183,6 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
                     }
                 }
             });
-
-
         }
     }
 
