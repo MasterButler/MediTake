@@ -27,10 +27,14 @@
     <string name="MEDICINE_HOLDER">viewholder</string>
     <string name="search_medicine">Search Medicine</string>
     <string name="notf_schedule_delete">Schedule successfully deleted.</string>
-    <string name="notif_medicine_delete">Medicine successfully deleted.</string>
+    <string name="notif_medicine_delete">Medicine deleted.</string>
     <string name="schedule_id">schedule_id</string>
     <string name="schedule_isActivated">schedule_isActivated</string>
     <string name="SCHEDULE_ID">schedule_id</string>
     <string name="SCHEDULE_HOLDER">schedule_holder</string>
     <string name="SCHEDULE">schedule</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="message_medicine_delete">Medicine is deleted.</string>
 </resources>

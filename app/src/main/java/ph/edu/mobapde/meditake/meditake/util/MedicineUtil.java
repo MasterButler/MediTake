@@ -1,5 +1,6 @@
 package ph.edu.mobapde.meditake.meditake.util;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
@@ -65,4 +66,10 @@ public class MedicineUtil {
         initializeDBConnection(this.context);
         return databaseConnection.getMedicine(conditions);
     }
+
+    public int updateMedicineId(int prevId, int newId){
+        initializeDBConnection(this.context);
+        return databaseConnection.updateMedicineId(prevId, newId);
+    }
+
 }

@@ -73,9 +73,6 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.lin_cancel_medicine)
     LinearLayout linCancelMedicine;
 
-    @BindView(R.id.line_divider)
-    View lineDivider;
-
     @BindView(R.id.cv_holder)
     LinearLayout cvHolder;
 

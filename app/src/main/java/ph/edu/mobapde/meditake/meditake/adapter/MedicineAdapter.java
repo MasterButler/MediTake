@@ -13,7 +13,6 @@ import android.widget.EditText;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.listener.OnMedicineClickListener;
-import ph.edu.mobapde.meditake.meditake.listener.OnSwipeTouchListener;
 import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 
 /**
@@ -55,33 +54,22 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
     public void onBindViewHolder(final MedicineViewHolder viewHolder, Cursor cursor) {
 
         int id = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_ID));
-        int medicineId = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_ID));
-        String brandName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
-        String genericName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
-        String medicineFor =  cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
-        double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
-        String medicineType = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE));
-        int dosage = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_DOSAGE));
 
         Log.d("ID", "EXPAND  ID: " + expandedPositionId);
         Log.d("ID", "EDITING ID: " + editingPositionId);
         Log.d("ID", "MEDICINEID: " + id + "\n");
-        Log.d("ID", "MED_COL_ID: " + medicineId + "\n");
 
         if(id != -1){
-            Medicine med = MedicineInstantiatorUtil.createMedicineInstanceFromString(medicineType);
-            med.setBrandName(brandName);
-            med.setGenericName(genericName);
-            med.setMedicineFor(medicineFor);
-            med.setAmount(amount);
-            med.setDosage(dosage);
+            Medicine med = MedicineInstantiatorUtil.createMedicineFromCursor(cursor);
+
+            String displayAmount = (Math.ceil(med.getAmount()) == Math.floor(med.getAmount())) ? String.valueOf(med.getAmount()).split("\\.")[0] +"" : med.getAmount()+"";
 
             viewHolder.tvMedicineBrandName.setText(med.getBrandName().isEmpty() ? NO_BRAND_NAME : med.getBrandName());
             viewHolder.tvMedicineGenericName.setText(med.getGenericName());
             viewHolder.tvMedicineFor.setText(med.getMedicineFor().isEmpty() ? NO_MEDICINE_FOR : med.getMedicineFor());
-            viewHolder.tvMedicineAmount.setText(med.getAmount() <= 0 ? NO_AMOUNT : amount + " " + med.getModifier() + " remaining");
+            viewHolder.tvMedicineAmount.setText(med.getAmount() <= 0 ? NO_AMOUNT : " " + displayAmount + med.getModifier() + " remaining");
             viewHolder.ivMedicineType.setImageResource(med.getIcon());
-            viewHolder.tvMedicineDosage.setText(med.getDosage() <= 0 ? NO_DOSAGE : med.getDosage() + " " + med.getModifier() + " per dosage");
+            viewHolder.tvMedicineDosage.setText(med.getDosage() <= 0 ? NO_DOSAGE : " " + med.getDosage() + " " + med.getModifier() + " per dosage");
 
             viewHolder.etMedicineGenericName.setText(med.getGenericName());
             viewHolder.etMedicineBrandName.setText(med.getBrandName());
@@ -91,9 +79,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
             viewHolder.etMedicineDosage.setText(med.getDosage() + "");
             viewHolder.tvMedicineDosageLabel.setText(med.getModifier() + " per dosage");
 
-            //viewHolder.cvHolder.setCardBackgroundColor(med.getColor());
 
-            //TODO add listeners here
             boolean isExpanded = id == expandedPositionId;
             viewHolder.cvHolder.setTag(id);
             viewHolder.linExpandedInformation.setVisibility(isExpanded ? View.VISIBLE : View.GONE);

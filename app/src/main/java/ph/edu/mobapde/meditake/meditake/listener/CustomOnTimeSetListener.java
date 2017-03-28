@@ -15,12 +15,18 @@ import java.util.Calendar;
 
 public class CustomOnTimeSetListener implements TimePickerDialog.OnTimeSetListener {
     EditText etTimeDisplay = null;
+    TextView tvTimeDisplay = null;
     TextView tvTimePeriodDisplay = null;
     Context contextHolder;
     boolean isMilitary;
 
     public CustomOnTimeSetListener(Context context, EditText etTimeDisplay, TextView tvTimePeriodDisplay, boolean isMilitary){
         this.etTimeDisplay = etTimeDisplay;
+        this.tvTimePeriodDisplay = tvTimePeriodDisplay;
+        this.contextHolder = context;
+    }
+    public CustomOnTimeSetListener(Context context, TextView tvTimeDisplay, TextView tvTimePeriodDisplay, boolean isMilitary){
+        this.tvTimeDisplay = tvTimeDisplay;
         this.tvTimePeriodDisplay = tvTimePeriodDisplay;
         this.contextHolder = context;
     }
@@ -42,7 +48,11 @@ public class CustomOnTimeSetListener implements TimePickerDialog.OnTimeSetListen
 
         int editedHourOfDay = isMilitary ? hourOfDay : hourOfDay % 12 ;
 
-        this.etTimeDisplay.setText(String.format("%02d", editedHourOfDay) + ":" + String.format("%02d", minute));
+        if(etTimeDisplay == null){
+            this.tvTimeDisplay.setText(String.format("%02d", editedHourOfDay) + ":" + String.format("%02d", minute));
+        }else{
+            this.etTimeDisplay.setText(String.format("%02d", editedHourOfDay) + ":" + String.format("%02d", minute));
+        }
         this.tvTimePeriodDisplay.setText(am_pm);
     }
 
