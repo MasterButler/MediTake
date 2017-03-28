@@ -96,7 +96,7 @@ public class AddMedicineActivity extends AppCompatActivity {
         String medicineFor = et_medicineFor.getText().toString();
 
         MedicineUtil medicineUtil = new MedicineUtil(getBaseContext());
-        medicineUtil.setMedicineInfo(newMedicine, brandName, genericName, medicineFor, 0.0);
+        medicineUtil.setMedicineInfo(newMedicine, brandName, genericName, medicineFor, 0.0, 0);
         long result = medicineUtil.addMedicine(newMedicine);
         return result == -1 ? false : true;
     }

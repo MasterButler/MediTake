@@ -27,12 +27,13 @@ public class MedicineUtil {
         return databaseConnection.createMedicine(medicine);
     }
 
-    public void setMedicineInfo(Medicine medicine, String brandName, String genericName, String medicineFor, double amount){
+    public void setMedicineInfo(Medicine medicine, String brandName, String genericName, String medicineFor, double amount, int dosage){
         initializeDBConnection(this.context);
         medicine.setBrandName(brandName);
         medicine.setGenericName(genericName);
         medicine.setMedicineFor(medicineFor);
         medicine.setAmount(amount);
+        medicine.setDosage(dosage);
     }
 
     public int deleteMedicine(int id){

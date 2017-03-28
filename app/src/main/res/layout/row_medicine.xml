@@ -25,14 +25,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="16sp"
         android:id="@+id/lin_holder"
         >
 
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -125,17 +125,39 @@
                     android:id="@+id/line_divider"
                     />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/editTextColor"
-                    tools:hint="Amount Remaining"
-                    android:id="@+id/tv_medicine_amount"
-                    android:textSize="14sp"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="10dp"/>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="?attr/editTextColor"
+                        android:text="5 mL per dosage"
+                        tools:hint="5 mL/drinking"
+                        android:id="@+id/tv_medicine_dosage"
+                        android:textSize="14sp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="10dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="?attr/editTextColor"
+                        tools:hint="Amount Remaining"
+                        android:id="@+id/tv_medicine_amount"
+                        android:textSize="14sp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="10dp"/>
+
+                </LinearLayout>
 
 
 
@@ -220,7 +242,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -289,18 +311,24 @@
                 android:id="@+id/lin_expanded_edit_information">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/lin_edit_amount">
+                    android:orientation="horizontal">
+
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        tools:hint="5"
                         android:textColor="?attr/editTextColor"
                         android:inputType="textNoSuggestions"
-                        tools:hint="50"
-                        android:id="@+id/et_medicine_amount"
+                        android:id="@+id/et_medicine_dosage"
                         android:textSize="14sp"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
@@ -308,14 +336,45 @@
                         android:paddingBottom="10dp"
                         android:minWidth="30dp"/>
 
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="?attr/editTextColor"
                         android:layout_weight="1"
                         android:text=" remaining"
-                        android:id="@+id/tv_medicine_amount_label"
+                        android:id="@+id/tv_medicine_dosage_label"
                         />
+                </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:id="@+id/lin_edit_amount">
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/editTextColor"
+                            android:inputType="textNoSuggestions"
+                            tools:hint="50"
+                            android:id="@+id/et_medicine_amount"
+                            android:textSize="14sp"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="10dp"
+                            android:minWidth="30dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/editTextColor"
+                            android:layout_weight="1"
+                            android:text=" remaining"
+                            android:id="@+id/tv_medicine_amount_label"
+                            />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout

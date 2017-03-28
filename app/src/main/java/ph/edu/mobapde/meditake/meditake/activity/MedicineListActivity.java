@@ -344,6 +344,7 @@ public class MedicineListActivity extends AppCompatActivity
             tempMed.setBrandName("");
             tempMed.setMedicineFor("");
             tempMed.setAmount(0.0);
+            tempMed.setDosage(0);
             long tempId = medicineUtil.addMedicine(tempMed);
 
             updateList();
@@ -354,6 +355,10 @@ public class MedicineListActivity extends AppCompatActivity
             CREATING_NEW_ITEM = tempId;
 
             addMedicineMenu.collapse();
+        }else{
+            delete((int) CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+            addNewMedicine(className);
         }
     }
 
@@ -373,5 +378,41 @@ public class MedicineListActivity extends AppCompatActivity
     public void addMedicine(){
         addNewMedicine(Tablet.CLASS_NAME);
         Toast.makeText(getBaseContext(), "Something", Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(CREATING_NEW_ITEM != -1){
+            delete((int) CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(CREATING_NEW_ITEM != -1){
+            delete((int) CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(CREATING_NEW_ITEM != -1){
+            delete((int) CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(CREATING_NEW_ITEM != -1){
+            delete((int) CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
     }
 }

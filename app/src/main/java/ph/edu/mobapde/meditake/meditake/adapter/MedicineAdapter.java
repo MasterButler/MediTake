@@ -25,6 +25,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
     public static final String NO_BRAND_NAME = "No Brand Name entered";
     public static final String NO_MEDICINE_FOR = "Not specified";
     public static final String NO_AMOUNT = "Out of stock";
+    public static final String NO_DOSAGE = "No default dosage entered";
 
     public static final int MODE_EDIT = 0;
     public static final int MODE_VIEW = 1;
@@ -60,6 +61,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
         String medicineFor =  cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
         double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
         String medicineType = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE));
+        int dosage = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_DOSAGE));
 
         Log.d("ID", "EXPAND  ID: " + expandedPositionId);
         Log.d("ID", "EDITING ID: " + editingPositionId);
@@ -72,18 +74,22 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
             med.setGenericName(genericName);
             med.setMedicineFor(medicineFor);
             med.setAmount(amount);
+            med.setDosage(dosage);
 
             viewHolder.tvMedicineBrandName.setText(med.getBrandName().isEmpty() ? NO_BRAND_NAME : med.getBrandName());
             viewHolder.tvMedicineGenericName.setText(med.getGenericName());
             viewHolder.tvMedicineFor.setText(med.getMedicineFor().isEmpty() ? NO_MEDICINE_FOR : med.getMedicineFor());
             viewHolder.tvMedicineAmount.setText(med.getAmount() <= 0 ? NO_AMOUNT : amount + " " + med.getModifier() + " remaining");
             viewHolder.ivMedicineType.setImageResource(med.getIcon());
+            viewHolder.tvMedicineDosage.setText(med.getDosage() <= 0 ? NO_DOSAGE : med.getDosage() + " " + med.getModifier() + " per dosage");
 
             viewHolder.etMedicineGenericName.setText(med.getGenericName());
             viewHolder.etMedicineBrandName.setText(med.getBrandName());
             viewHolder.etMedicineFor.setText(med.getMedicineFor());
             viewHolder.etMedicineAmount.setText(med.getAmount() + "");
             viewHolder.tvMedicineAmountLabel.setText(med.getModifier() + " remaining");
+            viewHolder.etMedicineDosage.setText(med.getDosage() + "");
+            viewHolder.tvMedicineDosageLabel.setText(med.getModifier() + " per dosage");
 
             //viewHolder.cvHolder.setCardBackgroundColor(med.getColor());
 
@@ -154,17 +160,20 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
                             String updatedGenericName = viewHolder.etMedicineGenericName.getText().toString();
                             Double updatedAmount = Double.valueOf(viewHolder.etMedicineAmount.getText().toString());
                             String updatedMedicineFor = viewHolder.etMedicineFor.getText().toString();
+                            int updatedDosage = Integer.valueOf(viewHolder.etMedicineDosage.getText().toString());
 
                             updatedMedicine.setSqlId(id);
                             updatedMedicine.setBrandName(updatedBrandName);
                             updatedMedicine.setGenericName(updatedGenericName);
                             updatedMedicine.setAmount(updatedAmount);
                             updatedMedicine.setMedicineFor(updatedMedicineFor);
+                            updatedMedicine.setDosage(updatedDosage);
 
                             Log.wtf("before the checking", "BRAND NAME: " + updatedMedicine.getBrandName());
                             Log.wtf("before the checking", "GENERIC NM: " + updatedMedicine.getGenericName());
                             Log.wtf("before the checking", "MEDICN  FOR: " + updatedMedicine.getMedicineFor());
                             Log.wtf("before the checking", "MED AMOUNT: " + updatedMedicine.getAmount() + "");
+                            Log.wtf("before the checking", "MED DOSAGE: " + updatedMedicine.getDosage() + "");
 
                             onMedicineClickListener.onItemSaveClick(updatedMedicine);
                         }

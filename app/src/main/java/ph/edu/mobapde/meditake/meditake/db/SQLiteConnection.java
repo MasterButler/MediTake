@@ -18,7 +18,7 @@ import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 
 public class SQLiteConnection extends SQLiteOpenHelper{
     public static final String SCHEMA = "MediTake";
-    public static final int VERSION = 11;
+    public static final int VERSION = 12;
 
     public SQLiteConnection(Context context) {
         super(context, SCHEMA, null, VERSION);
@@ -40,6 +40,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
          *
          * medicineFor TEXT
          * amount REAL NOT NULL
+         * dosage REAL NOT NULL
          * medicineType TEXT NOT NULL
          * );
          *
@@ -58,6 +59,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             + Medicine.COLUMN_GENERIC_NAME + " TEXT NOT NULL, "
             + Medicine.COLUMN_MEDICINE_FOR + " TEXT, "
             + Medicine.COLUMN_AMOUNT + " REAL NOT NULL, "
+            + Medicine.COLUMN_DOSAGE + " REAL NOT NULL, "
             + Medicine.COLUMN_MEDICINE_TYPE + " TEXT NOT NULL);";
 
         sqlSchedule = "CREATE TABLE " + Schedule.TABLE + " ( "
@@ -108,6 +110,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         cv.put(Medicine.COLUMN_GENERIC_NAME, medicine.getGenericName());
         cv.put(Medicine.COLUMN_MEDICINE_FOR, medicine.getMedicineFor());
         cv.put(Medicine.COLUMN_AMOUNT, medicine.getAmount());
+        cv.put(Medicine.COLUMN_DOSAGE, medicine.getDosage());
         cv.put(Medicine.COLUMN_MEDICINE_TYPE, medicine.getClass().getSimpleName());
 
         SQLiteDatabase db = getWritableDatabase();
@@ -152,6 +155,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             String genericName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
             String medicineFor = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
             double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
+            int dosage = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_DOSAGE));
 
             Log.wtf("IN SQLITE CONNECTION", "FOUND " + id);
             Log.wtf("IN SQLITE CONNECTION", "FOUND " + brandName);
@@ -161,6 +165,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             medicine.setGenericName(genericName);
             medicine.setMedicineFor(medicineFor);
             medicine.setAmount(amount);
+            medicine.setDosage(dosage);
             Log.wtf("FULL INFO", medicine.getSqlId() + ": " + medicine.getBrandName() + ", " + medicine.getGenericName() + ", " + medicine.getMedicineFor());
         }
 
@@ -233,6 +238,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         cv.put(Medicine.COLUMN_GENERIC_NAME, medicine.getGenericName());
         cv.put(Medicine.COLUMN_MEDICINE_FOR, medicine.getMedicineFor());
         cv.put(Medicine.COLUMN_AMOUNT, medicine.getAmount());
+        cv.put(Medicine.COLUMN_DOSAGE, medicine.getDosage());
         cv.put(Medicine.COLUMN_MEDICINE_TYPE, medicine.getClass().getSimpleName());
 
         int rows = db.update(Medicine.TABLE,
