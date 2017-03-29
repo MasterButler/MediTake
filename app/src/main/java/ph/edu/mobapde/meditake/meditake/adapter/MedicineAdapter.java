@@ -36,8 +36,8 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
 
     private OnMedicineClickListener onMedicineClickListener;
 
-    public MedicineAdapter(Context context, Cursor cursor) {
-        super(context, cursor);
+    public MedicineAdapter(Context context, Cursor cursor, String column) {
+        super(context, cursor, column);
         this.contextHolder = context;
         expandedPositionId = -1;
         editingPositionId = -1;

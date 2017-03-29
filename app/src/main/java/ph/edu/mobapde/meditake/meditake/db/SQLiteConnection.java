@@ -19,7 +19,7 @@ import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 
 public class SQLiteConnection extends SQLiteOpenHelper{
     public static final String SCHEMA = "MediTake";
-    public static final int VERSION = 12;
+    public static final int VERSION = 13;
 
     private Context contextHolder;
     private MedicineUtil medicineUtil;

@@ -42,64 +42,79 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/fab_add_medicine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
-        fab:fab_addButtonColorNormal="?attr/fab_addButtonColorNormal"
-        fab:fab_addButtonColorPressed="?attr/fab_addButtonColorPressed"
-        fab:fab_addButtonPlusIconColor="@color/white"
-        fab:fab_addButtonStrokeVisible="false"
-        fab:fab_labelStyle="@style/menu_labels_style"
-        fab:fab_labelsPosition="left"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="24dp">
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_option_tablet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/medicine_tablet_selection"
-            fab:fab_colorPressed="@color/medicine_tablet_selection_pressed"
-            fab:fab_plusIconColor="@color/white"
-            fab:fab_icon="@drawable/aspirins_white"
-            fab:fab_size="mini"
-            fab:fab_title="Tablet" />
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_option_capsule"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/medicine_capsule_selection"
-            fab:fab_colorPressed="@color/medicine_capsule_selection_pressed"
-            fab:fab_plusIconColor="@color/white"
-            fab:fab_icon="@drawable/pill_capsule_white"
-            fab:fab_size="mini"
-            fab:fab_title="Capsule" />
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_option_syrup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/medicine_syrup_selection"
-            fab:fab_colorPressed="@color/medicine_syrup_selection_pressed"
-            fab:fab_plusIconColor="@color/white"
-            fab:fab_icon="@drawable/medicine_bottle_white"
-            fab:fab_size="mini"
-            fab:fab_title="Syrup"
-            />
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
-
-    <android.support.design.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/snackbar_position">
-    </android.support.design.widget.CoordinatorLayout>
+        android:orientation="vertical">
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <com.getbase.floatingactionbutton.FloatingActionsMenu
+                android:id="@+id/fab_add_medicine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                fab:fab_addButtonColorNormal="?attr/fab_addButtonColorNormal"
+                fab:fab_addButtonColorPressed="?attr/fab_addButtonColorPressed"
+                fab:fab_addButtonPlusIconColor="@color/white"
+                fab:fab_addButtonStrokeVisible="false"
+                fab:fab_labelStyle="@style/menu_labels_style"
+                fab:fab_labelsPosition="left"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp">
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_option_tablet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_colorNormal="@color/medicine_tablet_selection"
+                    fab:fab_colorPressed="@color/medicine_tablet_selection_pressed"
+                    fab:fab_plusIconColor="@color/white"
+                    fab:fab_icon="@drawable/aspirins_white"
+                    fab:fab_size="mini"
+                    fab:fab_title="Tablet" />
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_option_capsule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_colorNormal="@color/medicine_capsule_selection"
+                    fab:fab_colorPressed="@color/medicine_capsule_selection_pressed"
+                    fab:fab_plusIconColor="@color/white"
+                    fab:fab_icon="@drawable/pill_capsule_white"
+                    fab:fab_size="mini"
+                    fab:fab_title="Capsule" />
+
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_option_syrup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_colorNormal="@color/medicine_syrup_selection"
+                    fab:fab_colorPressed="@color/medicine_syrup_selection_pressed"
+                    fab:fab_plusIconColor="@color/white"
+                    fab:fab_icon="@drawable/medicine_bottle_white"
+                    fab:fab_size="mini"
+                    fab:fab_title="Syrup"
+                    />
+            </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+
+        </android.support.design.widget.CoordinatorLayout>
+
+        <android.support.design.widget.CoordinatorLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/snackbar_position">
+        </android.support.design.widget.CoordinatorLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
