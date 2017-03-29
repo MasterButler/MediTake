@@ -1,5 +1,8 @@
 package ph.edu.mobapde.meditake.meditake.util;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.util.Log;
 import android.widget.ImageView;
 
 import ph.edu.mobapde.meditake.meditake.R;
@@ -45,5 +48,41 @@ public class MedicineInstantiatorUtil {
             return new Syrup();
         }
         return null;
+    }
+
+    public static ContentValues createCVMapFromBean(Medicine medicine){
+        ContentValues cv = new ContentValues();
+
+        cv.put(Medicine.COLUMN_BRAND_NAME, medicine.getBrandName());
+        cv.put(Medicine.COLUMN_GENERIC_NAME, medicine.getGenericName());
+        cv.put(Medicine.COLUMN_MEDICINE_FOR, medicine.getMedicineFor());
+        cv.put(Medicine.COLUMN_AMOUNT, medicine.getAmount());
+        cv.put(Medicine.COLUMN_DOSAGE, medicine.getDosage());
+        cv.put(Medicine.COLUMN_MEDICINE_TYPE, medicine.getClass().getSimpleName());
+
+        return cv;
+    }
+
+    public static Medicine createMedicineFromCursor(Cursor cursor){
+        Medicine medicine = MedicineInstantiatorUtil.createMedicineInstanceFromString(cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE)));
+        int id = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_ID));
+        String brandName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
+        String genericName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
+        String medicineFor = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
+        double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
+        int dosage = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_DOSAGE));
+
+        Log.wtf("IN SQLITE CONNECTION", "FOUND " + id);
+        Log.wtf("IN SQLITE CONNECTION", "FOUND " + brandName);
+
+        medicine.setSqlId(id);
+        medicine.setBrandName(brandName);
+        medicine.setGenericName(genericName);
+        medicine.setMedicineFor(medicineFor);
+        medicine.setAmount(amount);
+        medicine.setDosage(dosage);
+        Log.wtf("FULL INFO", medicine.getSqlId() + ": " + medicine.getBrandName() + ", " + medicine.getGenericName() + ", " + medicine.getMedicineFor());
+
+        return medicine;
     }
 }

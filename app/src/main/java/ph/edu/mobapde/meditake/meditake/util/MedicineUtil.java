@@ -1,5 +1,6 @@
 package ph.edu.mobapde.meditake.meditake.util;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
@@ -27,12 +28,13 @@ public class MedicineUtil {
         return databaseConnection.createMedicine(medicine);
     }
 
-    public void setMedicineInfo(Medicine medicine, String brandName, String genericName, String medicineFor, double amount){
+    public void setMedicineInfo(Medicine medicine, String brandName, String genericName, String medicineFor, double amount, int dosage){
         initializeDBConnection(this.context);
         medicine.setBrandName(brandName);
         medicine.setGenericName(genericName);
         medicine.setMedicineFor(medicineFor);
         medicine.setAmount(amount);
+        medicine.setDosage(dosage);
     }
 
     public int deleteMedicine(int id){
@@ -64,4 +66,10 @@ public class MedicineUtil {
         initializeDBConnection(this.context);
         return databaseConnection.getMedicine(conditions);
     }
+
+    public int updateMedicineId(int prevId, int newId){
+        initializeDBConnection(this.context);
+        return databaseConnection.updateMedicineId(prevId, newId);
+    }
+
 }

@@ -11,6 +11,7 @@ import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
+import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 
 /**
  * Created by Winfred Villaluna on 3/6/2017.
@@ -18,10 +19,14 @@ import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 
 public class SQLiteConnection extends SQLiteOpenHelper{
     public static final String SCHEMA = "MediTake";
-    public static final int VERSION = 11;
+    public static final int VERSION = 12;
+
+    private Context contextHolder;
+    private MedicineUtil medicineUtil;
 
     public SQLiteConnection(Context context) {
         super(context, SCHEMA, null, VERSION);
+        this.contextHolder = context;
     }
 
     /**
@@ -40,6 +45,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
          *
          * medicineFor TEXT
          * amount REAL NOT NULL
+         * dosage REAL NOT NULL
          * medicineType TEXT NOT NULL
          * );
          *
@@ -58,6 +64,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             + Medicine.COLUMN_GENERIC_NAME + " TEXT NOT NULL, "
             + Medicine.COLUMN_MEDICINE_FOR + " TEXT, "
             + Medicine.COLUMN_AMOUNT + " REAL NOT NULL, "
+            + Medicine.COLUMN_DOSAGE + " REAL NOT NULL, "
             + Medicine.COLUMN_MEDICINE_TYPE + " TEXT NOT NULL);";
 
         sqlSchedule = "CREATE TABLE " + Schedule.TABLE + " ( "
@@ -100,18 +107,10 @@ public class SQLiteConnection extends SQLiteOpenHelper{
      */
     public long createMedicine(Medicine medicine){
 
-        ContentValues cv = new ContentValues();
-
         Log.wtf("DB_ADD", "instance of " + medicine.getClass().getSimpleName() + " to be inserted");
 
-        cv.put(Medicine.COLUMN_BRAND_NAME, medicine.getBrandName());
-        cv.put(Medicine.COLUMN_GENERIC_NAME, medicine.getGenericName());
-        cv.put(Medicine.COLUMN_MEDICINE_FOR, medicine.getMedicineFor());
-        cv.put(Medicine.COLUMN_AMOUNT, medicine.getAmount());
-        cv.put(Medicine.COLUMN_MEDICINE_TYPE, medicine.getClass().getSimpleName());
-
         SQLiteDatabase db = getWritableDatabase();
-        long id = db.insert(Medicine.TABLE, null, cv);
+        long id = db.insert(Medicine.TABLE, null, MedicineInstantiatorUtil.createCVMapFromBean(medicine));
 
         db.close();
         return id;
@@ -147,21 +146,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 null);
 
         if(cursor.moveToFirst()){
-            medicine = MedicineInstantiatorUtil.createMedicineInstanceFromString(cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE)));
-            String brandName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
-            String genericName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
-            String medicineFor = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
-            double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
-
-            Log.wtf("IN SQLITE CONNECTION", "FOUND " + id);
-            Log.wtf("IN SQLITE CONNECTION", "FOUND " + brandName);
-
-            medicine.setSqlId(id);
-            medicine.setBrandName(brandName);
-            medicine.setGenericName(genericName);
-            medicine.setMedicineFor(medicineFor);
-            medicine.setAmount(amount);
-            Log.wtf("FULL INFO", medicine.getSqlId() + ": " + medicine.getBrandName() + ", " + medicine.getGenericName() + ", " + medicine.getMedicineFor());
+            medicine = MedicineInstantiatorUtil.createMedicineFromCursor(cursor);
         }
 
         cursor.close();
@@ -228,12 +213,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         /* UPDATE INTO medicine SET ..... WHERE id = ?
 
          */
-        ContentValues cv = new ContentValues();
-        cv.put(Medicine.COLUMN_BRAND_NAME, medicine.getBrandName());
-        cv.put(Medicine.COLUMN_GENERIC_NAME, medicine.getGenericName());
-        cv.put(Medicine.COLUMN_MEDICINE_FOR, medicine.getMedicineFor());
-        cv.put(Medicine.COLUMN_AMOUNT, medicine.getAmount());
-        cv.put(Medicine.COLUMN_MEDICINE_TYPE, medicine.getClass().getSimpleName());
+        ContentValues cv = MedicineInstantiatorUtil.createCVMapFromBean(medicine);
 
         int rows = db.update(Medicine.TABLE,
                     cv,
@@ -244,6 +224,22 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         return rows;
     }
 
+    public int updateMedicineId(int prevId, int newId){
+        SQLiteDatabase db = getWritableDatabase();
+        /* UPDATE INTO medicine SET ..... WHERE id = ?
+
+         */
+        ContentValues cv = new ContentValues();
+        cv.put(Medicine.COLUMN_ID, prevId);
+
+        int rows = db.update(Medicine.TABLE,
+                cv,
+                Medicine.COLUMN_ID + " = ? ",
+                new String[]{newId+""});
+
+        db.close();
+        return rows;
+    }
 
     /**
      * Deletes the medicine in the through the use of its id.

@@ -15,12 +15,13 @@ import android.os.Parcelable;
  */
 abstract public class Medicine {
     public static final String TABLE = "medicine";
-    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_ID = "medicineId";
     public static final String COLUMN_MEDICINE_ID = "_medicine_id";
     public static final String COLUMN_BRAND_NAME = "brandName";
     public static final String COLUMN_GENERIC_NAME = "genericName";
     public static final String COLUMN_MEDICINE_FOR = "medicineFor";
     public static final String COLUMN_AMOUNT = "amount";
+    public static final String COLUMN_DOSAGE = "dosage";
     //public static final String COLUMN_ICON = "icon";
     //public static final String COLUMN_MODIFIER = "modifier";
     public static final String COLUMN_MEDICINE_TYPE = "medicineType";
@@ -46,6 +47,8 @@ abstract public class Medicine {
     protected int icon;
     //for the display, e.g. 5mL or 5 tablets where 'mL' and ' tablets' are the extensions
     protected String modifier;
+    //default value that the user can use when the medicine will be drank by user.
+    protected int dosage;
     //for the color to be used in the recyclerview
     protected int color;
 
@@ -142,6 +145,14 @@ abstract public class Medicine {
 
     public void setModifier(String modifier) {
         this.modifier = modifier;
+    }
+
+    public int getDosage() {
+        return dosage;
+    }
+
+    public void setDosage(int dosage) {
+        this.dosage = dosage;
     }
 
     public int getColor() {

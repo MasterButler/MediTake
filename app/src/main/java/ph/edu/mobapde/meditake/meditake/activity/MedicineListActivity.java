@@ -4,9 +4,10 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.transition.TransitionManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -46,6 +48,9 @@ import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 public class MedicineListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    @BindView(R.id.snackbar_position)
+    CoordinatorLayout clSnackbar;
+
     @BindView(R.id.rv_medicine)
     RecyclerView rvMedicine;
 
@@ -64,11 +69,15 @@ public class MedicineListActivity extends AppCompatActivity
     MenuItem actionSearchMedicineIcon;
     SearchView actionSearchMedicineMenu;
 
-
     MedicineAdapter medicineAdapter;
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback;
+    ItemTouchHelper itemTouchHelper;
+
     MedicineUtil medicineUtil;
 
     long CREATING_NEW_ITEM;
+
+    Medicine LAST_DELETED;
 
     public void setUpActionBar(){
         setSupportActionBar(medicine_list_toolbar);
@@ -91,6 +100,7 @@ public class MedicineListActivity extends AppCompatActivity
         initializeAdapter();
         initializeFAM();
         CREATING_NEW_ITEM = -1;
+        LAST_DELETED = null;
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getBaseContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -100,22 +110,6 @@ public class MedicineListActivity extends AppCompatActivity
         rvMedicine.setAdapter(medicineAdapter);
         rvMedicine.setLayoutManager(mLayoutManager);
 
-
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                int value = (int) viewHolder.getItemId();
-                delete(value);
-                updateList();
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(rvMedicine);
     }
 
@@ -132,12 +126,10 @@ public class MedicineListActivity extends AppCompatActivity
             @Override
             public void onItemDeleteClick(int id) {
                 delete(id);
-                Toast.makeText(getBaseContext(), R.string.notif_medicine_delete, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onItemEditClick(int id) {
-                Log.wtf("action", "RECEIVED ID " + id);
                 edit(id);
             }
 
@@ -157,6 +149,21 @@ public class MedicineListActivity extends AppCompatActivity
             }
         });
 
+        simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int value = (int) viewHolder.getItemId();
+                delete(value);
+                updateList();
+            }
+        };
+
+        itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
     }
 
     public void initializeDrawer(){
@@ -213,8 +220,42 @@ public class MedicineListActivity extends AppCompatActivity
     }
 
     public void delete(int id){
+        LAST_DELETED = medicineUtil.getMedicine(id);
         medicineUtil.deleteMedicine(id);
         medicineAdapter.notifyDataSetChanged();
+        updateList();
+
+        int[] attrs = {android.R.attr.color};
+        Snackbar snackbar = Snackbar.make(clSnackbar, R.string.message_medicine_delete, Snackbar.LENGTH_SHORT)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        undoDelete();
+                        Snackbar.make(clSnackbar, "Medicine is restored.", Snackbar.LENGTH_SHORT)
+                            .show();
+
+                    }});
+
+        TextView snackBarTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        TypedArray typedArray = obtainStyledAttributes(attrs);
+        snackBarTextView.setTextColor(typedArray.getColor(0, Color.WHITE));
+
+        snackbar.show();
+
+    }
+
+    public void undoDelete(){
+
+        itemTouchHelper.attachToRecyclerView(null);
+        itemTouchHelper.attachToRecyclerView(rvMedicine);
+
+        int prevId = LAST_DELETED.getSqlId();
+        int newId = (int) medicineUtil.addMedicine(LAST_DELETED);
+
+        medicineUtil.updateMedicineId(prevId, newId);
+        medicineAdapter.notifyDataSetChanged();
+        LAST_DELETED = null;
+
         updateList();
     }
 
@@ -229,14 +270,16 @@ public class MedicineListActivity extends AppCompatActivity
     }
 
     public void expand(int id){
-        if(CREATING_NEW_ITEM == -1){
-            boolean isExpanded = medicineAdapter.isExpanded(id);
-            medicineAdapter.setExpandedPositionId(isExpanded ? -1 : id);
-            TransitionManager.beginDelayedTransition(rvMedicine);
-            medicineAdapter.notifyDataSetChanged();
-        }else{
-            delete((int)CREATING_NEW_ITEM);
-            CREATING_NEW_ITEM = -1;
+        if(!medicineAdapter.isEditing(id)) {
+            if (CREATING_NEW_ITEM == -1) {
+                boolean isExpanded = medicineAdapter.isExpanded(id);
+                medicineAdapter.setExpandedPositionId(isExpanded ? -1 : id);
+                TransitionManager.beginDelayedTransition(rvMedicine);
+                medicineAdapter.notifyDataSetChanged();
+            } else {
+                delete((int) CREATING_NEW_ITEM);
+                CREATING_NEW_ITEM = -1;
+            }
         }
     }
 
@@ -322,7 +365,7 @@ public class MedicineListActivity extends AppCompatActivity
         switch(id){
             case R.id.action_search_medicine:
                 break;
-            default: Toast.makeText(getBaseContext(), "Unexpected error encountered. Please try again", Toast.LENGTH_SHORT);
+            default: Toast.makeText(getBaseContext(), "Unexpected error encountered. Please try again", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
@@ -344,6 +387,7 @@ public class MedicineListActivity extends AppCompatActivity
             tempMed.setBrandName("");
             tempMed.setMedicineFor("");
             tempMed.setAmount(0.0);
+            tempMed.setDosage(0);
             long tempId = medicineUtil.addMedicine(tempMed);
 
             updateList();
@@ -354,24 +398,61 @@ public class MedicineListActivity extends AppCompatActivity
             CREATING_NEW_ITEM = tempId;
 
             addMedicineMenu.collapse();
+        }else{
+            delete((int) CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+            addNewMedicine(className);
         }
     }
 
     @OnClick(R.id.fab_option_capsule)
     public void addCapsule(){
         addNewMedicine(Capsule.CLASS_NAME);
-        Toast.makeText(getBaseContext(), "Something", Toast.LENGTH_SHORT);
     }
 
     @OnClick(R.id.fab_option_syrup)
     public void addSyrup(){
         addNewMedicine(Syrup.CLASS_NAME);
-        Toast.makeText(getBaseContext(), "Something", Toast.LENGTH_SHORT);
     }
 
     @OnClick(R.id.fab_option_tablet)
     public void addMedicine(){
         addNewMedicine(Tablet.CLASS_NAME);
-        Toast.makeText(getBaseContext(), "Something", Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(CREATING_NEW_ITEM != -1){
+            delete((int) CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(CREATING_NEW_ITEM != -1){
+            delete((int) CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(CREATING_NEW_ITEM != -1){
+            delete((int) CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(CREATING_NEW_ITEM != -1){
+            delete((int) CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
     }
 }

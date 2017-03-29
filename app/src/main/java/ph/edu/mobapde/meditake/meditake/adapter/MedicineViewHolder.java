@@ -31,8 +31,11 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder{
     TextView tvMedicineFor;
     @BindView(R.id.tv_medicine_amount)
     TextView tvMedicineAmount;
+    @BindView(R.id.tv_medicine_dosage)
+    TextView tvMedicineDosage;
     @BindView(R.id.iv_medicine_type)
     ImageView ivMedicineType;
+
 
     @BindView(R.id.et_medicine_generic_name)
     EditText etMedicineGenericName;
@@ -44,6 +47,10 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder{
     EditText etMedicineAmount;
     @BindView(R.id.tv_medicine_amount_label)
     TextView tvMedicineAmountLabel;
+    @BindView(R.id.et_medicine_dosage)
+    EditText etMedicineDosage;
+    @BindView(R.id.tv_medicine_dosage_label)
+    TextView tvMedicineDosageLabel;
 
     @BindView(R.id.lin_expanded_information)
     LinearLayout linExpandedInformation;
@@ -65,9 +72,6 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder{
     LinearLayout linSaveMedicine;
     @BindView(R.id.lin_cancel_medicine)
     LinearLayout linCancelMedicine;
-
-    @BindView(R.id.line_divider)
-    View lineDivider;
 
     @BindView(R.id.cv_holder)
     LinearLayout cvHolder;
