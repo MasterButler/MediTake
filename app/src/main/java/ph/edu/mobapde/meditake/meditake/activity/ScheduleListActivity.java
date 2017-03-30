@@ -1,16 +1,20 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.app.AlarmManager;
+import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.transition.TransitionManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +26,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +41,7 @@ import ph.edu.mobapde.meditake.meditake.adapter.ScheduleAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.beans.Syrup;
+import ph.edu.mobapde.meditake.meditake.fragment.AddScheduleFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.MedicineListFragment;
 import ph.edu.mobapde.meditake.meditake.listener.CustomOnTimeSetListener;
 import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
@@ -48,8 +54,10 @@ import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class ScheduleListActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MedicineListFragment.OnDataPass{
+        implements NavigationView.OnNavigationItemSelectedListener, MedicineListFragment.OnDataPass, AddScheduleFragment.OnAddScheduleFragmentInteractionListener {
 
+    @BindView(R.id.layout_schedule_list)
+    CoordinatorLayout scheduleListLayout;
 
     @BindView(R.id.fab_add_schedule)
     FloatingActionButton addSchedule;
@@ -64,6 +72,7 @@ public class ScheduleListActivity extends AppCompatActivity
     RecyclerView rvSchedule;
 
     MedicineListFragment medicineListFragment;
+    AddScheduleFragment addScheduleFragment;
 
     ScheduleAdapter scheduleAdapter;
 
@@ -93,7 +102,7 @@ public class ScheduleListActivity extends AppCompatActivity
         scheduleUtil = new ScheduleUtil(getBaseContext());
         medicineUtil = new MedicineUtil(getBaseContext());
 
-        //addHardCodedData();
+        addHardCodedData();
         initializeDrawer();
         initializeAdapter();
         CREATING_NEW_ITEM = -1;
@@ -103,40 +112,27 @@ public class ScheduleListActivity extends AppCompatActivity
                 getBaseContext(), LinearLayoutManager.VERTICAL, false)
         );
 
+        addScheduleFragment = new AddScheduleFragment();
     }
 
     public void addHardCodedData(){
 
-        Medicine medicine = new Syrup();
-        medicine.setBrandName("brand Medicine");
-        medicine.setGenericName("generic Medicine");
-        medicine.setMedicineFor("for something");
-        medicine.setAmount(100);
-
-        long medicineId = medicineUtil.addMedicine(medicine);
-        medicine.setSqlId((int) medicineId);
+//        Medicine medicine = new Syrup();
+//        medicine.setBrandName("brand Medicine");
+//        medicine.setGenericName("generic Medicine");
+//        medicine.setMedicineFor("for something");
+//        medicine.setAmount(100);
+//
+//        long medicineId = medicineUtil.addMedicine(medicine);
+//        medicine.setSqlId((int) medicineId);
 
         Schedule schedule = new Schedule();
-        schedule.setActivated(false);
-        schedule.setLastTimeTaken(System.currentTimeMillis());
-        schedule.setDrinkingInterval(1);
-        schedule.setDosagePerDrinkingInterval(5);
-        schedule.setMedicineToDrink(medicine);
-
-        Schedule scheduleB = new Schedule();
-        scheduleB.setActivated(false);
-        scheduleB.setLastTimeTaken(System.currentTimeMillis());
-        scheduleB.setDrinkingInterval(1);
-        scheduleB.setDosagePerDrinkingInterval(5);
-        scheduleB.setMedicineToDrink(null);
 
         scheduleUtil.addNewSchedule(schedule);
-        scheduleUtil.addNewSchedule(scheduleB);
-
     }
 
     public void initializeAdapter(){
-        scheduleAdapter = new ScheduleAdapter(getBaseContext(), scheduleUtil.getAllSchedule());
+        scheduleAdapter = new ScheduleAdapter(getBaseContext(), scheduleUtil.getAllSchedule(), Schedule.COLUMN_ID);
         scheduleAdapter.setHasStableIds(true);
         scheduleAdapter.setOnScheduleClickListener(new OnScheduleClickListener() {
             @Override
@@ -168,17 +164,6 @@ public class ScheduleListActivity extends AppCompatActivity
             public void onSwitchClick(Schedule schedule) {
                 toggleSwitch(schedule);
             }
-
-            @Override
-            public void onEditTimeClick(Schedule schedule, EditText etTime, TextView tvTimePeriod, boolean isMilitary) {
-                editTime(schedule, etTime, tvTimePeriod, isMilitary);
-            }
-
-            @Override
-            public void onMedicineListClick(Schedule schedule, TextView tvToFragmentMedicineToDrink) {
-                Log.d("action", "ON MEDICINE LIST CLICK");
-                showMedicineList(schedule, tvToFragmentMedicineToDrink);
-            }
         });
     }
 
@@ -190,37 +175,14 @@ public class ScheduleListActivity extends AppCompatActivity
 
     public void addNewSchedule(){
         if(CREATING_NEW_ITEM == -1) {
-            Medicine medicine = medicineUtil.getMedicineFirstRow();
-            if (medicine != null) {
-                Schedule tempSched = new Schedule();
-                tempSched.setActivated(true);
-                tempSched.setDosagePerDrinkingInterval(0);
-                tempSched.setDrinkingInterval(0);
-                tempSched.setLastTimeTaken(0);
-                tempSched.setMedicineToDrink(medicine);
-                tempSched.setCustomNextDrinkingTime(0);
-                long tempId = scheduleUtil.addNewSchedule(tempSched);
-
-                Log.d("action", "FOUND MEDICINE OF VALUE " + medicine.getSqlId() + " WITH NAME " + medicine.getBrandName());
-
-//                Log.d("action", "ADDING SCHEDULE WITH ID " + tempId);
-
-                updateList();
-                rvSchedule.smoothScrollToPosition(scheduleAdapter.getItemCount() - 1);
-                expand((int) scheduleAdapter.getItemId(scheduleAdapter.getItemCount() - 1));
-                edit((int) scheduleAdapter.getItemId(scheduleAdapter.getItemCount() - 1));
-                CREATING_NEW_ITEM = (int) tempId;
-//                expand((int) scheduleAdapter.getItemId(0));
-//                edit((int) scheduleAdapter.getItemId(0));
-//                if(scheduleAdapter.getItemCount() > 0){
-//
-//                }else{
-//                    Toast.makeText(getBaseContext(), "Error creating schedule.", Toast.LENGTH_LONG).show();
-//                }
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            ft.replace(R.id.fragment_medicine_list_placeholder, addScheduleFragment);
+            ft.addToBackStack(null);
+            ft.commit();
             } else {
                 Toast.makeText(getBaseContext(), "No medicines in list. Adding Schedule without any medicine not yet supported.", Toast.LENGTH_LONG).show();
             }
-        }
     }
 
     public void cancel(int id){
@@ -246,18 +208,18 @@ public class ScheduleListActivity extends AppCompatActivity
         scheduleAdapter.notifyDataSetChanged();
     }
 
-    public void editTime(Schedule schedule, EditText etTime, TextView tvTimePeriod, boolean isMilitary) {
-        // TODO Auto-generated method stub
-        Calendar mcurrentTime = Calendar.getInstance();
-        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-        int minute = mcurrentTime.get(Calendar.MINUTE);
+    public void editTime(TextView tvTime, TextView tvTimePeriod){
+        if(tvTime != null){
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
 
-        Log.d("check", "IS MILITARY IS " + isMilitary);
-        CustomOnTimeSetListener timeSet = new CustomOnTimeSetListener(getBaseContext(), etTime, tvTimePeriod, isMilitary);
-        TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(ScheduleListActivity.this, timeSet, hour, minute, isMilitary);//Yes 24 hour time
-        mTimePicker.setTitle("Select Time");
-        mTimePicker.show();
+                CustomOnTimeSetListener timeSet = new CustomOnTimeSetListener(getBaseContext(), tvTime, tvTimePeriod, tvTimePeriod==null);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(ScheduleListActivity.this, timeSet, hour, minute, tvTimePeriod==null);
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+        }
     }
 
     public void expand(int id){
@@ -291,7 +253,7 @@ public class ScheduleListActivity extends AppCompatActivity
         medicineListFragment = new MedicineListFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        ft.replace(R.id.fragment_medicine_list_placeholder, medicineListFragment);
+        ft.add(R.id.fragment_medicine_list_placeholder, medicineListFragment);
         ft.commit();
 
         Toast.makeText(getBaseContext(), medicineListFragment.isVisible() + " << ", Toast.LENGTH_SHORT).show();
@@ -313,20 +275,13 @@ public class ScheduleListActivity extends AppCompatActivity
         Log.d("com", "switching to " + schedule.isActivated());
         scheduleUtil.updateSchedule(schedule);
         scheduleAdapter.notifyDataSetChanged();
-        if(schedule.isActivated()){
-            Toast.makeText(getBaseContext(), "Alarm set for " + DateUtil.getDifferenceInMinutes(System.currentTimeMillis(), schedule.getNextDrinkingTime()) + " from now.", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
-            intent.putExtra(getString(R.string.SCHEDULE_ID), (int)schedule.getSqlId());
-            intent.putExtra(getString(R.string.MEDICINE_ID), (int)schedule.getMedicineToDrink().getSqlId());
-
-            PendingIntent pendingAlarm = PendingIntent.getBroadcast(getBaseContext(), AlarmReceiver.PENDING_ALARMRECEIVER, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-            long delay = schedule.getNextDrinkingTime() - System.currentTimeMillis();
-            Log.d("action", "DELAY IS " + delay + " milliseconds (" + (delay/DateUtil.MILLIS_TO_SECONDS) + ")");
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 5 * 1000, pendingAlarm);
-        }
         updateList();
+
+
+        Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
+        PendingIntent pendingAlarm = PendingIntent.getBroadcast(getBaseContext(), AlarmReceiver.PENDING_ALARMRECEIVER, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 5 * 1000, pendingAlarm);
     }
 
     public void updateList(){
@@ -345,6 +300,10 @@ public class ScheduleListActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
+    }
+
+    public void closeAddScheduleFragment(){
+        getSupportFragmentManager().beginTransaction().remove(addScheduleFragment).commit();
     }
 
     @OnClick(R.id.fab_add_schedule)
@@ -394,9 +353,25 @@ public class ScheduleListActivity extends AppCompatActivity
     @Override
     public void onDataPass(Medicine medicine) {
         selectedMedicine = medicine;
-        schedule.setMedicineToDrink(selectedMedicine);
+//        schedule.setMedicineToDrink(selectedMedicine);
         this.tvToFragmentMedicineToDrink.setText(medicine.getModifier() + " of " + medicine.getName());
         closeMedicineList();
     }
 
+    @Override
+    public void onFragmentTimeClick(TextView tvTime, TextView tvTimePeriod) {
+        editTime(tvTime, tvTimePeriod);
+    }
+
+    @Override
+    public void onFragmentSave(Schedule schedule) {
+        scheduleUtil.addNewSchedule(schedule);
+        updateList();
+        closeAddScheduleFragment();
+    }
+
+    @Override
+    public void onFragmentCancel(){
+        closeAddScheduleFragment();
+    }
 }

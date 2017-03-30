@@ -17,6 +17,4 @@ public interface OnScheduleClickListener {
     public void onItemSaveClick(Schedule schedule);
     public void onItemCancelClick(int id);
     public void onSwitchClick(Schedule schedule);
-    public void onEditTimeClick(Schedule schedule, EditText etTime, TextView tvTimePeriod, boolean isMilitary);
-    public void onMedicineListClick(Schedule schdule, TextView tvToFragmentMedicineToDrink);
 }

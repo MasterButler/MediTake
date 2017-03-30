@@ -9,4 +9,7 @@
 
     <dimen name="z_card">24dp</dimen>
     <dimen name="y_card">0dp</dimen>
+
+    <dimen name="dialog_left_margin">16dp</dimen>
+    <dimen name="dialog_right_margin">16dp</dimen>
 </resources>

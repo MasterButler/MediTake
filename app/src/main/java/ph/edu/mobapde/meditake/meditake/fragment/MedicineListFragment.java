@@ -54,7 +54,7 @@ public class MedicineListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_medicine_list, null);
         ButterKnife.bind(this, v);
 
-        medicineListFragmentAdapter = new MedicineListFragmentAdapter(contextHolder, new MedicineUtil(contextHolder).getAllMedicine());
+        medicineListFragmentAdapter = new MedicineListFragmentAdapter(contextHolder, new MedicineUtil(contextHolder).getAllMedicine(), Medicine.COLUMN_ID);
         medicineListFragmentAdapter.setHasStableIds(true);
         Log.d("action", "CONTINUE INFLATION");
         medicineListFragmentAdapter.setOnMedicineListFragmentClickListener(new OnMedicineListFragmentClickListener() {

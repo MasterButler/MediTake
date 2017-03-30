@@ -28,8 +28,8 @@ public class MedicineListFragmentAdapter extends CursorRecyclerViewAdapter<Medic
 
     OnMedicineListFragmentClickListener onMedicineListFragmentClickListener;
 
-    public MedicineListFragmentAdapter(Context context, Cursor cursor) {
-        super(context, cursor);
+    public MedicineListFragmentAdapter(Context context, Cursor cursor, String column) {
+        super(context, cursor, column);
         this.contextHolder = context;
     }
 
