@@ -12,6 +12,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.PowerManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
@@ -68,15 +70,17 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 //
 //        Intent in=new Intent().setClass(context,DrinkMedicineActivity.class);
 //        startActivity(in);
+        Bundle data = intent.getExtras();
+        Schedule schedule = data.getParcelable(Schedule.TABLE);
 
-        startAlarmService(context);
+        startAlarmService(context, schedule);
     }
 
-    public void startAlarmService(Context context){
+    public void startAlarmService(Context context, Schedule schedule){
         Log.wtf("RECEIVER", "RECEIVED THE ACTION");
 
         Intent intentNext = new Intent(context, AlarmService.class);
-
+        intentNext.putExtra(Schedule.TABLE, schedule);
         startWakefulService(context, intentNext);
     }
 }

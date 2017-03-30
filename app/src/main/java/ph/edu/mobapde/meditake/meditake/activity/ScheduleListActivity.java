@@ -102,7 +102,7 @@ public class ScheduleListActivity extends AppCompatActivity
         scheduleUtil = new ScheduleUtil(getBaseContext());
         medicineUtil = new MedicineUtil(getBaseContext());
 
-        addHardCodedData();
+        //addHardCodedData();
         initializeDrawer();
         initializeAdapter();
         CREATING_NEW_ITEM = -1;
@@ -279,6 +279,7 @@ public class ScheduleListActivity extends AppCompatActivity
 
 
         Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
+        intent.putExtra(Schedule.TABLE, schedule);
         PendingIntent pendingAlarm = PendingIntent.getBroadcast(getBaseContext(), AlarmReceiver.PENDING_ALARMRECEIVER, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 5 * 1000, pendingAlarm);

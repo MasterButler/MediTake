@@ -1,12 +1,14 @@
 package ph.edu.mobapde.meditake.meditake.beans;
 
 import android.media.Ringtone;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
- * Main class for maintaining the schedule of the person's dosage of the medicines.
+ * Main class Schedule  maintaining the schedule of the person's dosage of the medicines.
  * @author Winfred Villaluna
  */
-public class Schedule {
+public class Schedule implements Parcelable {
     public static final String TABLE = "schedule";
     public static final String COLUMN_ID = "_scheduleId";
     //public static final String COLUMN_SCHEDULE_ID = "_schedule_id";
@@ -35,14 +37,14 @@ public class Schedule {
     private int sqlId;
     private long nextDrinkingTime;
     private String label;
-    private Ringtone ringtone;
+    private String ringtone;
     private double drinkingInterval;
     private boolean isVibrate;
     private boolean isActivated;
 
     public Schedule(){    }
 
-    public Schedule(long nextDrinkingTime, String label, Ringtone ringtone, double drinkingInterval, boolean isVibrate, boolean isActivated){
+    public Schedule(long nextDrinkingTime, String label, String ringtone, double drinkingInterval, boolean isVibrate, boolean isActivated){
         this.nextDrinkingTime = nextDrinkingTime;
         this.label = label;
         this.ringtone = ringtone;
@@ -51,7 +53,7 @@ public class Schedule {
         this.isActivated = isActivated;
     }
 
-    public Schedule(int sqlId, long nextDrinkingTime, String label, Ringtone ringtone, double drinkingInterval, boolean isVibrate, boolean isActivated){
+    public Schedule(int sqlId, long nextDrinkingTime, String label, String ringtone, double drinkingInterval, boolean isVibrate, boolean isActivated){
         this(nextDrinkingTime, label, ringtone, drinkingInterval, isVibrate, isActivated);
         this.sqlId = sqlId;
     }
@@ -64,7 +66,7 @@ public class Schedule {
     public boolean drinkMedicine(){
 //        if(medicineToDrink.drink(dosagePerDrinkingInterval) > Medicine.NOT_ENOUGH) {
 //            setLastTimeTaken(new Date(System.currentTimeMillis()));
-            return true;
+        return true;
 //        }
 //        return false;
     }
@@ -93,11 +95,11 @@ public class Schedule {
         this.drinkingInterval = drinkingInterval;
     }
 
-    public Ringtone getRingtone() {
+    public String getRingtone() {
         return ringtone;
     }
 
-    public void setRingtone(Ringtone ringtone) {
+    public void setRingtone(String ringtone) {
         this.ringtone = ringtone;
     }
 
@@ -124,4 +126,45 @@ public class Schedule {
     public void setActivated(boolean activated) {
         isActivated = activated;
     }
+
+    protected Schedule (Parcel in) {
+        dosagePerDrinkingInterval = in.readDouble();
+        sqlId = in.readInt();
+        nextDrinkingTime = in.readLong();
+        label = in.readString();
+        ringtone = in.readString();
+        drinkingInterval = in.readDouble();
+        isVibrate = in.readByte() != 0x00;
+        isActivated = in.readByte() != 0x00;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(dosagePerDrinkingInterval);
+        dest.writeInt(sqlId);
+        dest.writeLong(nextDrinkingTime);
+        dest.writeString(label);
+        dest.writeString(ringtone);
+        dest.writeDouble(drinkingInterval);
+        dest.writeByte((byte) (isVibrate ? 0x01 : 0x00));
+        dest.writeByte((byte) (isActivated ? 0x01 : 0x00));
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Schedule > CREATOR = new Parcelable.Creator<Schedule >() {
+        @Override
+        public Schedule  createFromParcel(Parcel in) {
+            return new Schedule (in);
+        }
+
+        @Override
+        public Schedule [] newArray(int size) {
+            return new Schedule [size];
+        }
+    };
 }

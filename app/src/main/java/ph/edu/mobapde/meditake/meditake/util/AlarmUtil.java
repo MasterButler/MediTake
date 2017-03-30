@@ -25,25 +25,21 @@ public class AlarmUtil {
         f.startActivityForResult(intent, REQUEST_RINGTONE);
     }
 
-    public static Ringtone getRingtone(Context context, Intent data){
+    public static Uri getRingtoneUri(Context context, Intent data){
         Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
         Ringtone ringtone = null;
         if (uri == null) {
             uri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE);
         }
-        return RingtoneManager.getRingtone(context, uri);
-    }
-
-    public static String convertRingtoneToString(Context context, Ringtone ringtone){
-        if(ringtone == null){
-            Uri defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE);
-            ringtone = RingtoneManager.getRingtone(context, defaultRingtoneUri);
-        }
-        return ringtone.toString();
+        return uri;
     }
 
     public static Ringtone convertStringToRingtone(Context context, String string){
         Uri ringtoneUri = Uri.parse(string);
-        return RingtoneManager.getRingtone(context, ringtoneUri);
+        Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
+        if(ringtone == null){
+            ringtone = RingtoneManager.getRingtone(context, RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE));
+        }
+        return ringtone;
     }
 }

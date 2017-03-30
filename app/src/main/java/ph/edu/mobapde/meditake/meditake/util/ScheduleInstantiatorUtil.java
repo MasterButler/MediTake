@@ -27,7 +27,7 @@ public class ScheduleInstantiatorUtil {
 
         cv.put(Schedule.COLUMN_NEXT_DRINKING_TIME, schedule.getNextDrinkingTime());
         cv.put(Schedule.COLUMN_LABEL, schedule.getLabel());
-        cv.put(Schedule.COUMNN_RINGTONE, AlarmUtil.convertRingtoneToString(context, schedule.getRingtone()));
+        cv.put(Schedule.COUMNN_RINGTONE, schedule.getRingtone());
         cv.put(Schedule.COLUMN_DRINKING_INTERVAL, schedule.getDrinkingInterval());
         cv.put(Schedule.COLUMN_IS_VIBRATE, schedule.isVibrate());
         cv.put(Schedule.COLUMN_IS_ACTIVATED, schedule.isActivated());
@@ -41,7 +41,7 @@ public class ScheduleInstantiatorUtil {
         int id = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_ID));
         long startingTime = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_NEXT_DRINKING_TIME));
         String label = cursor.getString(cursor.getColumnIndex(Schedule.COLUMN_LABEL));
-        Ringtone ringtone = AlarmUtil.convertStringToRingtone(context, cursor.getString(cursor.getColumnIndex(Schedule.COUMNN_RINGTONE)));
+        String ringtone = cursor.getString(cursor.getColumnIndex(Schedule.COUMNN_RINGTONE));
         double drinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DRINKING_INTERVAL));
         boolean isVibrate = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_IS_VIBRATE)) == 1 ? true : false;
         boolean isActivated = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_IS_ACTIVATED)) == 1 ? true : false;

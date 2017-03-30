@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,7 @@ public class AddScheduleFragment extends Fragment {
     @BindView(R.id.switch_schedule_vibrate)
     Switch switchIsVibrate;
 
-    private Ringtone ringtoneUsed;
+    private Uri ringtoneUriUsed;
 
     boolean isMilitary;
 
@@ -77,8 +78,10 @@ public class AddScheduleFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == AlarmUtil.REQUEST_RINGTONE && resultCode == Activity.RESULT_OK){
-            ringtoneUsed = AlarmUtil.getRingtone(contextHolder, data);
-            tvRingtone.setText(ringtoneUsed.getTitle(contextHolder));
+            ringtoneUriUsed = AlarmUtil.getRingtoneUri(contextHolder, data);
+            Ringtone ringtone = RingtoneManager.getRingtone(contextHolder, ringtoneUriUsed);
+            String title = ringtone.getTitle(contextHolder);
+            tvRingtone.setText(title);
         }
     }
 
@@ -116,8 +119,9 @@ public class AddScheduleFragment extends Fragment {
         ButterKnife.bind(this, v);
 
         Uri defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
-        ringtoneUsed = RingtoneManager.getRingtone(getActivity(), defaultRingtoneUri);
-        tvRingtone.setText(ringtoneUsed.getTitle(contextHolder));
+        Ringtone ringtone = RingtoneManager.getRingtone(contextHolder, defaultRingtoneUri);
+        String title = ringtone.getTitle(contextHolder);
+        tvRingtone.setText(title);
 
         linScheduleTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +140,7 @@ public class AddScheduleFragment extends Fragment {
                     String label = tvScheduleLabel.getText().toString();
                     boolean isVibrate = switchIsVibrate.isChecked();
 
-                    Schedule schedule = new Schedule(nextDrinkingTime, label, ringtoneUsed, 10, isVibrate, true);
+                    Schedule schedule = new Schedule(nextDrinkingTime, label, ringtoneUriUsed.toString(), 10, isVibrate, true);
                     onAddScheduleFragmentInteractionListener.onFragmentSave(schedule);
                 }
             }
