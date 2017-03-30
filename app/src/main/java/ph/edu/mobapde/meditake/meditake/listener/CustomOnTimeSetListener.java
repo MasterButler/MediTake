@@ -9,6 +9,8 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
+import ph.edu.mobapde.meditake.meditake.util.DateUtil;
+
 /**
  * Created by Winfred Villaluna on 3/19/2017.
  */
@@ -46,14 +48,13 @@ public class CustomOnTimeSetListener implements TimePickerDialog.OnTimeSetListen
         else if (datetime.get(Calendar.AM_PM) == Calendar.PM)
             am_pm = "PM";
 
-        int editedHourOfDay = isMilitary ? hourOfDay : hourOfDay % 12 ;
-
+        String timeDisplay = DateUtil.format(hourOfDay, minute, isMilitary);
         if(etTimeDisplay == null){
-            this.tvTimeDisplay.setText(String.format("%02d", editedHourOfDay) + ":" + String.format("%02d", minute));
+            this.tvTimeDisplay.setText(timeDisplay.split("\\s+")[0]);
+            this.tvTimePeriodDisplay.setText(timeDisplay.split("\\s+")[1]);
         }else{
-            this.etTimeDisplay.setText(String.format("%02d", editedHourOfDay) + ":" + String.format("%02d", minute));
+            this.etTimeDisplay.setText(timeDisplay.split("\\s+")[0]);
         }
-        this.tvTimePeriodDisplay.setText(am_pm);
     }
 
 }

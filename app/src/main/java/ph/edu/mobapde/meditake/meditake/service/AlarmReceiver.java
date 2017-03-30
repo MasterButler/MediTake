@@ -70,10 +70,12 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 //
 //        Intent in=new Intent().setClass(context,DrinkMedicineActivity.class);
 //        startActivity(in);
-        Bundle data = intent.getExtras();
-        Schedule schedule = data.getParcelable(Schedule.TABLE);
+//        Bundle data = intent.getExtras();
+//        Schedule schedule = data.getParcelable(Schedule.TABLE);
+//        Log.wtf("ACTION", "RECEIVED MEDICINE WITH ID OF " + schedule.getSqlId());
+//        Log.wtf("ACTION", "PLAY " + schedule.getRingtone());
 
-        startAlarmService(context, schedule);
+        startAlarmService(context, new ScheduleUtil(context).getSchedule(intent.getIntExtra(Schedule.COLUMN_ID, -1)));
     }
 
     public void startAlarmService(Context context, Schedule schedule){

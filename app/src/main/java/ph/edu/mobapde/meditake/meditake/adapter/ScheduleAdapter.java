@@ -88,7 +88,9 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
 
             Log.d("CHECK", "SCHEDULEID: " + sched.getSqlId());
 
-            String displayTime = DateUtil.convertToReadableFormat(sched.getNextDrinkingTime());
+            String displayTime = DateUtil.convertToReadableFormat(sched.getNextDrinkingTime(), isMilitary);
+            Log.d("CHECK", "HOURS: " + sched.getNextDrinkingTime()/DateUtil.MILLIS_TO_HOURS);
+            Log.d("CHECK", "DISPLAYTIME: " + displayTime);
 
             viewHolder.cardViewBackground.setImageResource(DateUtil.pickBackground(sched.getNextDrinkingTime()));
             viewHolder.cardViewBackground.setColorFilter(Color.parseColor("#AAFFFFFF"), PorterDuff.Mode.SRC_ATOP);

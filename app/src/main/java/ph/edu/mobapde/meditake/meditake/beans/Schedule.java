@@ -155,7 +155,6 @@ public class Schedule implements Parcelable {
         dest.writeByte((byte) (isActivated ? 0x01 : 0x00));
     }
 
-    @SuppressWarnings("unused")
     public static final Parcelable.Creator<Schedule > CREATOR = new Parcelable.Creator<Schedule >() {
         @Override
         public Schedule  createFromParcel(Parcel in) {
@@ -167,4 +166,6 @@ public class Schedule implements Parcelable {
             return new Schedule [size];
         }
     };
+
+
 }

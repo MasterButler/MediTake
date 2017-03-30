@@ -5,7 +5,9 @@ import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -13,6 +15,7 @@ import android.os.SystemClock;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -55,6 +58,9 @@ import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class ScheduleListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MedicineListFragment.OnDataPass, AddScheduleFragment.OnAddScheduleFragmentInteractionListener {
+
+    @BindView(R.id.snackbar_position)
+    CoordinatorLayout clSnackbar;
 
     @BindView(R.id.layout_schedule_list)
     CoordinatorLayout scheduleListLayout;
@@ -210,13 +216,11 @@ public class ScheduleListActivity extends AppCompatActivity
 
     public void editTime(TextView tvTime, TextView tvTimePeriod){
         if(tvTime != null){
-                Calendar mcurrentTime = Calendar.getInstance();
-                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = mcurrentTime.get(Calendar.MINUTE);
-
-                CustomOnTimeSetListener timeSet = new CustomOnTimeSetListener(getBaseContext(), tvTime, tvTimePeriod, tvTimePeriod==null);
+                int selectedHour = Integer.valueOf(tvTime.getText().toString().split(":")[0]);
+                int selectedMinute = Integer.valueOf(tvTime.getText().toString().split(":")[1]);
+                CustomOnTimeSetListener timeSet = new CustomOnTimeSetListener(getBaseContext(), tvTime, tvTimePeriod, false);
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(ScheduleListActivity.this, timeSet, hour, minute, tvTimePeriod==null);
+                mTimePicker = new TimePickerDialog(ScheduleListActivity.this, timeSet, selectedHour, selectedMinute, false);
                 mTimePicker.setTitle("Select Time");
                 mTimePicker.show();
         }
@@ -269,20 +273,35 @@ public class ScheduleListActivity extends AppCompatActivity
     }
 
     public void toggleSwitch(Schedule schedule){
-        Log.d("click", "ON SWITCH");
         schedule.setActivated(!schedule.isActivated());
-        Log.d("com", "actual interval is " + schedule.getDrinkingInterval());
-        Log.d("com", "switching to " + schedule.isActivated());
         scheduleUtil.updateSchedule(schedule);
         scheduleAdapter.notifyDataSetChanged();
         updateList();
 
+        if(schedule.isActivated()){
+            setAlarmForSchedule(schedule);
+        }
+    }
 
+    private void setAlarmForSchedule(Schedule schedule) {
+        showGenericSnackbar("Alarm set for " + DateUtil.convertToNotificationFormat(schedule.getNextDrinkingTime()) + " from now.", Snackbar.LENGTH_SHORT);
         Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
-        intent.putExtra(Schedule.TABLE, schedule);
-        PendingIntent pendingAlarm = PendingIntent.getBroadcast(getBaseContext(), AlarmReceiver.PENDING_ALARMRECEIVER, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        intent.putExtra(Schedule.COLUMN_ID, schedule.getSqlId());
+        PendingIntent pendingAlarm = PendingIntent
+                .getBroadcast(
+                        getBaseContext(),
+                        schedule.getSqlId(),
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 5 * 1000, pendingAlarm);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + DateUtil.getDelay(schedule.getNextDrinkingTime()), pendingAlarm);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
     }
 
     public void updateList(){
@@ -375,4 +394,18 @@ public class ScheduleListActivity extends AppCompatActivity
     public void onFragmentCancel(){
         closeAddScheduleFragment();
     }
+
+
+    public void showGenericSnackbar(String message, int length){
+        int[] attrs = {android.R.attr.color};
+        Snackbar snackbarNotify = Snackbar.make(clSnackbar, message, length);
+
+        TypedArray typedArray = obtainStyledAttributes(attrs);
+
+        TextView snackBarNotifyTextView = (TextView) snackbarNotify.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackBarNotifyTextView.setTextColor(typedArray.getColor(0, Color.WHITE));
+
+        snackbarNotify.show();
+    }
+
 }

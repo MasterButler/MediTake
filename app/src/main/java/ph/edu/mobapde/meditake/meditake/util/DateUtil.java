@@ -5,6 +5,7 @@ import android.util.Log;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import ph.edu.mobapde.meditake.meditake.R;
@@ -46,22 +47,80 @@ public class DateUtil {
         }
     }
 
+    private static boolean currTimeIsAfter(long time){
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        int second = mcurrentTime.get(Calendar.SECOND);
+        long currTime = second * MILLIS_TO_SECONDS + minute * MILLIS_TO_MINUTES + hour * MILLIS_TO_HOURS;
+
+        return currTime > time;
+    }
+
+    public static String format(int hourOfDay, int minute, boolean isMilitary){
+        Log.wtf("TIME", "RECEIVED " + hourOfDay + ":" + minute);
+        if(isMilitary){
+            return hourOfDay + ":" + minute;
+        }
+        String period = "";
+        if(hourOfDay < 12){
+            period = "AM";
+            hourOfDay = hourOfDay == 0 ? 12 : hourOfDay;
+        }else{
+            period = "PM";
+            hourOfDay = hourOfDay == 12 ? 12 : hourOfDay - 12;
+        }
+        return String.format("%02d",hourOfDay) + ":" + String.format("%02d",minute) + " " + period;
+    }
+
     public static long getTime(String s) {
         String[] time = s.split("\\s+");
+        Log.wtf("TIME", "GOT " + s);
         long offset = 0;
         if(time.length == 2){
             offset = time[1].trim().toLowerCase().equals("pm") ? 12 * MILLIS_TO_HOURS : 0;
         }
         long actualTime = Long.valueOf(time[0].split(":")[0]) * MILLIS_TO_HOURS + Long.valueOf(time[0].split(":")[1]) * MILLIS_TO_MINUTES;
+        Log.wtf("TIME PARSED", "RETURNING " + actualTime/MILLIS_TO_HOURS + ":" + actualTime%MILLIS_TO_HOURS/MILLIS_TO_MINUTES);
         return actualTime + offset;
     }
 
-    public static String convertToReadableFormat(long nextDrinkingTime) {
-        DateFormat df = new SimpleDateFormat(DEFAULT_TIME_FORMAT_PERIOD_12);
-        return df.format(new Date(nextDrinkingTime));
+    public static long getDelay(long timeToAlarm){
+        Log.wtf("CURRENT TIME", "ORIGTIME IS " + timeToAlarm + " OR " + convertToReadableFormat(timeToAlarm, false) );
+        if(DateUtil.currTimeIsAfter(timeToAlarm)){
+            timeToAlarm += 24*MILLIS_TO_HOURS;
+        }
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        int second = mcurrentTime.get(Calendar.SECOND);
+        long currTime = second * MILLIS_TO_SECONDS + minute * MILLIS_TO_MINUTES + hour * MILLIS_TO_HOURS;
+
+        Log.wtf("CURRENT TIME", "ALRMTIME IS " + timeToAlarm + " OR " + convertToReadableFormat(timeToAlarm, false) );
+        Log.wtf("CURRENT TIME", "CURRTIME IS " + currTime + " OR " + convertToReadableFormat(currTime, false) );
+        return timeToAlarm-currTime;
     }
 
-    public static String convertToNotificationFormat(long DrinkingTime){
-        return "";
+    public static String convertToReadableFormat(long nextDrinkingTime, boolean isMilitary) {
+        int hours = (int) (nextDrinkingTime/MILLIS_TO_HOURS);
+        int minutes = (int) (nextDrinkingTime%MILLIS_TO_HOURS/MILLIS_TO_MINUTES);
+        return format(hours, minutes, isMilitary);
     }
+
+    public static String convertToNotificationFormat(long drinkingTime){
+        String message = "";
+        long delay = getDelay(drinkingTime);
+        Log.wtf("TIME DELAY", "DELAY IS " + delay);
+        if(delay < MILLIS_TO_MINUTES){
+            message = "less than a minute";
+        }else if(drinkingTime < MILLIS_TO_HOURS){
+            message = delay/MILLIS_TO_MINUTES + " minutes";
+        }else if(drinkingTime < MILLIS_TO_DAYS){
+            message = delay/MILLIS_TO_HOURS + " hours";
+            message += delay/MILLIS_TO_MINUTES > 0 ? " and " + delay%MILLIS_TO_HOURS/MILLIS_TO_MINUTES + " minutes" : "";
+        }
+        return message;
+    }
+
+
 }

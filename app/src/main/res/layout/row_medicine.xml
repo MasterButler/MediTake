@@ -90,7 +90,7 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/pills_1_colored"
+                        android:src="@drawable/sick"
                         android:padding="2sp"/>
 
                     <TextView
@@ -276,7 +276,7 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/pills_1_colored"
+                        android:src="@drawable/sick"
                         android:padding="2sp"/>
 
                     <EditText

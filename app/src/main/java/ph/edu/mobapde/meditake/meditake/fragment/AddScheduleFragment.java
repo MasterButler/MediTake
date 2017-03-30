@@ -23,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
@@ -118,10 +120,18 @@ public class AddScheduleFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_add_schedule, container, false);
         ButterKnife.bind(this, v);
 
-        Uri defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
-        Ringtone ringtone = RingtoneManager.getRingtone(contextHolder, defaultRingtoneUri);
+        ringtoneUriUsed = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
+        Ringtone ringtone = RingtoneManager.getRingtone(contextHolder, ringtoneUriUsed);
         String title = ringtone.getTitle(contextHolder);
         tvRingtone.setText(title);
+
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+
+        String displayTime = DateUtil.format(hour, minute, isMilitary);
+        this.tvScheduleTime.setText(displayTime.split("\\s+")[0]);
+        this.tvScheduleTimePeriod.setText(displayTime.split("\\s+")[1]);
 
         linScheduleTime.setOnClickListener(new View.OnClickListener() {
             @Override

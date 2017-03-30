@@ -21,7 +21,6 @@ public class SQLiteConnection extends SQLiteOpenHelper{
     public static final String SCHEMA = "MediTake";
     public static final int VERSION = 15;
     private Context contextHolder;
-    private MedicineUtil medicineUtil;
 
     public SQLiteConnection(Context context) {
         super(context, SCHEMA, null, VERSION);
