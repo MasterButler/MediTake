@@ -1,16 +1,16 @@
 package ph.edu.mobapde.meditake.meditake.beans;
 
-import android.util.Log;
-
-import ph.edu.mobapde.meditake.meditake.util.DateUtil;
+import android.media.Ringtone;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
- * Main class for maintaining the schedule of the person's dosage of the medicines.
+ * Main class Schedule  maintaining the schedule of the person's dosage of the medicines.
  * @author Winfred Villaluna
  */
-public class Schedule {
+public class Schedule implements Parcelable {
     public static final String TABLE = "schedule";
-    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_ID = "_scheduleId";
     //public static final String COLUMN_SCHEDULE_ID = "_schedule_id";
     public static final String COLUMN_DOSAGE_PER_DRINKING_INTERVAL = "dosagePerDrinkingInterval";
     public static final String COLUMN_MEDICINE_TO_DRINK = "medicineToDrink";
@@ -19,28 +19,43 @@ public class Schedule {
     public static final String COLUMN_IS_ACTIVATED = "isActivated";
     public static final String COLUMN_CUSTOM_NEXT_DRINKING_TIME = "customNextDrinkingTime";
 
+    public static final String COLUMN_NEXT_DRINKING_TIME = "nextDrinkingTime";
+    public static final String COUMNN_RINGTONE = "ringtone";
+    public static final String COLUMN_LABEL = "label";
+    public static final String COLUMN_IS_VIBRATE = "vibrate";
+
     public static final int TIMES_A_DAY = 0;
     public static final int EVERY_NTH_HOUR = 1;
     public static final int EVERY_DAY = 2;
     public static final int EVERY_OTHER_DAY = 3;
 
-    //id of the medicine in the server for easier retrieval/storage when it is already present in the cache
-    private int sqlId;
     //the medicine to drink
-    private Medicine medicineToDrink;
+    //private Medicine medicineToDrink;
     //dosage needed to drink
     private double dosagePerDrinkingInterval;
-    //intervals in between drinking the medicineToDrink. stored in terms of HOURS
+
+    private int sqlId;
+    private long nextDrinkingTime;
+    private String label;
+    private String ringtone;
     private double drinkingInterval;
-
-    //when user decides to set next drinking time just because
-    private long customNextDrinkingTime;
-
-    private long lastTimeTaken;
+    private boolean isVibrate;
     private boolean isActivated;
 
-    public Schedule(){
-        customNextDrinkingTime = 0;
+    public Schedule(){    }
+
+    public Schedule(long nextDrinkingTime, String label, String ringtone, double drinkingInterval, boolean isVibrate, boolean isActivated){
+        this.nextDrinkingTime = nextDrinkingTime;
+        this.label = label;
+        this.ringtone = ringtone;
+        this.drinkingInterval = drinkingInterval;
+        this.isVibrate = isVibrate;
+        this.isActivated = isActivated;
+    }
+
+    public Schedule(int sqlId, long nextDrinkingTime, String label, String ringtone, double drinkingInterval, boolean isVibrate, boolean isActivated){
+        this(nextDrinkingTime, label, ringtone, drinkingInterval, isVibrate, isActivated);
+        this.sqlId = sqlId;
     }
 
     /**
@@ -51,56 +66,9 @@ public class Schedule {
     public boolean drinkMedicine(){
 //        if(medicineToDrink.drink(dosagePerDrinkingInterval) > Medicine.NOT_ENOUGH) {
 //            setLastTimeTaken(new Date(System.currentTimeMillis()));
-            return true;
+        return true;
 //        }
 //        return false;
-    }
-
-    /**
-     * returns next drinking time relative to last time taken and the interval between drinks.
-     * @param
-     */
-    public long getNextDrinkingTime(){
-        return customNextDrinkingTime == 0 ? DateUtil.addHours(lastTimeTaken, drinkingInterval) : customNextDrinkingTime;
-    }
-
-    public void setMedicineToDrink(Medicine medicineToDrink){
-        this.medicineToDrink = medicineToDrink;
-    }
-
-    public Medicine getMedicineToDrink(){
-        return this.medicineToDrink;
-    }
-
-    public double getDosagePerDrinkingInterval(){
-        return this.dosagePerDrinkingInterval;
-    }
-
-    public void setDosagePerDrinkingInterval(double dosagePerDrinkingInterval){
-        this.dosagePerDrinkingInterval = dosagePerDrinkingInterval;
-    }
-
-    public double getDrinkingInterval(){
-        return this.drinkingInterval;
-    }
-
-    public void setDrinkingInterval(double drinkingInterval) {
-        this.drinkingInterval = drinkingInterval;
-    }
-
-    public void setDrinkingInterval(int value, int mode){
-        switch(mode){
-            case TIMES_A_DAY: drinkingInterval = 24 / value;
-                break;
-            case EVERY_DAY: drinkingInterval = 24;
-                break;
-            case EVERY_OTHER_DAY: drinkingInterval = 48;
-                break;
-            case EVERY_NTH_HOUR: drinkingInterval = value;
-                break;
-            default: drinkingInterval = value;
-                break;
-        }
     }
 
     public int getSqlId() {
@@ -111,12 +79,44 @@ public class Schedule {
         this.sqlId = sqlId;
     }
 
-    public long getLastTimeTaken(){
-        return this.lastTimeTaken;
+    public long getNextDrinkingTime() {
+        return nextDrinkingTime;
     }
 
-    public void setLastTimeTaken(long lastTimeTaken){
-        this.lastTimeTaken = lastTimeTaken - (lastTimeTaken % DateUtil.MILLIS_TO_SECONDS);
+    public void setNextDrinkingTime(long nextDrinkingTime) {
+        this.nextDrinkingTime = nextDrinkingTime;
+    }
+
+    public double getDrinkingInterval() {
+        return drinkingInterval;
+    }
+
+    public void setDrinkingInterval(double drinkingInterval) {
+        this.drinkingInterval = drinkingInterval;
+    }
+
+    public String getRingtone() {
+        return ringtone;
+    }
+
+    public void setRingtone(String ringtone) {
+        this.ringtone = ringtone;
+    }
+
+    public boolean isVibrate() {
+        return isVibrate;
+    }
+
+    public void setVibrate(boolean vibrate) {
+        isVibrate = vibrate;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public boolean isActivated() {
@@ -127,12 +127,45 @@ public class Schedule {
         isActivated = activated;
     }
 
-    public long getCustomNextDrinkingTime() {
-        return customNextDrinkingTime;
+    protected Schedule (Parcel in) {
+        dosagePerDrinkingInterval = in.readDouble();
+        sqlId = in.readInt();
+        nextDrinkingTime = in.readLong();
+        label = in.readString();
+        ringtone = in.readString();
+        drinkingInterval = in.readDouble();
+        isVibrate = in.readByte() != 0x00;
+        isActivated = in.readByte() != 0x00;
     }
 
-    public void setCustomNextDrinkingTime(long customNextDrinkingTime) {
-        this.customNextDrinkingTime = customNextDrinkingTime;
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(dosagePerDrinkingInterval);
+        dest.writeInt(sqlId);
+        dest.writeLong(nextDrinkingTime);
+        dest.writeString(label);
+        dest.writeString(ringtone);
+        dest.writeDouble(drinkingInterval);
+        dest.writeByte((byte) (isVibrate ? 0x01 : 0x00));
+        dest.writeByte((byte) (isActivated ? 0x01 : 0x00));
+    }
+
+    public static final Parcelable.Creator<Schedule > CREATOR = new Parcelable.Creator<Schedule >() {
+        @Override
+        public Schedule  createFromParcel(Parcel in) {
+            return new Schedule (in);
+        }
+
+        @Override
+        public Schedule [] newArray(int size) {
+            return new Schedule [size];
+        }
+    };
+
 
 }

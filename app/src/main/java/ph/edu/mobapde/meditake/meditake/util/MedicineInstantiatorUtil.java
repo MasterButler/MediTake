@@ -63,7 +63,7 @@ public class MedicineInstantiatorUtil {
         return cv;
     }
 
-    public static Medicine createMedicineFromCursor(Cursor cursor){
+    public static Medicine createBeanFromCursor(Cursor cursor){
         Medicine medicine = MedicineInstantiatorUtil.createMedicineInstanceFromString(cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE)));
         int id = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_ID));
         String brandName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));

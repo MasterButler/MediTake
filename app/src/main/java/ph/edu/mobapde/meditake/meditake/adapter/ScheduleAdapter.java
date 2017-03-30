@@ -1,12 +1,16 @@
 package ph.edu.mobapde.meditake.meditake.adapter;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
+import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,10 +32,14 @@ import ph.edu.mobapde.meditake.meditake.activity.ScheduleListActivity;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
+import ph.edu.mobapde.meditake.meditake.service.AlarmReceiver;
 import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
+import ph.edu.mobapde.meditake.meditake.util.ScheduleInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
+
+import static android.content.Context.ALARM_SERVICE;
 
 /**
  * Created by Winfred Villaluna on 3/17/2017.
@@ -51,8 +59,8 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
 
     private OnScheduleClickListener onScheduleClickListener;
 
-    public ScheduleAdapter(Context context, Cursor cursor) {
-        super(context, cursor);
+    public ScheduleAdapter(Context context, Cursor cursor, String column) {
+        super(context, cursor, column);
         this.contextHolder = context;
         expandedPositionId = -1;
         editingPositionId = -1;
@@ -73,54 +81,16 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
 
     @Override
     public void onBindViewHolder(final ScheduleViewHolder viewHolder, Cursor cursor) {
-        int id = cursor.getInt(cursor.getColumnIndex(Schedule.TABLE + "." + Schedule.COLUMN_ID));
-        int medicineId = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_MEDICINE_TO_DRINK));
-        double dosagePerDrinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL));
-        final double drinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL));
-        long lastTimeTaken = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_LAST_TIME_TAKEN));
-        boolean isActivated = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_IS_ACTIVATED)) == 1 ? true : false;
-        long customNextDrinkingTime = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME));
-
-        String brandName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
-        String genericName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
-        String medicineFor =  cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
-        double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
-        String medicineType = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE));
-
-        Log.d("ID", "STR");
-        Log.d("ID", "STR");
-        Log.d("ID", "EXPAND  ID: " + expandedPositionId);
-        Log.d("ID", "EDITING ID: " + editingPositionId);
-        Log.d("ID", "SCHEDULEID: " + id);
-        Log.d("ID", "END");
-        Log.d("ID", "END");
-
+        int id = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_ID));
         if(id != -1){
 
-            Medicine med = null;
-
-            if(medicineId != -1){
-                med = MedicineInstantiatorUtil.createMedicineInstanceFromString(medicineType);
-                med.setSqlId(medicineId);
-                med.setBrandName(brandName);
-                med.setGenericName(genericName);
-                med.setMedicineFor(medicineFor);
-                med.setAmount(amount);
-            }
-
-            Schedule sched = new Schedule();
-            sched.setSqlId(id);
-            sched.setMedicineToDrink(med);
-            sched.setDosagePerDrinkingInterval(dosagePerDrinkingInterval);
-            sched.setDrinkingInterval(drinkingInterval);
-            sched.setLastTimeTaken(lastTimeTaken);
-            sched.setActivated(isActivated);
-            sched.setCustomNextDrinkingTime(customNextDrinkingTime);
+            Schedule sched = ScheduleInstantiatorUtil.createBeanFromCursor(contextHolder, cursor);
 
             Log.d("CHECK", "SCHEDULEID: " + sched.getSqlId());
 
-            long nextTimeToTake = sched.getNextDrinkingTime();
-            String displayTime = DateUtil.getTime(nextTimeToTake, isMilitary);
+            String displayTime = DateUtil.convertToReadableFormat(sched.getNextDrinkingTime(), isMilitary);
+            Log.d("CHECK", "HOURS: " + sched.getNextDrinkingTime()/DateUtil.MILLIS_TO_HOURS);
+            Log.d("CHECK", "DISPLAYTIME: " + displayTime);
 
             viewHolder.cardViewBackground.setImageResource(DateUtil.pickBackground(sched.getNextDrinkingTime()));
             viewHolder.cardViewBackground.setColorFilter(Color.parseColor("#AAFFFFFF"), PorterDuff.Mode.SRC_ATOP);
@@ -143,37 +113,42 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                 viewHolder.etScheduleTimePeriod.setText(displayTime.split("\\s")[1]);
             }
 
-            Log.d("action", String.valueOf(dosagePerDrinkingInterval).split("\\.")[1].equals("0") + " <-- RESULT");
 
             String dosagePerDrinkingIntervalDisplay;
             String drinkingIntervalDisplay;
             String medicineDisplay;
 
-            if(String.valueOf(dosagePerDrinkingInterval).split("\\.")[1].equals("0")){
-                dosagePerDrinkingIntervalDisplay = String.valueOf(dosagePerDrinkingInterval).split("\\.")[0];
+            if(String.valueOf(sched.getDrinkingInterval()).split("\\.")[1].equals("0")){
+                drinkingIntervalDisplay = String.valueOf(sched.getDrinkingInterval()).split("\\.")[0];
             }else{
-                dosagePerDrinkingIntervalDisplay = String.valueOf(dosagePerDrinkingInterval);
+                drinkingIntervalDisplay = String.valueOf(sched.getDrinkingInterval());
             }
 
-            if(String.valueOf(drinkingInterval).split("\\.")[1].equals("0")){
-                drinkingIntervalDisplay = String.valueOf(drinkingInterval).split("\\.")[0];
-            }else{
-                drinkingIntervalDisplay = String.valueOf(drinkingInterval);
-            }
-
-            medicineDisplay = med != null ?
-                    dosagePerDrinkingIntervalDisplay  + " " + sched.getMedicineToDrink().getModifier() + " of " + sched.getMedicineToDrink().getName() :
-                    "units of unentered medicine.";
-            viewHolder.tvMedicineToDrink.setText(medicineDisplay);
-            viewHolder.scheduleSwitch.setChecked(isActivated);
+            viewHolder.tvMedicineToDrink.setText("TO BE FIXED");
+            viewHolder.scheduleSwitch.setChecked(sched.isActivated());
             viewHolder.tvDrinkingInterval.setText("Medicine taken every " + drinkingIntervalDisplay + " hours.");
-            viewHolder.tvLastTaken.setText(lastTimeTaken == 0 ? "Not yet taken before" : "Last taken: " + DateUtil.getDateTime(sched.getLastTimeTaken(), isMilitary));
+            //viewHolder.tvLastTaken.setText(sched.getLastTimeTaken() == 0 ? "Not yet taken before" : "Last taken: " + DateUtil.getDateTime(sched.getLastTimeTaken(), isMilitary));
 
-            viewHolder.etDosagePerDrinkingInterval.setText(dosagePerDrinkingIntervalDisplay);
-            viewHolder.etDrinkingIntervals.setText(String.valueOf(drinkingInterval));
+            //viewHolder.etDosagePerDrinkingInterval.setText(dosagePerDrinkingIntervalDisplay);
+            viewHolder.etDrinkingIntervals.setText(String.valueOf(sched.getDrinkingInterval()));
 
-            Log.wtf("action", "ACTIVATED: " + isActivated);
+            Log.wtf("action", "ACTIVATED: " + sched.isActivated());
             Log.wtf("check", "VALUE OF SWITCH IS " + viewHolder.scheduleSwitch.isChecked());
+
+
+
+//            if(sched.isActivated()){
+//            Intent intent = new Intent(contextHolder, AlarmReceiver.class);
+////            intent.putExtra(getString(R.string.SCHEDULE_ID), (int)schedule.getSqlId());
+////            intent.putExtra(getString(R.string.MEDICINE_ID), (int)schedule.getMedicineToDrink().getSqlId());
+//
+//            PendingIntent pendingAlarm = PendingIntent.getBroadcast(contextHolder, AlarmReceiver.PENDING_ALARMRECEIVER, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            AlarmManager alarmManager = (AlarmManager) contextHolder.getSystemService(ALARM_SERVICE);
+//
+//            long delay = sched.getNextDrinkingTime() - System.currentTimeMillis();
+//            Log.d("action", "DELAY IS " + delay + " milliseconds (" + (delay/DateUtil.MILLIS_TO_SECONDS) + ")");
+//            alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 5 * 1000, pendingAlarm);
+//            }
 
             //TODO add listeners here
             boolean isExpanded = id == expandedPositionId;
@@ -225,37 +200,32 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                 @Override
                 public void onClick(View v) {
                     if(onScheduleClickListener != null){
-                        boolean isDosagePerDrinkingIntervalEmpty = viewHolder.etDosagePerDrinkingInterval.getText().toString().isEmpty();
-                        boolean isDrinkingIntervalsEmpty = viewHolder.etDrinkingIntervals.getText().toString().isEmpty();
-                        Log.d("check bool", "dosage is " + isDosagePerDrinkingIntervalEmpty);
-                        if(isDosagePerDrinkingIntervalEmpty || isDrinkingIntervalsEmpty){
-                            Log.d("false bool", "SHOWING ERROR");
-                            viewHolder.etDosagePerDrinkingInterval.setError(isDosagePerDrinkingIntervalEmpty ? "Dosage must not be empty" : null);
-                            viewHolder.etDrinkingIntervals.setError(isDrinkingIntervalsEmpty ? "Drinking Intervals must not be empty" : null);
-                        }else{
-                            double updatedDosagePerDrinkingInterval = Double.valueOf(viewHolder.etDosagePerDrinkingInterval.getText().toString());
-                            double updatedDrinkingInterval = Double.valueOf(viewHolder.etDrinkingIntervals.getText().toString());
-                            long updatedTime;
-                            if(isMilitary){
-                                updatedTime = DateUtil.addDate(DateUtil.parseToLong(viewHolder.etScheduleTime.getText().toString()));
-                            }else{
-                                updatedTime = DateUtil.addDate(DateUtil.parseToLong(viewHolder.etScheduleTime.getText().toString(), viewHolder.etScheduleTimePeriod.getText().toString()));
-                            }
-
-                            while(updatedTime < System.currentTimeMillis()){
-                                updatedTime += System.currentTimeMillis();
-                            }
-
-                            Schedule sched = (Schedule) v.getTag(R.string.SCHEDULE);
-                            sched.setDosagePerDrinkingInterval(updatedDosagePerDrinkingInterval);
-                            sched.setDrinkingInterval(updatedDrinkingInterval);
-                            Log.d("action", "COMPARING " + DateUtil.getTime(updatedTime,isMilitary) + " AND " + DateUtil.getTime(sched.getNextDrinkingTime(), isMilitary));
-
-                            if(updatedTime != sched.getLastTimeTaken() + drinkingInterval * DateUtil.MILLIS_TO_HOURS){
-                                sched.setCustomNextDrinkingTime(updatedTime);
-                            }
-                            onScheduleClickListener.onItemSaveClick(sched);
-                        }
+//                        boolean isDosagePerDrinkingIntervalEmpty = viewHolder.etDosagePerDrinkingInterval.getText().toString().isEmpty();
+//                        boolean isDrinkingIntervalsEmpty = viewHolder.etDrinkingIntervals.getText().toString().isEmpty();
+//                        Log.d("check bool", "dosage is " + isDosagePerDrinkingIntervalEmpty);
+//                        if(isDosagePerDrinkingIntervalEmpty || isDrinkingIntervalsEmpty){
+//                            Log.d("false bool", "SHOWING ERROR");
+//                            viewHolder.etDosagePerDrinkingInterval.setError(isDosagePerDrinkingIntervalEmpty ? "Dosage must not be empty" : null);
+//                            viewHolder.etDrinkingIntervals.setError(isDrinkingIntervalsEmpty ? "Drinking Intervals must not be empty" : null);
+//                        }else{
+//                            double updatedDosagePerDrinkingInterval = Double.valueOf(viewHolder.etDosagePerDrinkingInterval.getText().toString());
+//                            double updatedDrinkingInterval = Double.valueOf(viewHolder.etDrinkingIntervals.getText().toString());
+//                            long updatedTime;
+//
+//                            while(updatedTime < System.currentTimeMillis()){
+//                                updatedTime += System.currentTimeMillis();
+//                            }
+//
+//                            Schedule sched = (Schedule) v.getTag(R.string.SCHEDULE);
+//                            sched.setDosagePerDrinkingInterval(updatedDosagePerDrinkingInterval);
+//                            sched.setDrinkingInterval(updatedDrinkingInterval);
+//                            Log.d("action", "COMPARING " + DateUtil.getTime(updatedTime,isMilitary) + " AND " + DateUtil.getTime(sched.getNextDrinkingTime(), isMilitary));
+//
+//                            if(updatedTime != sched.getLastTimeTaken() + sched.getDrinkingInterval() * DateUtil.MILLIS_TO_HOURS){
+//                                sched.setCustomNextDrinkingTime(updatedTime);
+//                            }
+//                            onScheduleClickListener.onItemSaveClick(sched);
+//                        }
                     }
                 }
             });
@@ -292,7 +262,7 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                 public void onClick(View v) {
                     if(onScheduleClickListener!= null){
                         Schedule sched = (Schedule) v.getTag();
-                        onScheduleClickListener.onEditTimeClick(sched, viewHolder.etScheduleTime, viewHolder.etScheduleTimePeriod, isMilitary);
+                        //onScheduleClickListener.onEditTimeClick(sched, viewHolder.etScheduleTime, viewHolder.etScheduleTimePeriod, isMilitary);
                     }
                 }
             });
@@ -303,7 +273,7 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                 public void onClick(View v) {
                     if(onScheduleClickListener != null){
                         Schedule sched = (Schedule) v.getTag();
-                        onScheduleClickListener.onMedicineListClick(sched, viewHolder.tvToFragmentMedicineToDrink);
+                        //onScheduleClickListener.onMedicineListClick(sched, viewHolder.tvToFragmentMedicineToDrink);
                     }
                 }
             });

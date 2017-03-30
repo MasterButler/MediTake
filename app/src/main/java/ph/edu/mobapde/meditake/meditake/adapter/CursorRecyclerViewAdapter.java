@@ -36,12 +36,15 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     private DataSetObserver mDataSetObserver;
 
-    public CursorRecyclerViewAdapter(Context context, Cursor cursor) {
+    private String mColumn;
+
+    public CursorRecyclerViewAdapter(Context context, Cursor cursor, String column) {
         mContext = context;
         mCursor = cursor;
         mDataValid = cursor != null;
-        mRowIdColumn = mDataValid ? mCursor.getColumnIndex("_id") : -1;
+        mRowIdColumn = mDataValid ? mCursor.getColumnIndex(column) : -1;
         mDataSetObserver = new NotifyingDataSetObserver();
+        mColumn = column;
         if (mCursor != null) {
             mCursor.registerDataSetObserver(mDataSetObserver);
         }
@@ -114,7 +117,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
             if (mDataSetObserver != null) {
                 mCursor.registerDataSetObserver(mDataSetObserver);
             }
-            mRowIdColumn = newCursor.getColumnIndexOrThrow("_id");
+            mRowIdColumn = newCursor.getColumnIndexOrThrow(mColumn);
             mDataValid = true;
             notifyDataSetChanged();
         } else {

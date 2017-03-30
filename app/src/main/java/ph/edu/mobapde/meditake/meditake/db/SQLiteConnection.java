@@ -7,11 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
+import ph.edu.mobapde.meditake.meditake.util.ScheduleInstantiatorUtil;
 
 /**
  * Created by Winfred Villaluna on 3/6/2017.
@@ -19,10 +19,8 @@ import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 
 public class SQLiteConnection extends SQLiteOpenHelper{
     public static final String SCHEMA = "MediTake";
-    public static final int VERSION = 13;
-
+    public static final int VERSION = 15;
     private Context contextHolder;
-    private MedicineUtil medicineUtil;
 
     public SQLiteConnection(Context context) {
         super(context, SCHEMA, null, VERSION);
@@ -49,11 +47,20 @@ public class SQLiteConnection extends SQLiteOpenHelper{
          * medicineType TEXT NOT NULL
          * );
          *
-         * CREATE TABLE schedule
+         * CREATE TABLE ???
          * _id INTEGER PRIMARY KEY AUTOINCREMENT
          * medicineToDrinkId INTEGER NOT NULL
          * dosagePerDrinkingInterval INTEGER NOT NULL
+         *
+         *
+         *
+         * CREATE TABLE schedule
+         * _scheduleId PRIMARY KEY AUTOINCREMENT
+         * time INTEGER NOT NULL
+         * label TEXT NOT NULL
+         * ringtone TEXT NOT NULL
          * drinkingIntervals INTEGER NOT NULL
+         * vibrate NUMERIC NOT NULL
          * isActivated NUMERIC NOT NULL
          */
 
@@ -67,14 +74,23 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             + Medicine.COLUMN_DOSAGE + " REAL NOT NULL, "
             + Medicine.COLUMN_MEDICINE_TYPE + " TEXT NOT NULL);";
 
+//        sqlSchedule = "CREATE TABLE " + Schedule.TABLE + " ( "
+//            + Schedule.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+//            + Schedule.COLUMN_MEDICINE_TO_DRINK + " INTEGER, "
+//            + Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL + " REAL, "
+//            + Schedule.COLUMN_DRINKING_INTERVAL + " REAL, "
+//            + Schedule.COLUMN_LAST_TIME_TAKEN + " REAL, "
+//            + Schedule.COLUMN_IS_ACTIVATED + " NUMERIC NOT NULL, "
+//            + Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME + " REAL);";
+
         sqlSchedule = "CREATE TABLE " + Schedule.TABLE + " ( "
-            + Schedule.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + Schedule.COLUMN_MEDICINE_TO_DRINK + " INTEGER, "
-            + Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL + " REAL, "
-            + Schedule.COLUMN_DRINKING_INTERVAL + " REAL, "
-            + Schedule.COLUMN_LAST_TIME_TAKEN + " REAL, "
-            + Schedule.COLUMN_IS_ACTIVATED + " NUMERIC NOT NULL, "
-            + Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME + " REAL);";
+                + Schedule.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Schedule.COLUMN_NEXT_DRINKING_TIME + " REAL NOT NULL, "
+                + Schedule.COLUMN_LABEL + " TEXT, "
+                + Schedule.COUMNN_RINGTONE + " TEXT NOT NULL, "
+                + Schedule.COLUMN_DRINKING_INTERVAL + " INTEGER NOT NULL,"
+                + Schedule.COLUMN_IS_VIBRATE + " NUMERIC NOT NULL, "
+                + Schedule.COLUMN_IS_ACTIVATED + " NUMERIC NOT NULL);";
 
         db.execSQL(sqlMedicine);
         db.execSQL(sqlSchedule);
@@ -146,7 +162,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 null);
 
         if(cursor.moveToFirst()){
-            medicine = MedicineInstantiatorUtil.createMedicineFromCursor(cursor);
+            medicine = MedicineInstantiatorUtil.createBeanFromCursor(cursor);
         }
 
         cursor.close();
@@ -224,6 +240,14 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         return rows;
     }
 
+    /**
+     * Updates the id of the medicine to insert the object into
+     * a specific row within the arragement of the row. Especially useful
+     * in making the undo function smooth to look at in the recycler view.
+     * @param prevId id where the object was inserted when added
+     * @param newId id where the object will be placed
+     * @return
+     */
     public int updateMedicineId(int prevId, int newId){
         SQLiteDatabase db = getWritableDatabase();
         /* UPDATE INTO medicine SET ..... WHERE id = ?
@@ -265,16 +289,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
      * @return id of the created object
      */
     public long createSchedule(Schedule schedule){
-        ContentValues cv = new ContentValues();
-
-        if(schedule.getMedicineToDrink() != null){
-            cv.put(Schedule.COLUMN_MEDICINE_TO_DRINK, schedule.getMedicineToDrink().getSqlId());
-        }
-        cv.put(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL, schedule.getDosagePerDrinkingInterval());
-        cv.put(Schedule.COLUMN_DRINKING_INTERVAL, schedule.getDrinkingInterval());
-        cv.put(Schedule.COLUMN_LAST_TIME_TAKEN, schedule.getLastTimeTaken());
-        cv.put(Schedule.COLUMN_IS_ACTIVATED, schedule.isActivated());
-        cv.put(Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME, schedule.getCustomNextDrinkingTime());
+        ContentValues cv = ScheduleInstantiatorUtil.createCVMapFromBean(contextHolder, schedule);
 
         SQLiteDatabase db = getWritableDatabase();
         long id = db.insert(Schedule.TABLE, null, cv);
@@ -293,11 +308,13 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         /* SELECT * FROM schedule
          *null == '*'
          */
+//        SQLiteDatabase db = getReadableDatabase();
+//        String sql = "SELECT * FROM " + Schedule.TABLE + ", " + Medicine.TABLE;
+//                + " WHERE " + Schedule.TABLE + "." + Schedule.COLUMN_MEDICINE_TO_DRINK
+//                + " = " + Medicine.TABLE + "." + Medicine.COLUMN_ID;
         SQLiteDatabase db = getReadableDatabase();
-        String sql = "SELECT * FROM " + Schedule.TABLE + ", " + Medicine.TABLE +
-                " WHERE " + Schedule.TABLE + "." + Schedule.COLUMN_MEDICINE_TO_DRINK +
-                " = " + Medicine.TABLE + "." + Medicine.COLUMN_ID;
-        return db.rawQuery(sql, null);
+        return db.query(Schedule.TABLE, null, null, null, null, null, null);
+        //return db.rawQuery(sql, null);
     }
 
     public Schedule getSchedule(int id){
@@ -305,9 +322,10 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         Schedule schedule = null;
         SQLiteDatabase db = getReadableDatabase();
         String sql = "SELECT * FROM " + Schedule.TABLE + ", " + Medicine.TABLE +
-                " WHERE " + Schedule.TABLE + "." + Schedule.COLUMN_MEDICINE_TO_DRINK +
-                " = " + Medicine.TABLE + "." + Medicine.COLUMN_ID
-                + " AND " + Schedule.TABLE + "." + Schedule.COLUMN_ID + " = " + id;
+                " WHERE " +
+//                Schedule.TABLE + "." + Schedule.COLUMN_MEDICINE_TO_DRINK +
+//                " = " + Medicine.TABLE + "." + Medicine.COLUMN_ID + " AND "
+                 Schedule.TABLE + "." + Schedule.COLUMN_ID + " = " + id;
         Cursor cursor = db.query(Schedule.TABLE,
                 null,
                 Schedule.TABLE + "." + Schedule.COLUMN_ID + " = ?",
@@ -317,87 +335,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 null);
 
         if(cursor.moveToFirst()){
-            schedule = new Schedule();
-
-            int medicineToDrinkId = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_MEDICINE_TO_DRINK));
-            double dosagePerDrinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL));
-            double drinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DRINKING_INTERVAL));
-            long lastTimeTaken = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_LAST_TIME_TAKEN));
-            boolean isActivated = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_IS_ACTIVATED)) == 1 ? true : false;
-            long customNextDrinkingTime = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME));
-
-            String brandName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
-            String genericName  = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
-            String medicineFor =  cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
-            double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
-            String medicineType = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_TYPE));
-
-            Medicine med = MedicineInstantiatorUtil.createMedicineInstanceFromString(medicineType);
-            med.setSqlId(medicineToDrinkId);
-            med.setBrandName(brandName);
-            med.setGenericName(genericName);
-            med.setMedicineFor(medicineFor);
-            med.setAmount(amount);
-
-            Log.wtf("IN SQLITE CONNECTION", "FOUND " + id);
-            Log.wtf("check", "FOUND SCHEDULE WITH INTERVAL OF " + drinkingInterval);
-
-            schedule.setSqlId(id);
-            schedule.setMedicineToDrink(med);
-            schedule.setDosagePerDrinkingInterval(dosagePerDrinkingInterval);
-            schedule.setDrinkingInterval(drinkingInterval);
-            schedule.setLastTimeTaken(lastTimeTaken);
-            schedule.setActivated(isActivated);
-            schedule.setCustomNextDrinkingTime(customNextDrinkingTime);
-        }
-
-        cursor.close();
-        db.close();
-        return schedule;
-    }
-
-    /**
-     * Retrieves the schedule through the id.
-     * @param id value that points to the object.
-     * @return schedule object referenced by the id.
-     * @deprecated use getScheduleInstead(), this will only break the code.
-     */
-    @Deprecated
-    public Schedule getScheduleWithoutMedicineInfo(int id){
-        //SELECT * FROM schedule WHERE _id = ?
-        Schedule schedule = null;
-        SQLiteDatabase db = getReadableDatabase();
-        String sql = "SELECT * FROM " + Schedule.TABLE + ", " + Medicine.TABLE +
-                " WHERE " + Schedule.TABLE + "." + Schedule.COLUMN_MEDICINE_TO_DRINK +
-                " = " + Medicine.TABLE + "." + Medicine.COLUMN_ID
-                + " AND " + Schedule.TABLE + "." + Schedule.COLUMN_ID + " = " + id;
-        Cursor cursor = db.query(Schedule.TABLE,
-                null,
-                Schedule.COLUMN_ID + " = ?",
-                new String[]{id+""},
-                null,
-                null,
-                null);
-
-        if(cursor.moveToFirst()){
-            schedule = new Schedule();
-            long medicineToDrinkId = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_MEDICINE_TO_DRINK));
-            double dosagePerDrinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL));
-            double drinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DRINKING_INTERVAL));
-            long lastTimeTaken = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_LAST_TIME_TAKEN));
-            boolean isActivated = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_IS_ACTIVATED)) == 1 ? true : false;
-
-            Medicine medTempHolder = new Capsule();
-            medTempHolder.setSqlId((int) medicineToDrinkId);
-
-            Log.wtf("IN SQLITE CONNECTION", "FOUND " + id);
-
-            schedule.setSqlId(id);
-            schedule.setMedicineToDrink(medTempHolder);
-            schedule.setDosagePerDrinkingInterval(dosagePerDrinkingInterval);
-            schedule.setDosagePerDrinkingInterval(drinkingInterval);
-            schedule.setLastTimeTaken(lastTimeTaken);
-            schedule.setActivated(isActivated);
+            schedule = ScheduleInstantiatorUtil.createBeanFromCursor(contextHolder, cursor);
         }
 
         cursor.close();
@@ -433,20 +371,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         /* UPDATE INTO schedule SET ..... WHERE id = ?
 
          */
-        ContentValues cv = new ContentValues();
-        cv.put(Schedule.COLUMN_MEDICINE_TO_DRINK, schedule.getMedicineToDrink().getSqlId());
-        cv.put(Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL, schedule.getDosagePerDrinkingInterval());
-        cv.put(Schedule.COLUMN_DRINKING_INTERVAL, schedule.getDrinkingInterval());
-        cv.put(Schedule.COLUMN_LAST_TIME_TAKEN, schedule.getLastTimeTaken());
-        cv.put(Schedule.COLUMN_IS_ACTIVATED, schedule.isActivated());
-        cv.put(Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME, schedule.getCustomNextDrinkingTime());
-
-        Log.wtf("check", "UPDATING MEDICINE ID OF " + schedule.getSqlId() + " TO " + schedule.getMedicineToDrink().getSqlId());
-        Log.wtf("check", "UPDATING DOSAGE OF " + schedule.getSqlId() + " TO " + schedule.getDosagePerDrinkingInterval());
-        Log.wtf("check", "UPDATING INTERVAL OF " + schedule.getSqlId() + " TO " + schedule.getDrinkingInterval());
-        Log.wtf("check", "UPDATING LAST TIME OF " + schedule.getLastTimeTaken() + " TO " + schedule.getLastTimeTaken());
-        Log.wtf("check", "UPDATING ISACTIVATED OF " + schedule.getSqlId() + " TO " + schedule.isActivated());
-        Log.wtf("check", "UPDATING CUSTOM NEXT DRINK TIME OF " + schedule.getSqlId() + " TO " + schedule.getCustomNextDrinkingTime());
+        ContentValues cv = ScheduleInstantiatorUtil.createCVMapFromBean(contextHolder, schedule);
         int rows = db.update(Schedule.TABLE,
                 cv,
                 Schedule.COLUMN_ID + " = ? ",

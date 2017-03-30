@@ -79,12 +79,6 @@ public class MedicineListActivity extends AppCompatActivity
 
     Medicine LAST_DELETED;
 
-    public void setUpActionBar(){
-        setSupportActionBar(medicine_list_toolbar);
-        getSupportActionBar().setTitle("Medicines");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,15 +87,23 @@ public class MedicineListActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
         setUpActionBar();
-
         medicineUtil = new MedicineUtil(getBaseContext());
 
         initializeDrawer();
         initializeAdapter();
         initializeFAM();
+        initializeContents();
         CREATING_NEW_ITEM = -1;
         LAST_DELETED = null;
+    }
 
+    public void setUpActionBar(){
+        setSupportActionBar(medicine_list_toolbar);
+        getSupportActionBar().setTitle("Medicines");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void initializeContents(){
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getBaseContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mLayoutManager.setReverseLayout(true);
@@ -114,7 +116,7 @@ public class MedicineListActivity extends AppCompatActivity
     }
 
     public void initializeAdapter(){
-        medicineAdapter = new MedicineAdapter(getBaseContext(), medicineUtil.getAllMedicine());
+        medicineAdapter = new MedicineAdapter(getBaseContext(), medicineUtil.getAllMedicine(), Medicine.COLUMN_ID);
         medicineAdapter.setHasStableIds(true);
 
         medicineAdapter.setOnMedicineClickListener(new OnMedicineClickListener() {
@@ -201,116 +203,6 @@ public class MedicineListActivity extends AppCompatActivity
         addMedicineMenu.collapse();
     }
 
-    public void updateList(){
-        Cursor c = medicineUtil.getAllMedicine();
-        medicineAdapter.changeCursor(c);
-    }
-
-    public void updateList(Cursor c){
-        medicineAdapter.changeCursor(c);
-    }
-
-    public void cancel(int id){
-        if(CREATING_NEW_ITEM == -1){
-            returnToView(id);
-        }else{
-            delete((int)CREATING_NEW_ITEM);
-            CREATING_NEW_ITEM = -1;
-        }
-    }
-
-    public void delete(int id){
-        LAST_DELETED = medicineUtil.getMedicine(id);
-        medicineUtil.deleteMedicine(id);
-        medicineAdapter.notifyDataSetChanged();
-        updateList();
-
-        int[] attrs = {android.R.attr.color};
-        Snackbar snackbar = Snackbar.make(clSnackbar, R.string.message_medicine_delete, Snackbar.LENGTH_SHORT)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        undoDelete();
-                        Snackbar.make(clSnackbar, "Medicine is restored.", Snackbar.LENGTH_SHORT)
-                            .show();
-
-                    }});
-
-        TextView snackBarTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        TypedArray typedArray = obtainStyledAttributes(attrs);
-        snackBarTextView.setTextColor(typedArray.getColor(0, Color.WHITE));
-
-        snackbar.show();
-
-    }
-
-    public void undoDelete(){
-
-        itemTouchHelper.attachToRecyclerView(null);
-        itemTouchHelper.attachToRecyclerView(rvMedicine);
-
-        int prevId = LAST_DELETED.getSqlId();
-        int newId = (int) medicineUtil.addMedicine(LAST_DELETED);
-
-        medicineUtil.updateMedicineId(prevId, newId);
-        medicineAdapter.notifyDataSetChanged();
-        LAST_DELETED = null;
-
-        updateList();
-    }
-
-    public void edit(int id){
-        if(!medicineAdapter.isExpanded(id)){
-            expand(id);
-        }
-        boolean isEditing = medicineAdapter.isEditing(id);
-        Log.wtf("action", "IS EDITING (AT ID" + id + ")? " + isEditing);
-        medicineAdapter.setEditingPositionId(isEditing ? -1 : id);
-        medicineAdapter.notifyDataSetChanged();
-    }
-
-    public void expand(int id){
-        if(!medicineAdapter.isEditing(id)) {
-            if (CREATING_NEW_ITEM == -1) {
-                boolean isExpanded = medicineAdapter.isExpanded(id);
-                medicineAdapter.setExpandedPositionId(isExpanded ? -1 : id);
-                TransitionManager.beginDelayedTransition(rvMedicine);
-                medicineAdapter.notifyDataSetChanged();
-            } else {
-                delete((int) CREATING_NEW_ITEM);
-                CREATING_NEW_ITEM = -1;
-            }
-        }
-    }
-
-    public void returnToView(int id){
-        boolean isEditing = medicineAdapter.isEditing(id);
-        medicineAdapter.setEditingPositionId(isEditing ? -1 : id);
-        medicineAdapter.notifyDataSetChanged();
-    }
-
-    public void save(Medicine medicine){
-        Log.wtf("action", "TO UPDATE " + medicine.getBrandName() + " WITH ID " + medicine.getSqlId());
-        medicineUtil.updateMedicine(medicine);
-        medicineAdapter.notifyDataSetChanged();
-
-        updateList();
-        returnToView(medicine.getSqlId());
-
-        if(CREATING_NEW_ITEM != -1)
-            CREATING_NEW_ITEM = -1;
-    }
-
-    public void search(String query){
-        String[] conditions = SearchUtil.searchWith(query);
-        if(conditions != null) {
-            Cursor medicineList = medicineUtil.search(conditions);
-            updateList(medicineList);
-        }else{
-            updateList();
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_medicine_list, menu);
@@ -365,7 +257,7 @@ public class MedicineListActivity extends AppCompatActivity
         switch(id){
             case R.id.action_search_medicine:
                 break;
-            default: Toast.makeText(getBaseContext(), "Unexpected error encountered. Please try again", Toast.LENGTH_SHORT).show();
+            default: showGenericSnackbar("Unexpected error encoutered. Please try again.", Snackbar.LENGTH_SHORT);
         }
         return false;
     }
@@ -375,34 +267,6 @@ public class MedicineListActivity extends AppCompatActivity
         DrawerManager.execute(this, item);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void addNewMedicine(String className){
-        if(CREATING_NEW_ITEM == -1) {
-            actionSearchMedicineIcon.collapseActionView();
-
-            Medicine tempMed = MedicineInstantiatorUtil.createMedicineInstanceFromString(className);
-
-            tempMed.setGenericName("");
-            tempMed.setBrandName("");
-            tempMed.setMedicineFor("");
-            tempMed.setAmount(0.0);
-            tempMed.setDosage(0);
-            long tempId = medicineUtil.addMedicine(tempMed);
-
-            updateList();
-
-            rvMedicine.smoothScrollToPosition(medicineAdapter.getItemCount() - 1);
-            expand((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
-            edit((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
-            CREATING_NEW_ITEM = tempId;
-
-            addMedicineMenu.collapse();
-        }else{
-            delete((int) CREATING_NEW_ITEM);
-            CREATING_NEW_ITEM = -1;
-            addNewMedicine(className);
-        }
     }
 
     @OnClick(R.id.fab_option_capsule)
@@ -455,4 +319,165 @@ public class MedicineListActivity extends AppCompatActivity
             CREATING_NEW_ITEM = -1;
         }
     }
+
+    public void updateList(){
+        medicineAdapter.changeCursor(medicineUtil.getAllMedicine());
+    }
+
+    public void updateList(Cursor c){
+        medicineAdapter.changeCursor(c);
+    }
+
+    public void addNewMedicine(String className){
+        if(CREATING_NEW_ITEM == -1) {
+            actionSearchMedicineIcon.collapseActionView();
+
+            Medicine tempMed = MedicineInstantiatorUtil.createMedicineInstanceFromString(className);
+
+            tempMed.setGenericName("");
+            tempMed.setBrandName("");
+            tempMed.setMedicineFor("");
+            tempMed.setAmount(0.0);
+            tempMed.setDosage(0);
+            long tempId = medicineUtil.addMedicine(tempMed);
+
+            updateList();
+
+            rvMedicine.smoothScrollToPosition(medicineAdapter.getItemCount() - 1);
+            expand((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
+            edit((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
+            CREATING_NEW_ITEM = tempId;
+
+            addMedicineMenu.collapse();
+        }else{
+            delete((int) CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+            addNewMedicine(className);
+        }
+    }
+
+    public void cancel(int id){
+        if(CREATING_NEW_ITEM == -1){
+            returnToView(id);
+        }else{
+            delete((int)CREATING_NEW_ITEM);
+            CREATING_NEW_ITEM = -1;
+        }
+    }
+
+    public void delete(int id){
+        LAST_DELETED = medicineUtil.getMedicine(id);
+        medicineUtil.deleteMedicine(id);
+        medicineAdapter.notifyDataSetChanged();
+        updateList();
+        if(CREATING_NEW_ITEM == -1)
+            showUndoSnackbar();
+    }
+
+    public void edit(int id){
+        if(!medicineAdapter.isExpanded(id)){
+            expand(id);
+        }
+        boolean isEditing = medicineAdapter.isEditing(id);
+        Log.wtf("action", "IS EDITING (AT ID" + id + ")? " + isEditing);
+        medicineAdapter.setEditingPositionId(isEditing ? -1 : id);
+        medicineAdapter.notifyDataSetChanged();
+    }
+
+    public void expand(int id){
+        if(!medicineAdapter.isEditing(id)) {
+            if (CREATING_NEW_ITEM == -1) {
+                boolean isExpanded = medicineAdapter.isExpanded(id);
+                medicineAdapter.setExpandedPositionId(isExpanded ? -1 : id);
+                TransitionManager.beginDelayedTransition(rvMedicine);
+                medicineAdapter.notifyDataSetChanged();
+            } else {
+                delete((int) CREATING_NEW_ITEM);
+                CREATING_NEW_ITEM = -1;
+            }
+        }
+    }
+
+    public void returnToView(int id){
+        boolean isEditing = medicineAdapter.isEditing(id);
+        medicineAdapter.setEditingPositionId(isEditing ? -1 : id);
+        medicineAdapter.notifyDataSetChanged();
+    }
+
+    public void save(Medicine medicine){
+        Log.wtf("action", "TO UPDATE " + medicine.getBrandName() + " WITH ID " + medicine.getSqlId());
+        medicineUtil.updateMedicine(medicine);
+        medicineAdapter.notifyDataSetChanged();
+
+        updateList();
+        returnToView(medicine.getSqlId());
+
+        String message = getString(R.string.message_medicine_edit);
+        if(CREATING_NEW_ITEM != -1) {
+            CREATING_NEW_ITEM = -1;
+            message = getString(R.string.message_medicine_add);
+        }
+        showGenericSnackbar(message, Snackbar.LENGTH_SHORT);
+    }
+
+    public void search(String query){
+        String[] conditions = SearchUtil.searchWith(query);
+        if(conditions != null) {
+            Cursor medicineList = medicineUtil.search(conditions);
+            updateList(medicineList);
+        }else{
+            updateList();
+        }
+    }
+
+    public void showUndoSnackbar(){
+        int[] attrs = {android.R.attr.color};
+        final Snackbar snackbarRestore = Snackbar.make(clSnackbar, R.string.message_medicine_restore, Snackbar.LENGTH_LONG);
+        Snackbar snackbarDelete = Snackbar.make(clSnackbar, R.string.message_medicine_delete, Snackbar.LENGTH_SHORT);
+        snackbarDelete.setAction("UNDO", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                undoDelete();
+                snackbarRestore.show();
+            }
+        });
+
+        TypedArray typedArray = obtainStyledAttributes(attrs);
+
+        TextView snackBarDeleteTextView = (TextView) snackbarDelete.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackBarDeleteTextView.setTextColor(typedArray.getColor(0, Color.WHITE));
+
+        TextView snackBarTextView = (TextView) snackbarRestore.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackBarTextView.setTextColor(typedArray.getColor(0, Color.WHITE));
+
+        snackbarDelete.show();
+    }
+
+    public void showGenericSnackbar(String message, int length){
+        int[] attrs = {android.R.attr.color};
+        Snackbar snackbarNotify = Snackbar.make(clSnackbar, message, length);
+
+        TypedArray typedArray = obtainStyledAttributes(attrs);
+
+        TextView snackBarNotifyTextView = (TextView) snackbarNotify.getView().findViewById(android.support.design.R.id.snackbar_text);
+        snackBarNotifyTextView.setTextColor(typedArray.getColor(0, Color.WHITE));
+
+        snackbarNotify.show();
+    }
+
+    public void undoDelete(){
+
+        itemTouchHelper.attachToRecyclerView(null);
+        itemTouchHelper.attachToRecyclerView(rvMedicine);
+
+        int prevId = LAST_DELETED.getSqlId();
+        int newId = (int) medicineUtil.addMedicine(LAST_DELETED);
+
+        medicineUtil.updateMedicineId(prevId, newId);
+        medicineAdapter.notifyDataSetChanged();
+        LAST_DELETED = null;
+
+        updateList();
+    }
+
 }

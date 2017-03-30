@@ -5,10 +5,8 @@ import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
@@ -60,7 +58,7 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineViewHolde
         Log.d("ID", "MEDICINEID: " + id + "\n");
 
         if(id != -1){
-            Medicine med = MedicineInstantiatorUtil.createMedicineFromCursor(cursor);
+            Medicine med = MedicineInstantiatorUtil.createBeanFromCursor(cursor);
 
             String displayAmount = (Math.ceil(med.getAmount()) == Math.floor(med.getAmount())) ? String.valueOf(med.getAmount()).split("\\.")[0] +"" : med.getAmount()+"";
 
