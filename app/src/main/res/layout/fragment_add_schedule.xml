@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     tools:context="ph.edu.mobapde.meditake.meditake.fragment.AddScheduleFragment">
 
-    <RelativeLayout
+
+        <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,10 +18,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="48dp"
-            android:layout_marginRight="48dp"
+            android:orientation="vertical"
+            android:layout_marginLeft="36dp"
+            android:layout_marginRight="36dp"
             android:layout_marginTop="60dp"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="60dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:text="Add Schedule"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"/>
+
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="@color/cardview_light_background">
 
@@ -294,6 +311,8 @@
 
 
             </LinearLayout>
+
+        </LinearLayout>
 
         </LinearLayout>
 

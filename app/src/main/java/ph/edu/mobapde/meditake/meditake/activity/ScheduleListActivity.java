@@ -111,30 +111,20 @@ public class ScheduleListActivity extends AppCompatActivity
         //addHardCodedData();
         initializeDrawer();
         initializeAdapter();
+        initializeContent();
         CREATING_NEW_ITEM = -1;
-
-        rvSchedule.setAdapter(scheduleAdapter);
-        rvSchedule.setLayoutManager(new LinearLayoutManager(
-                getBaseContext(), LinearLayoutManager.VERTICAL, false)
-        );
-
-        addScheduleFragment = new AddScheduleFragment();
     }
 
-    public void addHardCodedData(){
+    public void initializeContent(){
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getBaseContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
 
-//        Medicine medicine = new Syrup();
-//        medicine.setBrandName("brand Medicine");
-//        medicine.setGenericName("generic Medicine");
-//        medicine.setMedicineFor("for something");
-//        medicine.setAmount(100);
-//
-//        long medicineId = medicineUtil.addMedicine(medicine);
-//        medicine.setSqlId((int) medicineId);
+        rvSchedule.setAdapter(scheduleAdapter);
+        rvSchedule.setLayoutManager(mLayoutManager);
 
-        Schedule schedule = new Schedule();
-
-        scheduleUtil.addNewSchedule(schedule);
+        addScheduleFragment = new AddScheduleFragment();
     }
 
     public void initializeAdapter(){
