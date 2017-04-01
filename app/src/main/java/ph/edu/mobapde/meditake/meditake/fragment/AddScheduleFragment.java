@@ -16,6 +16,8 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -44,12 +46,19 @@ import static android.widget.FrameLayout.*;
  */
 public class AddScheduleFragment extends Fragment {
 
+    @BindView(R.id.checkbox_repeat)
+    CheckBox cbRepeat;
+
     @BindView(R.id.tv_display_time)
     TextView tvScheduleTime;
     @BindView(R.id.tv_display_time_period)
     TextView tvScheduleTimePeriod;
     @BindView(R.id.lin_display_edit_time)
     LinearLayout linScheduleTime;
+    @BindView(R.id.lin_schedule_repeat)
+    LinearLayout linRepeat;
+    @BindView(R.id.lin_schedule_repeat_selection)
+    LinearLayout linRepeatSelection;
 
     @BindView(R.id.lin_cancel_schedule)
     LinearLayout linCancelSchedule;
@@ -62,7 +71,8 @@ public class AddScheduleFragment extends Fragment {
     TextView tvRingtone;
     @BindView(R.id.iv_schedule_ringtone_selector)
     ImageView ivScheduleRingtonePicker;
-
+    @BindView(R.id.tv_schedule_repeat_time)
+    TextView tvRepeat;
     @BindView(R.id.tv_schedule_label)
     TextView tvScheduleLabel;
 
@@ -133,11 +143,29 @@ public class AddScheduleFragment extends Fragment {
         this.tvScheduleTime.setText(displayTime.split("\\s+")[0]);
         this.tvScheduleTimePeriod.setText(displayTime.split("\\s+")[1]);
 
+        linRepeat.setVisibility(cbRepeat.isChecked() ? View.VISIBLE : View.GONE);
+        cbRepeat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int view_mode = isChecked ? View.VISIBLE : View.GONE;
+                linRepeat.setVisibility(view_mode);
+            }
+        });
+
+        linRepeatSelection.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onAddScheduleFragmentInteractionListener != null){
+                    onAddScheduleFragmentInteractionListener.onAddScheduleFragmentRepeatClick(tvRepeat);
+                }
+            }
+        });
+
         linScheduleTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onAddScheduleFragmentInteractionListener != null){
-                    onAddScheduleFragmentInteractionListener.onFragmentTimeClick(tvScheduleTime, tvScheduleTimePeriod);
+                    onAddScheduleFragmentInteractionListener.onAddScheduleFragmentTimeClick(tvScheduleTime, tvScheduleTimePeriod);
                 }
             }
         });
@@ -151,7 +179,7 @@ public class AddScheduleFragment extends Fragment {
                     boolean isVibrate = switchIsVibrate.isChecked();
 
                     Schedule schedule = new Schedule(nextDrinkingTime, label, ringtoneUriUsed.toString(), 10, isVibrate, true);
-                    onAddScheduleFragmentInteractionListener.onFragmentSave(schedule);
+                    onAddScheduleFragmentInteractionListener.onAddScheduleFragmentSave(schedule);
                 }
             }
         });
@@ -159,7 +187,7 @@ public class AddScheduleFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(onAddScheduleFragmentInteractionListener != null){
-                    onAddScheduleFragmentInteractionListener.onFragmentCancel();
+                    onAddScheduleFragmentInteractionListener.onAddScheduleFragmentCancel();
                 }
             }
         });
@@ -256,8 +284,9 @@ public class AddScheduleFragment extends Fragment {
 
     public interface OnAddScheduleFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentTimeClick(TextView tvTime, TextView tvTimePeriod);
-        void onFragmentSave(Schedule schedule);
-        void onFragmentCancel();
+        void onAddScheduleFragmentRepeatClick(TextView tvRepeat);
+        void onAddScheduleFragmentTimeClick(TextView tvTime, TextView tvTimePeriod);
+        void onAddScheduleFragmentSave(Schedule schedule);
+        void onAddScheduleFragmentCancel();
     }
 }

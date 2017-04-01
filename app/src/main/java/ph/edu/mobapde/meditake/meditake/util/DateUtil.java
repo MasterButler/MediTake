@@ -74,6 +74,7 @@ public class DateUtil {
     }
 
     public static long getTime(String s) {
+
         String[] time = s.split("\\s+");
         Log.wtf("TIME", "GOT " + s);
         long offset = 0;
@@ -123,4 +124,21 @@ public class DateUtil {
     }
 
 
+    public static int[] parseFromTimePicker(String in) {
+        String[] contents = in.split("\\s+");
+        int hourValue = 0;
+        int minuteValue = 0;
+
+        if(contents.length == 3){
+            if(contents[2].equals("hour(s)")){
+                hourValue = Integer.valueOf(contents[1]);
+            }else if(contents[2].equals("minutes")){
+                minuteValue = Integer.valueOf(contents[1]);
+            }
+        }else if(contents.length == 6){
+            hourValue = Integer.valueOf(contents[1]);
+            minuteValue = Integer.valueOf(contents[4]);
+        }
+        return new int[]{hourValue, minuteValue};
+    }
 }
