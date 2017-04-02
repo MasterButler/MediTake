@@ -37,6 +37,7 @@ import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.fragment.AddScheduleDetailsFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.AddScheduleFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.AddScheduleMedicineFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.MedicineListFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.RepeatingTimePickerFragment;
 import ph.edu.mobapde.meditake.meditake.listener.CustomOnTimeSetListener;
@@ -49,7 +50,10 @@ import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class ScheduleListActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AddScheduleDetailsFragment.OnAddScheduleFragmentInteractionListener, RepeatingTimePickerFragment.OnRepeatingTimePickerFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        AddScheduleDetailsFragment.OnAddScheduleDetailsFragmentInteractionListener,
+                    RepeatingTimePickerFragment.OnRepeatingTimePickerFragmentInteractionListener,
+                    AddScheduleMedicineFragment.OnAddScheduleMedicineFragmentInteractionListener {
 
     @BindView(R.id.snackbar_position)
     CoordinatorLayout clSnackbar;
@@ -396,29 +400,17 @@ public class ScheduleListActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAddScheduleFragmentTimeClick(TextView tvTime, TextView tvTimePeriod) {
+    public void onAddScheduleDetailsFragmentTimeClick(TextView tvTime, TextView tvTimePeriod) {
         editTime(tvTime, tvTimePeriod);
     }
 
     @Override
-    public void onAddScheduleFragmentSave(Schedule schedule) {
-        int id = (int) scheduleUtil.addNewSchedule(schedule);
-        schedule.setSqlId(id);
-        updateList();
-        closeAddScheduleFragment();
-
-        if(schedule.isActivated()){
-            setAlarmForSchedule(schedule);
-        }
-    }
-
-    @Override
-    public void onAddScheduleFragmentCancel(){
+    public void onAddScheduleDetailsFragmentCancel(){
         closeAddScheduleFragment();
     }
 
     @Override
-    public void onAddScheduleFragmentRepeatClick(TextView tvRepeat) {
+    public void onAddScheduleDetailsFragmentRepeatClick(TextView tvRepeat) {
         editRepeatingTime(tvRepeat);
     }
 
@@ -432,6 +424,18 @@ public class ScheduleListActivity extends AppCompatActivity
         closeRepeatingTimePickerFragment();
     }
 
+    @Override
+    public void onAddScheduleMedicineFragmentSave(Schedule schedule) {
+        int id = (int) scheduleUtil.addNewSchedule(schedule);
+        schedule.setSqlId(id);
+        updateList();
+        closeAddScheduleFragment();
+
+        if(schedule.isActivated()) {
+            setAlarmForSchedule(schedule);
+        }
+    }
+
     public void showGenericSnackbar(String message, int length){
         int[] attrs = {android.R.attr.color};
         Snackbar snackbarNotify = Snackbar.make(clSnackbar, message, length);
@@ -443,4 +447,5 @@ public class ScheduleListActivity extends AppCompatActivity
 
         snackbarNotify.show();
     }
+
 }

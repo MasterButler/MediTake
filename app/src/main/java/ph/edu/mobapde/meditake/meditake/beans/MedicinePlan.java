@@ -6,6 +6,10 @@ package ph.edu.mobapde.meditake.meditake.beans;
 
 public class MedicinePlan {
 
+    public static final String TABLE = "medcicinePlan";
+    public static final String COLUMN_ID = "medicinePlanId";
+    public static final String COLUMN_DOSAGE = "dosage";
+
     private int medicineId;
     private int dosage;
 

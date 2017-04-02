@@ -71,7 +71,7 @@ public class AddScheduleFragment extends Fragment {
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         mSectionsPagerAdapter.add(AddScheduleDetailsFragment.newInstance(1));
-        mSectionsPagerAdapter.add(AddScheduleDetailsFragment.newInstance(2));
+        mSectionsPagerAdapter.add(AddScheduleMedicineFragment.newInstance(2));
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -122,6 +122,10 @@ public class AddScheduleFragment extends Fragment {
 
         public void add(Fragment fragment){
             this.fragments.add(fragment);
+        }
+
+        public Fragment getFragment(int position){
+            return fragments.get(position);
         }
 
         @Override

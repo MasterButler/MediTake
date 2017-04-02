@@ -11,6 +11,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,7 +40,7 @@ import static android.widget.FrameLayout.*;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AddScheduleDetailsFragment.OnAddScheduleFragmentInteractionListener} interface
+ * {@link OnAddScheduleDetailsFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link AddScheduleDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -62,10 +63,10 @@ public class AddScheduleDetailsFragment extends Fragment {
     @BindView(R.id.lin_schedule_repeat_selection)
     LinearLayout linRepeatSelection;
 
-    @BindView(R.id.lin_cancel_schedule)
-    LinearLayout linCancelSchedule;
-    @BindView(R.id.lin_save_schedule)
-    LinearLayout linSaveSchedule;
+    @BindView(R.id.lin_discard_schedule)
+    LinearLayout linDiscardSchedule;
+    @BindView(R.id.lin_continue_schedule)
+    LinearLayout linContinueSchedule;
 
     @BindView(R.id.lin_schedule_ringtone)
     LinearLayout linRingtone;
@@ -81,11 +82,13 @@ public class AddScheduleDetailsFragment extends Fragment {
     @BindView(R.id.switch_schedule_vibrate)
     Switch switchIsVibrate;
 
+    private int sectionNumber;
+
     private Uri ringtoneUriUsed;
 
     boolean isMilitary;
 
-    private OnAddScheduleFragmentInteractionListener onAddScheduleFragmentInteractionListener;
+    private OnAddScheduleDetailsFragmentInteractionListener onAddScheduleFragmentInteractionListener;
     private Context contextHolder;
 
     @Override
@@ -104,19 +107,19 @@ public class AddScheduleDetailsFragment extends Fragment {
     }
 
     public static AddScheduleDetailsFragment newInstance(int sectionNumber) {
-        Log.wtf("BEFORE ADDSCHEDDETFRAG", "RETURNING THE FRAGMENT");
         AddScheduleDetailsFragment fragment = new AddScheduleDetailsFragment();
-        Log.wtf("AFTER ADDSCHEDDETFRAG", "RETURNING THE FRAGMENT");
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
-        Log.wtf("ADDSCHEDDETFRAG", "RETURNING THE FRAGMENT");
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+        }
     }
 
     @Override
@@ -152,7 +155,7 @@ public class AddScheduleDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(onAddScheduleFragmentInteractionListener != null){
-                    onAddScheduleFragmentInteractionListener.onAddScheduleFragmentRepeatClick(tvRepeat);
+                    onAddScheduleFragmentInteractionListener.onAddScheduleDetailsFragmentRepeatClick(tvRepeat);
                 }
             }
         });
@@ -161,36 +164,26 @@ public class AddScheduleDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(onAddScheduleFragmentInteractionListener != null){
-                    onAddScheduleFragmentInteractionListener.onAddScheduleFragmentTimeClick(tvScheduleTime, tvScheduleTimePeriod);
+                    onAddScheduleFragmentInteractionListener.onAddScheduleDetailsFragmentTimeClick(tvScheduleTime, tvScheduleTimePeriod);
                 }
             }
         });
 
-        linSaveSchedule.setOnClickListener(new OnClickListener() {
+        linContinueSchedule.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onAddScheduleFragmentInteractionListener != null){
-                    long nextDrinkingTime = DateUtil.getTime(tvScheduleTime.getText().toString() + " " + tvScheduleTimePeriod.getText().toString());
-                    String label = tvScheduleLabel.getText().toString();
-                    boolean isVibrate = switchIsVibrate.isChecked();
-                    int[] timeValues = DateUtil.parseFromTimePicker(tvRepeat.getText().toString());
-                    long drinkingInterval = cbRepeat.isChecked() ? (timeValues[0] * 60 + timeValues[1]) : 0;
+                    ViewPager viewPager = (ViewPager)getActivity().findViewById(R.id.container);
+                    viewPager.setCurrentItem(1);
 
-                    Log.wtf("NEW MEDICINES", "NEXT DRINKING TIME: " + nextDrinkingTime);
-                    Log.wtf("NEW MEDICINES", "LABEL: " + label);
-                    Log.wtf("NEW MEDICINES", "ISVIBRATE IS " + isVibrate);
-                    Log.wtf("NEW MEDICINES", "DRINKING INTERVAL IS " + drinkingInterval);
-
-                    Schedule schedule = new Schedule(nextDrinkingTime, label, ringtoneUriUsed.toString(), drinkingInterval, isVibrate, true);
-                    onAddScheduleFragmentInteractionListener.onAddScheduleFragmentSave(schedule);
                 }
             }
         });
-        linCancelSchedule.setOnClickListener(new OnClickListener() {
+        linDiscardSchedule.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onAddScheduleFragmentInteractionListener != null){
-                    onAddScheduleFragmentInteractionListener.onAddScheduleFragmentCancel();
+                    onAddScheduleFragmentInteractionListener.onAddScheduleDetailsFragmentCancel();
                 }
             }
         });
@@ -216,8 +209,8 @@ public class AddScheduleDetailsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnAddScheduleFragmentInteractionListener) {
-            onAddScheduleFragmentInteractionListener = (OnAddScheduleFragmentInteractionListener) context;
+        if (context instanceof OnAddScheduleDetailsFragmentInteractionListener) {
+            onAddScheduleFragmentInteractionListener = (OnAddScheduleDetailsFragmentInteractionListener) context;
             contextHolder = context;
         } else {
             throw new RuntimeException(context.toString()
@@ -285,11 +278,28 @@ public class AddScheduleDetailsFragment extends Fragment {
         tvScheduleLabel.setText(newValue);
     }
 
-    public interface OnAddScheduleFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onAddScheduleFragmentRepeatClick(TextView tvRepeat);
-        void onAddScheduleFragmentTimeClick(TextView tvTime, TextView tvTimePeriod);
-        void onAddScheduleFragmentSave(Schedule schedule);
-        void onAddScheduleFragmentCancel();
+    public interface OnAddScheduleDetailsFragmentInteractionListener {
+        void onAddScheduleDetailsFragmentRepeatClick(TextView tvRepeat);
+        void onAddScheduleDetailsFragmentTimeClick(TextView tvTime, TextView tvTimePeriod);
+        void onAddScheduleDetailsFragmentCancel();
+    }
+
+
+    //TODO lookign for better ways to do this
+    public  Schedule constructScheduleFromUserInput(){
+        long nextDrinkingTime = DateUtil.getTime(tvScheduleTime.getText().toString() + " " + tvScheduleTimePeriod.getText().toString());
+        String label = tvScheduleLabel.getText().toString();
+        boolean isVibrate = switchIsVibrate.isChecked();
+        int[] timeValues = DateUtil.parseFromTimePicker(tvRepeat.getText().toString());
+        long drinkingInterval = cbRepeat.isChecked() ? (timeValues[0] * 60 + timeValues[1]) : 0;
+
+        Log.wtf("NEW MEDICINES", "NEXT DRINKING TIME: " + nextDrinkingTime);
+        Log.wtf("NEW MEDICINES", "LABEL: " + label);
+        Log.wtf("NEW MEDICINES", "ISVIBRATE IS " + isVibrate);
+        Log.wtf("NEW MEDICINES", "DRINKING INTERVAL IS " + drinkingInterval);
+
+        Schedule schedule = new Schedule(nextDrinkingTime, label, ringtoneUriUsed.toString(), drinkingInterval, isVibrate, true);
+        //onAddScheduleFragmentInteractionListener.onAddScheduleFragmentSave(schedule);
+        return schedule;
     }
 }
