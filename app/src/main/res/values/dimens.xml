@@ -12,4 +12,5 @@
 
     <dimen name="dialog_left_margin">16dp</dimen>
     <dimen name="dialog_right_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>
