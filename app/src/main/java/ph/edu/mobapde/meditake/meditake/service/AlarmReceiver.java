@@ -40,42 +40,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
-        //WakeLocker.acquire(context);
-
-        //notify user
-        //MedicineUtil medicineUtil = new MedicineUtil(context);
-        //Medicine toDrink = medicineUtil.getMedicine(intent.getIntExtra(context.getString(R.string.MEDICINE_ID), -1));
-
-
-        //ScheduleUtil scheduleUtil = new ScheduleUtil(context);
-        //Schedule schedule = scheduleUtil.getSchedule(intent.getIntExtra(context.getString(R.string.SCHEDULE_ID), -1));
-
-        //NotificationManager notificationManager = (NotificationManager) context.getSystemService(Service.NOTIFICATION_SERVICE);
-        //Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.clock_colored);
-
-//        //PendingIntent pendingAdd = PendingIntent.getActivity(context, 2, new Intent(context, NextActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        Notification.Builder notifBuilder = new Notification.Builder(context)
-//                .setContentTitle("Drink your medicine!")
-//                //.setContentText("Drink " + schedule.getDosagePerDrinkingInterval() + " " + toDrink.getModifier() + " of " + toDrink.getName() + " now!")
-//                .setSmallIcon(R.drawable.alarm_clock_colored)
-//                .setLargeIcon(bitmap)
-//                .setAutoCancel(true)
-//                .setContentIntent(pendingNext);
-//
-//        notificationManager.notify(NOTIFICATION_ANNOUNCEMENT, notifBuilder.build());
-//
-//        //throw new UnsupportedOperationException("Not yet implemented");
-//
-//        Intent in=new Intent().setClass(context,DrinkMedicineActivity.class);
-//        startActivity(in);
-//        Bundle data = intent.getExtras();
-//        Schedule schedule = data.getParcelable(Schedule.TABLE);
-//        Log.wtf("ACTION", "RECEIVED MEDICINE WITH ID OF " + schedule.getSqlId());
-//        Log.wtf("ACTION", "PLAY " + schedule.getRingtone());
-
         startAlarmService(context, new ScheduleUtil(context).getSchedule(intent.getIntExtra(Schedule.COLUMN_ID, -1)));
+
     }
 
     public void startAlarmService(Context context, Schedule schedule){

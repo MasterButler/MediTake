@@ -289,7 +289,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
      * @return id of the created object
      */
     public long createSchedule(Schedule schedule){
-        ContentValues cv = ScheduleInstantiatorUtil.createCVMapFromBean(contextHolder, schedule);
+        ContentValues cv = ScheduleInstantiatorUtil.createCVMapFromBean(schedule);
 
         SQLiteDatabase db = getWritableDatabase();
         long id = db.insert(Schedule.TABLE, null, cv);
@@ -335,7 +335,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 null);
 
         if(cursor.moveToFirst()){
-            schedule = ScheduleInstantiatorUtil.createBeanFromCursor(contextHolder, cursor);
+            schedule = ScheduleInstantiatorUtil.createBeanFromCursor(cursor);
         }
 
         cursor.close();
@@ -371,7 +371,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         /* UPDATE INTO schedule SET ..... WHERE id = ?
 
          */
-        ContentValues cv = ScheduleInstantiatorUtil.createCVMapFromBean(contextHolder, schedule);
+        ContentValues cv = ScheduleInstantiatorUtil.createCVMapFromBean(schedule);
         int rows = db.update(Schedule.TABLE,
                 cv,
                 Schedule.COLUMN_ID + " = ? ",

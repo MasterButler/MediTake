@@ -1,24 +1,19 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.app.AlarmManager;
-import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.os.SystemClock;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.transition.TransitionManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -28,18 +23,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.lang.reflect.Array;
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,7 +35,7 @@ import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.adapter.ScheduleAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
-import ph.edu.mobapde.meditake.meditake.beans.Syrup;
+import ph.edu.mobapde.meditake.meditake.fragment.AddScheduleDetailsFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.AddScheduleFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.MedicineListFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.RepeatingTimePickerFragment;
@@ -57,13 +44,12 @@ import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
 import ph.edu.mobapde.meditake.meditake.service.AlarmReceiver;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
-import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class ScheduleListActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AddScheduleFragment.OnAddScheduleFragmentInteractionListener, RepeatingTimePickerFragment.OnRepeatingTimePickerFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AddScheduleDetailsFragment.OnAddScheduleFragmentInteractionListener, RepeatingTimePickerFragment.OnRepeatingTimePickerFragmentInteractionListener {
 
     @BindView(R.id.snackbar_position)
     CoordinatorLayout clSnackbar;
@@ -105,6 +91,25 @@ public class ScheduleListActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    public void checkIntent(){
+        Bundle data = getIntent().getExtras();
+
+        if(data != null) {
+            Schedule schedule = data.getParcelable(Schedule.TABLE);
+            Log.wtf("NEW", "PREV DRINKING SCHED IS " + schedule.getNextDrinkingTime());
+            Log.wtf("NEW", "DRINKING INTERVAL   IS " + schedule.getDrinkingInterval());
+            Log.wtf("NEW", "NEXT TIME AFTER " + schedule.getDrinkingInterval()*DateUtil.MILLIS_TO_MINUTES);
+            if(schedule.getDrinkingInterval() == 0){
+                schedule.setActivated(false);
+            }else{
+                schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + schedule.getDrinkingInterval()*DateUtil.MILLIS_TO_MINUTES);
+            }
+            scheduleUtil.updateSchedule(schedule);
+            updateList();
+            setAlarmForSchedule(schedule);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +127,8 @@ public class ScheduleListActivity extends AppCompatActivity
         initializeAdapter();
         initializeContent();
         CREATING_NEW_ITEM = -1;
+
+        checkIntent();
     }
 
     public void initializeContent(){
@@ -251,6 +258,17 @@ public class ScheduleListActivity extends AppCompatActivity
         if(tvTime != null){
                 int selectedHour = Integer.valueOf(tvTime.getText().toString().split(":")[0]);
                 int selectedMinute = Integer.valueOf(tvTime.getText().toString().split(":")[1]);
+
+                if(tvTimePeriod.getText().toString().toLowerCase().trim().equals("pm")){
+                    if(selectedHour != 12){
+                        selectedHour+=12;
+                    }
+                }else if(tvTimePeriod.getText().toString().toLowerCase().trim().equals("am")){
+                    if(selectedHour == 12){
+                        selectedHour-=12;
+                    }
+                }
+
                 CustomOnTimeSetListener timeSet = new CustomOnTimeSetListener(getBaseContext(), tvTime, tvTimePeriod, false);
                 TimePickerDialog mTimePicker;
                 mTimePicker = new TimePickerDialog(ScheduleListActivity.this, timeSet, selectedHour, selectedMinute, false);
@@ -384,9 +402,14 @@ public class ScheduleListActivity extends AppCompatActivity
 
     @Override
     public void onAddScheduleFragmentSave(Schedule schedule) {
-        scheduleUtil.addNewSchedule(schedule);
+        int id = (int) scheduleUtil.addNewSchedule(schedule);
+        schedule.setSqlId(id);
         updateList();
         closeAddScheduleFragment();
+
+        if(schedule.isActivated()){
+            setAlarmForSchedule(schedule);
+        }
     }
 
     @Override

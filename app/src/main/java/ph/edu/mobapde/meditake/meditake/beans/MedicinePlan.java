@@ -6,7 +6,22 @@ package ph.edu.mobapde.meditake.meditake.beans;
 
 public class MedicinePlan {
 
-    private Medicine medicineToDrink;
+    private int medicineId;
+    private int dosage;
 
+    public int getMedicineId() {
+        return medicineId;
+    }
 
+    public void setMedicineId(int medicineId) {
+        this.medicineId = medicineId;
+    }
+
+    public int getDosage() {
+        return dosage;
+    }
+
+    public void setDosage(int dosage) {
+        this.dosage = dosage;
+    }
 }

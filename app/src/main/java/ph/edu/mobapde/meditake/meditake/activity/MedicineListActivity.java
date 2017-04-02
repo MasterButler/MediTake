@@ -95,6 +95,18 @@ public class MedicineListActivity extends AppCompatActivity
         initializeContents();
         CREATING_NEW_ITEM = -1;
         LAST_DELETED = null;
+
+        //addHardcodedData()
+    }
+
+    public void addHardcodedData(){
+        Medicine medA = new Capsule("Capsule A", "Generic capsule", "Something bad", 0.0);
+        Medicine medB = new Syrup("Syrup A", "Generic syrup", "Something bad", 0.0);
+        Medicine medC = new Tablet("Tablet A", "Generic tablet", "Something bad", 0.0);
+        medicineUtil.addMedicine(medA);
+        medicineUtil.addMedicine(medB);
+        medicineUtil.addMedicine(medC);
+        updateList();
     }
 
     public void setUpActionBar(){

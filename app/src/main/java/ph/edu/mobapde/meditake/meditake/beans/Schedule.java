@@ -38,13 +38,13 @@ public class Schedule implements Parcelable {
     private long nextDrinkingTime;
     private String label;
     private String ringtone;
-    private double drinkingInterval;
+    private long drinkingInterval;
     private boolean isVibrate;
     private boolean isActivated;
 
     public Schedule(){    }
 
-    public Schedule(long nextDrinkingTime, String label, String ringtone, double drinkingInterval, boolean isVibrate, boolean isActivated){
+    public Schedule(long nextDrinkingTime, String label, String ringtone, long drinkingInterval, boolean isVibrate, boolean isActivated){
         this.nextDrinkingTime = nextDrinkingTime;
         this.label = label;
         this.ringtone = ringtone;
@@ -53,7 +53,7 @@ public class Schedule implements Parcelable {
         this.isActivated = isActivated;
     }
 
-    public Schedule(int sqlId, long nextDrinkingTime, String label, String ringtone, double drinkingInterval, boolean isVibrate, boolean isActivated){
+    public Schedule(int sqlId, long nextDrinkingTime, String label, String ringtone, long drinkingInterval, boolean isVibrate, boolean isActivated){
         this(nextDrinkingTime, label, ringtone, drinkingInterval, isVibrate, isActivated);
         this.sqlId = sqlId;
     }
@@ -87,11 +87,11 @@ public class Schedule implements Parcelable {
         this.nextDrinkingTime = nextDrinkingTime;
     }
 
-    public double getDrinkingInterval() {
+    public long getDrinkingInterval() {
         return drinkingInterval;
     }
 
-    public void setDrinkingInterval(double drinkingInterval) {
+    public void setDrinkingInterval(long drinkingInterval) {
         this.drinkingInterval = drinkingInterval;
     }
 
@@ -133,7 +133,7 @@ public class Schedule implements Parcelable {
         nextDrinkingTime = in.readLong();
         label = in.readString();
         ringtone = in.readString();
-        drinkingInterval = in.readDouble();
+        drinkingInterval = in.readLong();
         isVibrate = in.readByte() != 0x00;
         isActivated = in.readByte() != 0x00;
     }
@@ -150,7 +150,7 @@ public class Schedule implements Parcelable {
         dest.writeLong(nextDrinkingTime);
         dest.writeString(label);
         dest.writeString(ringtone);
-        dest.writeDouble(drinkingInterval);
+        dest.writeLong(drinkingInterval);
         dest.writeByte((byte) (isVibrate ? 0x01 : 0x00));
         dest.writeByte((byte) (isActivated ? 0x01 : 0x00));
     }

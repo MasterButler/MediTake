@@ -117,21 +117,8 @@ public class RepeatingTimePickerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(onRepeatingTimePickerFragmentInteractionListener != null){
-                    String output = "";
-                    if(npHour.getValue() != 0){
-                        output += npHour.getValue() + " hour(s) ";
-                    }
-                    if(npMinutes.getValue() != 0){
-                        if(!output.isEmpty()){
-                            output += "and ";
-                        }
-                        output += npMinutes.getValue() + " minutes";
-                    }
-                    if(!output.isEmpty()){
-                        tvRepeat.setText("Every " + output);
-                    }else{
-                        tvRepeat.setText("Repeating schedule not yet set");
-                    }
+                    String output = DateUtil.parseToTimePickerDisplay(npHour.getValue(), npMinutes.getValue());
+                    tvRepeat.setText(output);
                     onRepeatingTimePickerFragmentInteractionListener.onRepeatingTimePickerFragmentSave();
                 }
             }

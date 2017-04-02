@@ -84,7 +84,7 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
         int id = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_ID));
         if(id != -1){
 
-            Schedule sched = ScheduleInstantiatorUtil.createBeanFromCursor(contextHolder, cursor);
+            Schedule sched = ScheduleInstantiatorUtil.createBeanFromCursor(cursor);
 
             Log.d("CHECK", "SCHEDULEID: " + sched.getSqlId());
 
@@ -113,23 +113,11 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                 viewHolder.etScheduleTimePeriod.setText(displayTime.split("\\s")[1]);
             }
 
-
-            String dosagePerDrinkingIntervalDisplay;
-            String drinkingIntervalDisplay;
-            String medicineDisplay;
-
-            if(String.valueOf(sched.getDrinkingInterval()).split("\\.")[1].equals("0")){
-                drinkingIntervalDisplay = String.valueOf(sched.getDrinkingInterval()).split("\\.")[0];
-            }else{
-                drinkingIntervalDisplay = String.valueOf(sched.getDrinkingInterval());
-            }
-
+            String drinkingTime = DateUtil.parseToTimePickerDisplay(sched.getDrinkingInterval());
             viewHolder.tvMedicineToDrink.setText("TO BE FIXED");
             viewHolder.scheduleSwitch.setChecked(sched.isActivated());
-            viewHolder.tvDrinkingInterval.setText("Medicine taken every " + drinkingIntervalDisplay + " hours.");
-            //viewHolder.tvLastTaken.setText(sched.getLastTimeTaken() == 0 ? "Not yet taken before" : "Last taken: " + DateUtil.getDateTime(sched.getLastTimeTaken(), isMilitary));
+            viewHolder.tvDrinkingInterval.setText(sched.getNextDrinkingTime() == 0 ? drinkingTime : "Medicine taken " + drinkingTime.toLowerCase() + ".");
 
-            //viewHolder.etDosagePerDrinkingInterval.setText(dosagePerDrinkingIntervalDisplay);
             viewHolder.etDrinkingIntervals.setText(String.valueOf(sched.getDrinkingInterval()));
 
             Log.wtf("action", "ACTIVATED: " + sched.isActivated());

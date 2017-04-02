@@ -22,7 +22,7 @@ public class ScheduleInstantiatorUtil {
     * vibrate NUMERIC NOT NULL
     * isActivated NUMERIC NOT NULL
     */
-    public static ContentValues createCVMapFromBean(Context context, Schedule schedule) {
+    public static ContentValues createCVMapFromBean(Schedule schedule) {
         ContentValues cv = new ContentValues();
 
         cv.put(Schedule.COLUMN_NEXT_DRINKING_TIME, schedule.getNextDrinkingTime());
@@ -35,14 +35,14 @@ public class ScheduleInstantiatorUtil {
         return cv;
     }
 
-    public static Schedule createBeanFromCursor(Context context, Cursor cursor){
+    public static Schedule createBeanFromCursor(Cursor cursor){
         Schedule schedule = new Schedule();
 
         int id = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_ID));
         long startingTime = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_NEXT_DRINKING_TIME));
         String label = cursor.getString(cursor.getColumnIndex(Schedule.COLUMN_LABEL));
         String ringtone = cursor.getString(cursor.getColumnIndex(Schedule.COUMNN_RINGTONE));
-        double drinkingInterval = cursor.getDouble(cursor.getColumnIndex(Schedule.COLUMN_DRINKING_INTERVAL));
+        long drinkingInterval = cursor.getLong(cursor.getColumnIndex(Schedule.COLUMN_DRINKING_INTERVAL));
         boolean isVibrate = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_IS_VIBRATE)) == 1 ? true : false;
         boolean isActivated = cursor.getInt(cursor.getColumnIndex(Schedule.COLUMN_IS_ACTIVATED)) == 1 ? true : false;
 

@@ -12,7 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,12 +39,14 @@ import static android.widget.FrameLayout.*;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AddScheduleFragment.OnAddScheduleFragmentInteractionListener} interface
+ * {@link AddScheduleDetailsFragment.OnAddScheduleFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AddScheduleFragment#newInstance} factory method to
+ * Use the {@link AddScheduleDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddScheduleFragment extends Fragment {
+public class AddScheduleDetailsFragment extends Fragment {
+
+    private static final String ARG_SECTION_NUMBER = "section_number";
 
     @BindView(R.id.checkbox_repeat)
     CheckBox cbRepeat;
@@ -97,37 +99,31 @@ public class AddScheduleFragment extends Fragment {
         }
     }
 
-    public AddScheduleFragment() {
+    public AddScheduleDetailsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddScheduleFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddScheduleFragment newInstance(String param1, String param2) {
-        AddScheduleFragment fragment = new AddScheduleFragment();
+    public static AddScheduleDetailsFragment newInstance(int sectionNumber) {
+        Log.wtf("BEFORE ADDSCHEDDETFRAG", "RETURNING THE FRAGMENT");
+        AddScheduleDetailsFragment fragment = new AddScheduleDetailsFragment();
+        Log.wtf("AFTER ADDSCHEDDETFRAG", "RETURNING THE FRAGMENT");
         Bundle args = new Bundle();
+        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
+        Log.wtf("ADDSCHEDDETFRAG", "RETURNING THE FRAGMENT");
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_add_schedule, container, false);
+        View v = inflater.inflate(R.layout.fragment_add_schedule_details, container, false);
         ButterKnife.bind(this, v);
 
         ringtoneUriUsed = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
@@ -177,8 +173,15 @@ public class AddScheduleFragment extends Fragment {
                     long nextDrinkingTime = DateUtil.getTime(tvScheduleTime.getText().toString() + " " + tvScheduleTimePeriod.getText().toString());
                     String label = tvScheduleLabel.getText().toString();
                     boolean isVibrate = switchIsVibrate.isChecked();
+                    int[] timeValues = DateUtil.parseFromTimePicker(tvRepeat.getText().toString());
+                    long drinkingInterval = cbRepeat.isChecked() ? (timeValues[0] * 60 + timeValues[1]) : 0;
 
-                    Schedule schedule = new Schedule(nextDrinkingTime, label, ringtoneUriUsed.toString(), 10, isVibrate, true);
+                    Log.wtf("NEW MEDICINES", "NEXT DRINKING TIME: " + nextDrinkingTime);
+                    Log.wtf("NEW MEDICINES", "LABEL: " + label);
+                    Log.wtf("NEW MEDICINES", "ISVIBRATE IS " + isVibrate);
+                    Log.wtf("NEW MEDICINES", "DRINKING INTERVAL IS " + drinkingInterval);
+
+                    Schedule schedule = new Schedule(nextDrinkingTime, label, ringtoneUriUsed.toString(), drinkingInterval, isVibrate, true);
                     onAddScheduleFragmentInteractionListener.onAddScheduleFragmentSave(schedule);
                 }
             }

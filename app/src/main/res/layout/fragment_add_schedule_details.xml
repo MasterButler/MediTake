@@ -2,38 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ph.edu.mobapde.meditake.meditake.fragment.AddScheduleFragment">
+    tools:context="ph.edu.mobapde.meditake.meditake.fragment.AddScheduleDetailsFragment">
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <View
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/black"
-            android:alpha="0.75"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginLeft="36dp"
-            android:layout_marginRight="36dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginBottom="60dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:text="Add Schedule"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"/>
+            android:orientation="vertical">
+        <!--android:layout_marginLeft="36dp"-->
+        <!--android:layout_marginRight="36dp"-->
+        <!--android:layout_marginTop="60dp"-->
+        <!--android:layout_marginBottom="60dp"-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -337,7 +315,7 @@
                     android:gravity="right|bottom">
 
                     <LinearLayout
-                        android:layout_width="90dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="2dp"
                         android:paddingBottom="2dp"
@@ -351,7 +329,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="32dp"
-                            android:text="CANCEL"
+                            android:text="DISCARD"
                             android:textSize="14sp"
                             android:paddingTop="8dp"
                             android:paddingBottom="8dp"
@@ -376,9 +354,9 @@
                         android:gravity="center">
 
                         <TextView
-                            android:layout_width="40dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="32dp"
-                            android:text="SAVE"
+                            android:text="ADD SCHEDULE"
                             android:textSize="14sp"
                             android:paddingTop="8dp"
                             android:paddingLeft="2dp"
@@ -395,9 +373,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-    </RelativeLayout>
-
 
     <FrameLayout
         android:id="@+id/fragment_schedule_options_selection"
