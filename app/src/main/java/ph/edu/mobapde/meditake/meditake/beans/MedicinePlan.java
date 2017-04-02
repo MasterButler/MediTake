@@ -7,11 +7,21 @@ package ph.edu.mobapde.meditake.meditake.beans;
 public class MedicinePlan {
 
     public static final String TABLE = "medcicinePlan";
-    public static final String COLUMN_ID = "medicinePlanId";
+    public static final String COLUMN_ID = "_medicinePlanId";
+    public static final String COLUMN_MEDICINE_ID = "medicineId";
     public static final String COLUMN_DOSAGE = "dosage";
 
+    private int sqlId;
     private int medicineId;
     private int dosage;
+
+    public int getSqlId() {
+        return sqlId;
+    }
+
+    public void setSqlId(int sqlId) {
+        this.sqlId = sqlId;
+    }
 
     public int getMedicineId() {
         return medicineId;

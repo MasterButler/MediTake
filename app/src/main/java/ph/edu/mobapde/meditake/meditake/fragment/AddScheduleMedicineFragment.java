@@ -18,8 +18,11 @@ import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.adapter.AddScheduleMedicineAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
+import ph.edu.mobapde.meditake.meditake.beans.MedicineList;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
+import ph.edu.mobapde.meditake.meditake.beans.MedicinePlanList;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
+import ph.edu.mobapde.meditake.meditake.util.MedicinePlanInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 
 public class AddScheduleMedicineFragment extends Fragment {
@@ -36,6 +39,7 @@ public class AddScheduleMedicineFragment extends Fragment {
 
     Context contextHolder;
 
+    MedicineList medicineList;
     AddScheduleMedicineAdapter addScheduleMedicineAdapter;
     MedicineUtil medicineUtil;
 
@@ -47,6 +51,17 @@ public class AddScheduleMedicineFragment extends Fragment {
 
     public void initializeAdapter(){
         addScheduleMedicineAdapter = new AddScheduleMedicineAdapter(contextHolder, medicineUtil.getAllMedicine(), Medicine.COLUMN_ID);
+        addScheduleMedicineAdapter.setOnAddScheduleMedicineClickListener(new AddScheduleMedicineAdapter.OnAddScheduleMedicineClickListener() {
+            @Override
+            public void onItemCheck(Medicine medicine) {
+                medicineList.add(medicine);
+            }
+
+            @Override
+            public void onItemUncheck(Medicine medicine) {
+                medicineList.remove(medicine);
+            }
+        });
         Log.wtf("ADDSCHEDULEMEDICINEFRAG", "ADAPTER NULL: " + (addScheduleMedicineAdapter == null));
     }
 
@@ -86,6 +101,7 @@ public class AddScheduleMedicineFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_add_schedule_medicine, container, false);
         ButterKnife.bind(this, v);
 
+        medicineList = new MedicineList();
         initializeAdapter();
         initializeContents();
 
@@ -106,7 +122,9 @@ public class AddScheduleMedicineFragment extends Fragment {
                     ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.container);
                     AddScheduleDetailsFragment frag = (AddScheduleDetailsFragment) ((AddScheduleFragment.SectionsPagerAdapter) viewPager.getAdapter()).getFragment(0);
 
+                    MedicinePlanList medicinePlanList = MedicinePlanInstantiatorUtil.convertMedicineToMedicinePlan(medicineList);
                     Schedule sched = frag.constructScheduleFromUserInput();
+
                     onAddScheduleMedicineFragmentInteractionListener.onAddScheduleMedicineFragmentSave(sched);
                 }
             }

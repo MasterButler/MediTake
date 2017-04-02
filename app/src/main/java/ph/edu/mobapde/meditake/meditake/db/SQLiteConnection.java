@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
+import ph.edu.mobapde.meditake.meditake.beans.MedicinePlan;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
+import ph.edu.mobapde.meditake.meditake.beans.SchedulePlan;
 import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleInstantiatorUtil;
@@ -35,24 +37,18 @@ public class SQLiteConnection extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         String sqlMedicine;
         String sqlSchedule;
+        String sqlMedicinePlan;
+        String sqlSchedulePlan;
         /*
-         * CREATE TABLE medicine
+         * CREATE TABLE medicine(
          * _id INTEGER PRIMARY KEY AUTOINCREMENT
          * brandName TEXT
          * genericName TEXT NOT NULL
-         *
          * medicineFor TEXT
          * amount REAL NOT NULL
          * dosage REAL NOT NULL
          * medicineType TEXT NOT NULL
          * );
-         *
-         * CREATE TABLE ???
-         * _id INTEGER PRIMARY KEY AUTOINCREMENT
-         * medicineToDrinkId INTEGER NOT NULL
-         * dosagePerDrinkingInterval INTEGER NOT NULL
-         *
-         *
          *
          * CREATE TABLE schedule
          * _scheduleId PRIMARY KEY AUTOINCREMENT
@@ -62,6 +58,19 @@ public class SQLiteConnection extends SQLiteOpenHelper{
          * drinkingIntervals INTEGER NOT NULL
          * vibrate NUMERIC NOT NULL
          * isActivated NUMERIC NOT NULL
+         * );
+         *
+         * CREATE TABLE medicinePlan
+         * _medicinePlanId PRIMARY KEY AUTOINCREMENT
+         * medicineId INTEGER NOT NULL
+         * dosage REAL NOT NULL
+         * );
+         *
+         * CREATE TABLE schedulePlan
+         * scheduleId INTEGER NOT NULL
+         * medicineId INTEGER NOT NULL
+         * PRIMARY KEY (scheduleId, medicineId
+         * );
          */
 
 
@@ -74,15 +83,6 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             + Medicine.COLUMN_DOSAGE + " REAL NOT NULL, "
             + Medicine.COLUMN_MEDICINE_TYPE + " TEXT NOT NULL);";
 
-//        sqlSchedule = "CREATE TABLE " + Schedule.TABLE + " ( "
-//            + Schedule.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-//            + Schedule.COLUMN_MEDICINE_TO_DRINK + " INTEGER, "
-//            + Schedule.COLUMN_DOSAGE_PER_DRINKING_INTERVAL + " REAL, "
-//            + Schedule.COLUMN_DRINKING_INTERVAL + " REAL, "
-//            + Schedule.COLUMN_LAST_TIME_TAKEN + " REAL, "
-//            + Schedule.COLUMN_IS_ACTIVATED + " NUMERIC NOT NULL, "
-//            + Schedule.COLUMN_CUSTOM_NEXT_DRINKING_TIME + " REAL);";
-
         sqlSchedule = "CREATE TABLE " + Schedule.TABLE + " ( "
                 + Schedule.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Schedule.COLUMN_NEXT_DRINKING_TIME + " REAL NOT NULL, "
@@ -92,8 +92,20 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 + Schedule.COLUMN_IS_VIBRATE + " NUMERIC NOT NULL, "
                 + Schedule.COLUMN_IS_ACTIVATED + " NUMERIC NOT NULL);";
 
+        sqlMedicinePlan = "CREATE TABLE " + MedicinePlan.TABLE + " ( "
+                + MedicinePlan.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINREMENT, "
+                + MedicinePlan.COLUMN_MEDICINE_ID + " INTEGER NOT NULL, "
+                + MedicinePlan.COLUMN_DOSAGE + " REAL NOT NULL);";
+
+        sqlSchedulePlan = "CREATE TABLE " + SchedulePlan.TABLE + " ( "
+                + SchedulePlan.COLUMN_SCHEDULE_ID + " INTEGER NOT NULL, "
+                + SchedulePlan.COLUMN_MEDICINE_PLAN_ID + " INTEGER NOT NULL, "
+                + "PRIMARY KEY (" + SchedulePlan.COLUMN_SCHEDULE_ID + ", " + SchedulePlan.COLUMN_MEDICINE_PLAN_ID + ");";
+
         db.execSQL(sqlMedicine);
         db.execSQL(sqlSchedule);
+//        db.execSQL(sqlMedicinePlan);
+//        db.execSQL(sqlSchedulePlan);
     }
 
     /**

@@ -21,10 +21,12 @@ import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
  * Created by Winfred Villaluna on 4/2/2017.
  */
 
-public class AddScheduleMedicineAdapter extends CursorRecyclerViewAdapter<AddScheduleMedicineAdapter.MedicineSelectionViewHolder>{
+public class AddScheduleMedicineAdapter extends CursorRecyclerViewAdapter<AddScheduleMedicineAdapter.AddScheduleMedicineViewHolder>{
 
     Context contextHolder;
     RecyclerView mRecyclerView;
+
+    private OnAddScheduleMedicineClickListener onAddScheduleMedicineClickListener;
 
     public AddScheduleMedicineAdapter(Context context, Cursor cursor, String column) {
         super(context, cursor, column);
@@ -40,7 +42,7 @@ public class AddScheduleMedicineAdapter extends CursorRecyclerViewAdapter<AddSch
 
 
     @Override
-    public void onBindViewHolder(AddScheduleMedicineAdapter.MedicineSelectionViewHolder viewHolder, Cursor cursor) {
+    public void onBindViewHolder(AddScheduleMedicineViewHolder viewHolder, Cursor cursor) {
         int id = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_ID));
 
         if(id != -1){
@@ -56,17 +58,31 @@ public class AddScheduleMedicineAdapter extends CursorRecyclerViewAdapter<AddSch
                 }
             });
 
+            viewHolder.cbSelected.setTag(med);
+            viewHolder.cbSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(onAddScheduleMedicineClickListener != null){
+                        Medicine value = (Medicine) buttonView.getTag();
+                        if(isChecked){
+                            onAddScheduleMedicineClickListener.onItemCheck(value);
+                        }else{
+                            onAddScheduleMedicineClickListener.onItemUncheck(value);
+                        }
+                    }
+                }
+            });
         }
     }
 
     @Override
-    public AddScheduleMedicineAdapter.MedicineSelectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AddScheduleMedicineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_medicine_selection, parent, false);
-        return new MedicineSelectionViewHolder(v);
+        return new AddScheduleMedicineViewHolder(v);
     }
 
-    public class MedicineSelectionViewHolder extends RecyclerView.ViewHolder{
+    public class AddScheduleMedicineViewHolder extends RecyclerView.ViewHolder{
         View parentView;
 
         @BindView(R.id.iv_selection_medicine_type)
@@ -76,11 +92,24 @@ public class AddScheduleMedicineAdapter extends CursorRecyclerViewAdapter<AddSch
         @BindView(R.id.cb_selection_medicine_selected)
         CheckBox cbSelected;
 
-        public MedicineSelectionViewHolder(View itemView) {
+        public AddScheduleMedicineViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.parentView = itemView;
 
         }
+    }
+
+    public OnAddScheduleMedicineClickListener getOnAddScheduleMedicineClickListener() {
+        return onAddScheduleMedicineClickListener;
+    }
+
+    public void setOnAddScheduleMedicineClickListener(OnAddScheduleMedicineClickListener onAddScheduleMedicineClickListener) {
+        this.onAddScheduleMedicineClickListener = onAddScheduleMedicineClickListener;
+    }
+
+    public interface OnAddScheduleMedicineClickListener{
+        void onItemCheck(Medicine medicine);
+        void onItemUncheck(Medicine medicine);
     }
 }
