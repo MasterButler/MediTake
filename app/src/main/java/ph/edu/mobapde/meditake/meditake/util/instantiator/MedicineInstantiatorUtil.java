@@ -1,4 +1,4 @@
-package ph.edu.mobapde.meditake.meditake.util;
+package ph.edu.mobapde.meditake.meditake.util.instantiator;
 
 import android.content.ContentValues;
 import android.database.Cursor;
