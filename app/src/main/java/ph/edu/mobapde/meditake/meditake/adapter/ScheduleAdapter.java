@@ -1,45 +1,22 @@
 package ph.edu.mobapde.meditake.meditake.adapter;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
-import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.TimePicker;
 
-import java.util.Calendar;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
-import ph.edu.mobapde.meditake.meditake.activity.ScheduleListActivity;
-import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
-import ph.edu.mobapde.meditake.meditake.service.AlarmReceiver;
-import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
-import ph.edu.mobapde.meditake.meditake.util.ScheduleInstantiatorUtil;
+import ph.edu.mobapde.meditake.meditake.util.instantiator.ScheduleInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
-
-import static android.content.Context.ALARM_SERVICE;
 
 /**
  * Created by Winfred Villaluna on 3/17/2017.

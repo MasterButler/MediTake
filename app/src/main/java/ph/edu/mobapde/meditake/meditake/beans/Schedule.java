@@ -11,27 +11,14 @@ import android.os.Parcelable;
 public class Schedule implements Parcelable {
     public static final String TABLE = "schedule";
     public static final String COLUMN_ID = "_scheduleId";
-    //public static final String COLUMN_SCHEDULE_ID = "_schedule_id";
-    public static final String COLUMN_DOSAGE_PER_DRINKING_INTERVAL = "dosagePerDrinkingInterval";
-    public static final String COLUMN_MEDICINE_TO_DRINK = "medicineToDrink";
     public static final String COLUMN_DRINKING_INTERVAL = "drinkingInterval";
-    public static final String COLUMN_LAST_TIME_TAKEN = "lastTimeTaken";
     public static final String COLUMN_IS_ACTIVATED = "isActivated";
-    public static final String COLUMN_CUSTOM_NEXT_DRINKING_TIME = "customNextDrinkingTime";
 
     public static final String COLUMN_NEXT_DRINKING_TIME = "nextDrinkingTime";
     public static final String COUMNN_RINGTONE = "ringtone";
     public static final String COLUMN_LABEL = "label";
     public static final String COLUMN_IS_VIBRATE = "vibrate";
 
-    public static final int TIMES_A_DAY = 0;
-    public static final int EVERY_NTH_HOUR = 1;
-    public static final int EVERY_DAY = 2;
-    public static final int EVERY_OTHER_DAY = 3;
-
-    //the medicine to drink
-    //private Medicine medicineToDrink;
-    //dosage needed to drink
     private double dosagePerDrinkingInterval;
 
     private int sqlId;
@@ -41,6 +28,7 @@ public class Schedule implements Parcelable {
     private long drinkingInterval;
     private boolean isVibrate;
     private boolean isActivated;
+    private MedicinePlanList medicinePlanList;
 
     public Schedule(){    }
 
@@ -125,6 +113,14 @@ public class Schedule implements Parcelable {
 
     public void setActivated(boolean activated) {
         isActivated = activated;
+    }
+
+    public MedicinePlanList getMedicinePlanList() {
+        return medicinePlanList;
+    }
+
+    public void setMedicinePlanList(MedicinePlanList medicinePlanList) {
+        this.medicinePlanList = medicinePlanList;
     }
 
     protected Schedule (Parcel in) {

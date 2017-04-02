@@ -51,12 +51,6 @@ public class MedicineUtil {
         initializeDBConnection(this.context);
         return databaseConnection.getAllMedicine();
     }
-
-    public Medicine getMedicineFirstRow(){
-        initializeDBConnection(this.context);
-        return databaseConnection.getFirstMedicineRow();
-    }
-
     public Medicine getMedicine(int id){
         initializeDBConnection(this.context);
         return databaseConnection.getMedicine(id);

@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
-import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
+import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicineInstantiatorUtil;
 
 /**
  * Created by Winfred Villaluna on 4/2/2017.

@@ -25,7 +25,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
@@ -40,7 +39,7 @@ import ph.edu.mobapde.meditake.meditake.beans.Syrup;
 import ph.edu.mobapde.meditake.meditake.beans.Tablet;
 import ph.edu.mobapde.meditake.meditake.listener.OnMedicineClickListener;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
-import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
+import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.SearchUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;

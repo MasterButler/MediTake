@@ -1,7 +1,6 @@
 package ph.edu.mobapde.meditake.meditake.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -21,8 +20,7 @@ import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.MedicineList;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.beans.MedicinePlanList;
-import ph.edu.mobapde.meditake.meditake.util.DateUtil;
-import ph.edu.mobapde.meditake.meditake.util.MedicinePlanInstantiatorUtil;
+import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicinePlanInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 
 public class AddScheduleMedicineFragment extends Fragment {
@@ -124,6 +122,7 @@ public class AddScheduleMedicineFragment extends Fragment {
 
                     MedicinePlanList medicinePlanList = MedicinePlanInstantiatorUtil.convertMedicineToMedicinePlan(medicineList);
                     Schedule sched = frag.constructScheduleFromUserInput();
+                    sched.setMedicinePlanList(medicinePlanList);
 
                     onAddScheduleMedicineFragmentInteractionListener.onAddScheduleMedicineFragmentSave(sched);
                 }

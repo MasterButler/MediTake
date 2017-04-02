@@ -15,6 +15,21 @@ public class MedicinePlan {
     private int medicineId;
     private int dosage;
 
+    public MedicinePlan(int sqlId, int medicineId, int dosage) {
+        this.sqlId = sqlId;
+        this.medicineId = medicineId;
+        this.dosage = dosage;
+    }
+
+    public MedicinePlan(int medicineId, int dosage) {
+        this.medicineId = medicineId;
+        this.dosage = dosage;
+    }
+
+    public MedicinePlan(){
+
+    }
+
     public int getSqlId() {
         return sqlId;
     }

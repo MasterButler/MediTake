@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.listener.OnMedicineClickListener;
-import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
+import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicineInstantiatorUtil;
 
 /**
  * Created by Winfred Villaluna on 3/12/2017.
