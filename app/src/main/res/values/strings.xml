@@ -43,4 +43,5 @@
     <string name="drink_medicine">drink_medicine_in_schedule</string>
     <string name="title_activity_add_schedule_fragment">Information</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_add_schedule">AddScheduleActivity</string>
 </resources>

@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ph.edu.mobapde.meditake.meditake.fragment.AddScheduleMedicineFragment"
-    android:background="@color/cardview_light_background">
+    tools:context="ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleMedicineFragment"
+    android:background="@android:color/white">
 
 
     <LinearLayout

@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
-import ph.edu.mobapde.meditake.meditake.adapter.MedicineListFragmentAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.MedicineListFragmentAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.listener.OnMedicineListFragmentClickListener;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;

@@ -36,6 +36,12 @@
             android:name=".activity.ScheduleListActivity"
             android:label="@string/title_activity_schedule_list"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AddScheduleActivity"
+            android:label="@string/title_activity_add_schedule"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
         <activity android:name=".activity.WelcomeScreenActivity">
 
             <!-- INTENT FILTER NAME WILL ON -->

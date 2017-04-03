@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.MedicinePlan;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
@@ -391,7 +393,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 Schedule.COLUMN_ID + " = ? ",
                 new String[]{id+""});
         db.close();
-        Log.wtf("DELETE", "deleted item with id " + id);
+        Log.wtf("DELETE", "Deleted Schedule with id " + id);
         return rows;
     }
 
@@ -409,6 +411,50 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         db.close();
         return id;
     }
+
+    public MedicinePlan getMedicinePlan(int id){
+        MedicinePlan medicinePlan = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(MedicinePlan.TABLE,
+                null,
+                MedicinePlan.TABLE + "." + MedicinePlan.COLUMN_ID + " = ?",
+                new String[]{id+""},
+                null,
+                null,
+                null);
+        if(cursor.moveToFirst()){
+            medicinePlan = MedicinePlanInstantiatorUtil.createBeanFromCursor(cursor);
+        }
+        cursor.close();
+        db.close();
+        return medicinePlan;
+    }
+
+    public int updateMedicinePlan(MedicinePlan medicinePlan){
+        SQLiteDatabase db = getWritableDatabase();
+        /* UPDATE INTO schedule SET ..... WHERE id = ? */
+        ContentValues cv = MedicinePlanInstantiatorUtil.createCVMapFromBean(medicinePlan);
+        int rows = db.update(MedicinePlan.TABLE,
+                cv,
+                MedicinePlan.COLUMN_ID + " = ? ",
+                new String[]{medicinePlan.getSqlId()+""});
+        Log.d("ROWS AFFECTED", rows+"");
+        db.close();
+        return rows;
+
+    }
+
+    public int deleteMedicinePlan(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        /* DELETE FROM medicine WHERE _id = ? */
+        int rows = db.delete(MedicinePlan.TABLE,
+                MedicinePlan.COLUMN_ID + " = ? ",
+                new String[]{id+""});
+        db.close();
+        Log.wtf("DELETE", "Deleted Medicine plan with ID " + id);
+        return rows;
+    }
+
     /*********************
      * SCHEDULE PLAN CRUD
      *********************/
@@ -424,6 +470,61 @@ public class SQLiteConnection extends SQLiteOpenHelper{
 
         db.close();
         return id;
+    }
+
+    public ArrayList<MedicinePlan> getMedicinePlanListWithScheduleId(int scheduleId){
+        ArrayList<MedicinePlan> medicinePlanList = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(SchedulePlan.TABLE,
+                null,
+                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_SCHEDULE_ID+ " = ?",
+                new String[]{scheduleId+""},
+                null,
+                null,
+                null);
+        if(cursor.moveToFirst()){
+            medicinePlanList = new ArrayList<>();
+            while(!cursor.isAfterLast()) {
+                medicinePlanList.add(MedicinePlanInstantiatorUtil.createBeanFromCursor(cursor));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return medicinePlanList;
+    }
+
+    public MedicinePlan getMedicinePlanList(int scheduleId, int medicinePlanId){
+        MedicinePlan medicinePlan = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(SchedulePlan.TABLE,
+                null,
+                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_SCHEDULE_ID + " = ? AND " +
+                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_MEDICINE_PLAN_ID + " = ? ",
+                new String[]{scheduleId+"", medicinePlanId+""},
+                null,
+                null,
+                null);
+        if(cursor.moveToFirst()){
+            medicinePlan = MedicinePlanInstantiatorUtil.createBeanFromCursor(cursor);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return medicinePlan;
+    }
+
+
+    public int deleteMedicinePlanList(int scheudleId, int medicinePlanId){
+        SQLiteDatabase db = getWritableDatabase();
+        /* DELETE FROM medicine WHERE _id = ? */
+        int rows = db.delete(SchedulePlan.TABLE,
+                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_SCHEDULE_ID + " = ? AND " +
+                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_MEDICINE_PLAN_ID + " = ? ",
+                new String[]{scheudleId+"", medicinePlanId+""});
+        db.close();
+        Log.wtf("DELETE", "Deleted Medicine plan with ID " + scheudleId + " AND " + medicinePlanId);
+        return rows;
     }
 }
 

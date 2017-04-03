@@ -12,14 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
-import ph.edu.mobapde.meditake.meditake.adapter.AddScheduleMedicineAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.AddScheduleMedicineAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.Page.AddSchedulePagerAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.MedicineList;
+import ph.edu.mobapde.meditake.meditake.beans.MedicinePlan;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
-import ph.edu.mobapde.meditake.meditake.beans.MedicinePlanList;
 import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicinePlanInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 
@@ -118,9 +121,9 @@ public class AddScheduleMedicineFragment extends Fragment {
             public void onClick(View v) {
                 if(onAddScheduleMedicineFragmentInteractionListener != null) {
                     ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.container);
-                    AddScheduleDetailsFragment frag = (AddScheduleDetailsFragment) ((AddScheduleFragment.SectionsPagerAdapter) viewPager.getAdapter()).getFragment(0);
+                    AddScheduleDetailsFragment frag = (AddScheduleDetailsFragment) ((AddSchedulePagerAdapter) viewPager.getAdapter()).getFragment(0);
 
-                    MedicinePlanList medicinePlanList = MedicinePlanInstantiatorUtil.convertMedicineToMedicinePlan(medicineList);
+                    ArrayList<MedicinePlan> medicinePlanList = MedicinePlanInstantiatorUtil.convertMedicineToMedicinePlan(medicineList);
                     Schedule sched = frag.constructScheduleFromUserInput();
                     sched.setMedicinePlanList(medicinePlanList);
 
@@ -143,12 +146,6 @@ public class AddScheduleMedicineFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        onAddScheduleMedicineFragmentInteractionListener = null;
-//    }
 
     public interface OnAddScheduleMedicineFragmentInteractionListener {
         void onAddScheduleMedicineFragmentSave(Schedule schedule);

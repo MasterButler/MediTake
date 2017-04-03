@@ -4,6 +4,8 @@ import android.media.Ringtone;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Main class Schedule  maintaining the schedule of the person's dosage of the medicines.
  * @author Winfred Villaluna
@@ -28,7 +30,7 @@ public class Schedule implements Parcelable {
     private long drinkingInterval;
     private boolean isVibrate;
     private boolean isActivated;
-    private MedicinePlanList medicinePlanList;
+    private ArrayList<MedicinePlan> medicinePlanList;
 
     public Schedule(){    }
 
@@ -115,15 +117,16 @@ public class Schedule implements Parcelable {
         isActivated = activated;
     }
 
-    public MedicinePlanList getMedicinePlanList() {
+    public ArrayList<MedicinePlan> getMedicinePlanList() {
         return medicinePlanList;
     }
 
-    public void setMedicinePlanList(MedicinePlanList medicinePlanList) {
+    public void setMedicinePlanList(ArrayList<MedicinePlan> medicinePlanList) {
         this.medicinePlanList = medicinePlanList;
     }
 
-    protected Schedule (Parcel in) {
+
+    protected Schedule(Parcel in) {
         dosagePerDrinkingInterval = in.readDouble();
         sqlId = in.readInt();
         nextDrinkingTime = in.readLong();
@@ -132,6 +135,7 @@ public class Schedule implements Parcelable {
         drinkingInterval = in.readLong();
         isVibrate = in.readByte() != 0x00;
         isActivated = in.readByte() != 0x00;
+        medicinePlanList = in.readArrayList(null);
     }
 
     @Override
@@ -149,19 +153,20 @@ public class Schedule implements Parcelable {
         dest.writeLong(drinkingInterval);
         dest.writeByte((byte) (isVibrate ? 0x01 : 0x00));
         dest.writeByte((byte) (isActivated ? 0x01 : 0x00));
+        //dest.writeValue(medicinePlanList);
+        dest.writeList(medicinePlanList);
     }
 
-    public static final Parcelable.Creator<Schedule > CREATOR = new Parcelable.Creator<Schedule >() {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Schedule> CREATOR = new Parcelable.Creator<Schedule>() {
         @Override
-        public Schedule  createFromParcel(Parcel in) {
-            return new Schedule (in);
+        public Schedule createFromParcel(Parcel in) {
+            return new Schedule(in);
         }
 
         @Override
-        public Schedule [] newArray(int size) {
-            return new Schedule [size];
+        public Schedule[] newArray(int size) {
+            return new Schedule[size];
         }
     };
-
-
 }

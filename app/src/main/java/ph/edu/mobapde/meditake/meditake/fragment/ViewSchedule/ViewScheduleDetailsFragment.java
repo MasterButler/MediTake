@@ -1,4 +1,4 @@
-package ph.edu.mobapde.meditake.meditake.fragment.AddSchedule;
+package ph.edu.mobapde.meditake.meditake.fragment.ViewSchedule;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,7 +11,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,14 +39,15 @@ import static android.widget.FrameLayout.*;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link OnAddScheduleDetailsFragmentInteractionListener} interface
+ * {@link OnViewScheduleDetailsFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AddScheduleDetailsFragment#newInstance} factory method to
+ * Use the {@link ViewScheduleDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddScheduleDetailsFragment extends Fragment {
+public class ViewScheduleDetailsFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_SCHEDULE = "schedule";
 
     @BindView(R.id.checkbox_repeat)
     CheckBox cbRepeat;
@@ -77,18 +77,19 @@ public class AddScheduleDetailsFragment extends Fragment {
     @BindView(R.id.tv_schedule_repeat_time)
     TextView tvRepeat;
     @BindView(R.id.tv_schedule_label)
-    TextView tvScheduleLabel;
+    TextView tvLabel;
 
     @BindView(R.id.switch_schedule_vibrate)
     Switch switchIsVibrate;
 
+    private Schedule schedule;
     private int sectionNumber;
 
     private Uri ringtoneUriUsed;
 
     boolean isMilitary;
 
-    private OnAddScheduleDetailsFragmentInteractionListener onAddScheduleFragmentInteractionListener;
+    private OnViewScheduleDetailsFragmentInteractionListener OnViewScheduleDetailsFragmentInteractionListener;
     private Context contextHolder;
 
     @Override
@@ -102,14 +103,15 @@ public class AddScheduleDetailsFragment extends Fragment {
         }
     }
 
-    public AddScheduleDetailsFragment() {
+    public ViewScheduleDetailsFragment() {
         // Required empty public constructor
     }
 
-    public static AddScheduleDetailsFragment newInstance(int sectionNumber) {
-        AddScheduleDetailsFragment fragment = new AddScheduleDetailsFragment();
+    public static ViewScheduleDetailsFragment newInstance(int sectionNumber, Schedule schedule) {
+        ViewScheduleDetailsFragment fragment = new ViewScheduleDetailsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putParcelable(ARG_SCHEDULE, schedule);
         fragment.setArguments(args);
         return fragment;
     }
@@ -119,6 +121,7 @@ public class AddScheduleDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            schedule = getArguments().getParcelable(ARG_SCHEDULE);
         }
     }
 
@@ -126,7 +129,7 @@ public class AddScheduleDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_add_schedule_details, container, false);
+        View v = inflater.inflate(R.layout.fragment_view_schedule_details, container, false);
         ButterKnife.bind(this, v);
 
         ringtoneUriUsed = RingtoneManager.getActualDefaultRingtoneUri(getActivity().getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
@@ -154,8 +157,8 @@ public class AddScheduleDetailsFragment extends Fragment {
         linRepeatSelection.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onAddScheduleFragmentInteractionListener != null){
-                    onAddScheduleFragmentInteractionListener.onAddScheduleDetailsFragmentRepeatClick(tvRepeat);
+                if(OnViewScheduleDetailsFragmentInteractionListener != null){
+                    OnViewScheduleDetailsFragmentInteractionListener.onViewScheduleDetailsFragmentRepeatClick(tvRepeat);
                 }
             }
         });
@@ -163,8 +166,8 @@ public class AddScheduleDetailsFragment extends Fragment {
         linScheduleTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onAddScheduleFragmentInteractionListener != null){
-                    onAddScheduleFragmentInteractionListener.onAddScheduleDetailsFragmentTimeClick(tvScheduleTime, tvScheduleTimePeriod);
+                if(OnViewScheduleDetailsFragmentInteractionListener != null){
+                    OnViewScheduleDetailsFragmentInteractionListener.onViewScheduleDetailsFragmentTimeClick(tvScheduleTime, tvScheduleTimePeriod);
                 }
             }
         });
@@ -172,18 +175,18 @@ public class AddScheduleDetailsFragment extends Fragment {
         linContinueSchedule.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onAddScheduleFragmentInteractionListener != null){
-                    ViewPager viewPager = (ViewPager)getActivity().findViewById(R.id.container);
-                    viewPager.setCurrentItem(1);
-
+                if(OnViewScheduleDetailsFragmentInteractionListener != null){
+//                    ViewPager viewPager = (ViewPager)getActivity().findViewById(R.id.container);
+//                    viewPager.setCurrentItem(1);
+                    OnViewScheduleDetailsFragmentInteractionListener.onViewScheduleMedicineFragmentUpdate(updateScheduleFromUserInput(schedule));
                 }
             }
         });
         linDiscardSchedule.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onAddScheduleFragmentInteractionListener != null){
-                    onAddScheduleFragmentInteractionListener.onAddScheduleDetailsFragmentCancel();
+                if(OnViewScheduleDetailsFragmentInteractionListener != null){
+                    OnViewScheduleDetailsFragmentInteractionListener.onViewScheduleDetailsFragmentCancel();
                 }
             }
         });
@@ -195,13 +198,20 @@ public class AddScheduleDetailsFragment extends Fragment {
             }
         });
 
-        tvScheduleLabel.setOnClickListener(new View.OnClickListener() {
+        tvLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showEditLabel();
             }
         });
 
+        cbRepeat.setChecked(schedule.getDrinkingInterval() != 0);
+        tvScheduleTime.setText(DateUtil.convertToReadableFormat(schedule.getNextDrinkingTime(), isMilitary).split(" ")[0]);
+        tvScheduleTimePeriod.setText(DateUtil.convertToReadableFormat(schedule.getNextDrinkingTime(), isMilitary).split(" ")[1]);
+        tvRepeat.setText(DateUtil.parseToTimePickerDisplay(schedule.getDrinkingInterval()));
+        tvRingtone.setText(AlarmUtil.convertStringToRingtone(contextHolder, schedule.getRingtone()).getTitle(contextHolder));
+        switchIsVibrate.setChecked(schedule.isVibrate());
+        tvLabel.setText(schedule.getLabel());
 
         return v;
     }
@@ -209,8 +219,8 @@ public class AddScheduleDetailsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnAddScheduleDetailsFragmentInteractionListener) {
-            onAddScheduleFragmentInteractionListener = (OnAddScheduleDetailsFragmentInteractionListener) context;
+        if (context instanceof OnViewScheduleDetailsFragmentInteractionListener) {
+            OnViewScheduleDetailsFragmentInteractionListener = (OnViewScheduleDetailsFragmentInteractionListener) context;
             contextHolder = context;
         } else {
             throw new RuntimeException(context.toString()
@@ -221,7 +231,7 @@ public class AddScheduleDetailsFragment extends Fragment {
 //    @Override
 //    public void onDetach() {
 //        super.onDetach();
-//        onAddScheduleFragmentInteractionListener = null;
+//        OnViewScheduleDetailsFragmentInteractionListener = null;
 //    }
 
     public void chooseRingtone(){
@@ -238,7 +248,7 @@ public class AddScheduleDetailsFragment extends Fragment {
         params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_left_margin);
         params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_right_margin);
 
-        input.setText(tvScheduleLabel.getText().toString());
+        input.setText(tvLabel.getText().toString());
         input.setLayoutParams(params);
         input.setSingleLine();
 
@@ -275,22 +285,21 @@ public class AddScheduleDetailsFragment extends Fragment {
     }
 
     private void editLabel(String newValue){
-        tvScheduleLabel.setText(newValue);
+        tvLabel.setText(newValue);
     }
 
-    public interface OnAddScheduleDetailsFragmentInteractionListener {
-        void onAddScheduleDetailsFragmentRepeatClick(TextView tvRepeat);
-        void onAddScheduleDetailsFragmentTimeClick(TextView tvTime, TextView tvTimePeriod);
-        void onAddScheduleDetailsFragmentCancel();
-
-        void onAddScheduleMedicineFragmentSave(Schedule schedule);
+    public interface OnViewScheduleDetailsFragmentInteractionListener {
+        void onViewScheduleDetailsFragmentRepeatClick(TextView tvRepeat);
+        void onViewScheduleDetailsFragmentTimeClick(TextView tvTime, TextView tvTimePeriod);
+        void onViewScheduleDetailsFragmentCancel();
+        void onViewScheduleMedicineFragmentUpdate(Schedule schedule);
     }
 
 
     //TODO lookign for better ways to do this
-    public  Schedule constructScheduleFromUserInput(){
+    public  Schedule updateScheduleFromUserInput(Schedule schedule){
         long nextDrinkingTime = DateUtil.getTime(tvScheduleTime.getText().toString() + " " + tvScheduleTimePeriod.getText().toString());
-        String label = tvScheduleLabel.getText().toString();
+        String label = tvLabel.getText().toString();
         boolean isVibrate = switchIsVibrate.isChecked();
         int[] timeValues = DateUtil.parseFromTimePicker(tvRepeat.getText().toString());
         long drinkingInterval = cbRepeat.isChecked() ? (timeValues[0] * 60 + timeValues[1]) : 0;
@@ -300,8 +309,12 @@ public class AddScheduleDetailsFragment extends Fragment {
         Log.wtf("NEW MEDICINES", "ISVIBRATE IS " + isVibrate);
         Log.wtf("NEW MEDICINES", "DRINKING INTERVAL IS " + drinkingInterval);
 
-        Schedule schedule = new Schedule(nextDrinkingTime, label, ringtoneUriUsed.toString(), drinkingInterval, isVibrate, true);
-        //onAddScheduleFragmentInteractionListener.onAddScheduleFragmentSave(schedule);
+        schedule.setNextDrinkingTime(nextDrinkingTime);
+        schedule.setLabel(label);
+        schedule.setVibrate(isVibrate);
+        schedule.setRingtone(ringtoneUriUsed.toString());
+        schedule.setDrinkingInterval(drinkingInterval);
+        //OnViewScheduleDetailsFragmentInteractionListener.onAddScheduleFragmentSave(schedule);
         return schedule;
     }
 }
