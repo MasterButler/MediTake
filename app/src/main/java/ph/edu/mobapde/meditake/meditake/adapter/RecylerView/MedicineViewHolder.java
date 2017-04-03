@@ -1,4 +1,4 @@
-package ph.edu.mobapde.meditake.meditake.adapter;
+package ph.edu.mobapde.meditake.meditake.adapter.RecylerView;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -74,7 +74,7 @@ public class MedicineViewHolder extends RecyclerView.ViewHolder{
     LinearLayout linCancelMedicine;
 
     @BindView(R.id.cv_holder)
-    LinearLayout cvHolder;
+    CardView cvHolder;
 
     @BindView(R.id.card_view_medicine)
     LinearLayout viewLayout;

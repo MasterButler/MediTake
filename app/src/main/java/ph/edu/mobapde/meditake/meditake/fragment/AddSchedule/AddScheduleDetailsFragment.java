@@ -1,4 +1,4 @@
-package ph.edu.mobapde.meditake.meditake.fragment;
+package ph.edu.mobapde.meditake.meditake.fragment.AddSchedule;
 
 import android.app.Activity;
 import android.content.Context;
@@ -218,11 +218,11 @@ public class AddScheduleDetailsFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        onAddScheduleFragmentInteractionListener = null;
-    }
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+//        onAddScheduleFragmentInteractionListener = null;
+//    }
 
     public void chooseRingtone(){
         AlarmUtil.chooseRingtone(this);

@@ -1,4 +1,4 @@
-package ph.edu.mobapde.meditake.meditake.fragment;
+package ph.edu.mobapde.meditake.meditake.fragment.AddSchedule;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -144,11 +144,11 @@ public class AddScheduleMedicineFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        onAddScheduleMedicineFragmentInteractionListener = null;
-    }
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+//        onAddScheduleMedicineFragmentInteractionListener = null;
+//    }
 
     public interface OnAddScheduleMedicineFragmentInteractionListener {
         void onAddScheduleMedicineFragmentSave(Schedule schedule);

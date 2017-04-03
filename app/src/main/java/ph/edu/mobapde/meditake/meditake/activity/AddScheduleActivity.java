@@ -1,33 +1,29 @@
-package ph.edu.mobapde.meditake.meditake.fragment;
+package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
+import ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleDetailsFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleMedicineFragment;
+import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
-public class AddScheduleFragment extends Fragment {
+public class AddScheduleActivity extends AppCompatActivity{
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -38,45 +34,48 @@ public class AddScheduleFragment extends Fragment {
     @BindView(R.id.tabs)
     TabLayout tabLayout;
 
-    public AddScheduleFragment(){
-
-    }
-
-    public static AddScheduleFragment newInstance() {
-        AddScheduleFragment fragment = new AddScheduleFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+    public AddScheduleActivity(){
+        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_add_schedule_fragment, container, false);
-        ButterKnife.bind(this, v);
-
-        setHasOptionsMenu(true);
+        ThemeUtil.onActivityCreateSetTheme(this);
+        setContentView(R.layout.fragment_add_schedule);
+        ButterKnife.bind(this);
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout.setupWithViewPager(mViewPager);
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mSectionsPagerAdapter.add(AddScheduleDetailsFragment.newInstance(1));
         mSectionsPagerAdapter.add(AddScheduleMedicineFragment.newInstance(2));
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        return v;
     }
+
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        View v = inflater.inflate(R.layout.fragment_add_schedule, container, false);
+//        ButterKnife.bind(this, v);
+//
+//        setHasOptionsMenu(true);
+//
+//        mViewPager.setAdapter(mSectionsPagerAdapter);
+//        tabLayout.setupWithViewPager(mViewPager);
+//
+//         Create the adapter that will return a fragment for each of the three
+//         primary sections of the activity.
+//
+//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//        mSectionsPagerAdapter.add(AddScheduleDetailsFragment.newInstance(1));
+//        mSectionsPagerAdapter.add(AddScheduleMedicineFragment.newInstance(2));
+//
+//        mViewPager.setAdapter(mSectionsPagerAdapter);
+//
+//        return v;
+//    }
 
 //    @Override
 //    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
@@ -92,19 +91,14 @@ public class AddScheduleFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        for (Fragment fragment : getFragmentManager().getFragments()) {
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
             if (fragment instanceof AddScheduleDetailsFragment) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.detach(fragment);
                 ft.attach(fragment);
                 ft.commit();
             }
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
     }
 
     /**

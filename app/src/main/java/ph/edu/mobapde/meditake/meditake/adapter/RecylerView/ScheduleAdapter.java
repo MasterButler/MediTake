@@ -1,4 +1,4 @@
-package ph.edu.mobapde.meditake.meditake.adapter;
+package ph.edu.mobapde.meditake.meditake.adapter.RecylerView;
 
 import android.content.Context;
 import android.database.Cursor;
