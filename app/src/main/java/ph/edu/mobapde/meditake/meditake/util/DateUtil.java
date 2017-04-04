@@ -26,6 +26,8 @@ public class DateUtil {
     public static long MILLIS_TO_HOURS = 60 * 60 * 1000;
     public static long MILLIS_TO_DAYS = 24 * 60 * 60 * 1000;
 
+    public static final String REPEATING_TIME_NOT_SET = "Interval not set";
+
     private static final String DEFAULT_TIME_FORMAT_PERIOD_12 = "hh:mm a";
     private static final String DEFAULT_TIME_FORMAT_PERIOD_24 = "HH:mm";
 
@@ -163,7 +165,7 @@ public class DateUtil {
         if(!output.isEmpty()){
             output = "Every " + output;
         }else{
-            output = "Repeating schedule not yet set";
+            output = REPEATING_TIME_NOT_SET;
         }
         return output;
     }

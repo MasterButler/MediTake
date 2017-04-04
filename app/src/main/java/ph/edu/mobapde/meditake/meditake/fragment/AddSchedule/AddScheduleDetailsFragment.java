@@ -72,8 +72,6 @@ public class AddScheduleDetailsFragment extends Fragment {
     LinearLayout linRingtone;
     @BindView(R.id.tv_schedule_ringtone_name)
     TextView tvRingtone;
-    @BindView(R.id.iv_schedule_ringtone_selector)
-    ImageView ivScheduleRingtonePicker;
     @BindView(R.id.tv_schedule_repeat_time)
     TextView tvRepeat;
     @BindView(R.id.tv_schedule_label)
@@ -175,7 +173,6 @@ public class AddScheduleDetailsFragment extends Fragment {
                 if(onAddScheduleFragmentInteractionListener != null){
                     ViewPager viewPager = (ViewPager)getActivity().findViewById(R.id.container);
                     viewPager.setCurrentItem(1);
-
                 }
             }
         });

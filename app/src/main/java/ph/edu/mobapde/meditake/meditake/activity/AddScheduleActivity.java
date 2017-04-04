@@ -2,6 +2,8 @@ package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 
@@ -69,14 +71,15 @@ public class AddScheduleActivity extends AppCompatActivity
     }
 
     public void initializePager(){
-        mViewPager.setAdapter(mAddSchedulePagerAdapter);
-        tabLayout.setupWithViewPager(mViewPager);
-
         mAddSchedulePagerAdapter = new AddSchedulePagerAdapter(getSupportFragmentManager());
         mAddSchedulePagerAdapter.add(AddScheduleDetailsFragment.newInstance(1));
         mAddSchedulePagerAdapter.add(AddScheduleMedicineFragment.newInstance(2));
 
         mViewPager.setAdapter(mAddSchedulePagerAdapter);
+        int[] attrs = {android.R.attr.colorBackground};
+        TypedArray typedArray = obtainStyledAttributes(attrs);
+        mViewPager.setBackgroundColor(typedArray.getColor(0, Color.WHITE));
+        tabLayout.setupWithViewPager(mViewPager);
     }
 
     public void initializeContents(){
@@ -86,7 +89,7 @@ public class AddScheduleActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_add_medicine, menu);
+        //getMenuInflater().inflate(R.menu.toolbar_add_medicine, menu);
         //......
         return true;
     }

@@ -1,6 +1,8 @@
 package ph.edu.mobapde.meditake.meditake.fragment.ViewSchedule;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -62,14 +64,15 @@ public class ViewScheduleFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        tabLayout.setupWithViewPager(mViewPager);
-
         mSectionsPagerAdapter = new ViewScheduleFragment.SectionsPagerAdapter(getChildFragmentManager());
         mSectionsPagerAdapter.add(ViewScheduleDetailsFragment.newInstance(1, schedule));
 //        mSectionsPagerAdapter.add(AddScheduleMedicineFragment.newInstance(2));
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        int[] attrs = {android.R.attr.colorBackground};
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs);
+        mViewPager.setBackgroundColor(typedArray.getColor(0, Color.WHITE));
+        tabLayout.setupWithViewPager(mViewPager);
 
         return v;
     }

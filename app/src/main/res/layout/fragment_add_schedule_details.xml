@@ -18,7 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="@color/cardview_light_background">
+                android:background="@color/white">
 
                 <!--<TextView-->
                 <!--android:layout_width="match_parent"-->
@@ -253,53 +253,53 @@
 
 
                 <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="horizontal">-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:textSize="14dp"-->
-                        <!--android:text="Medicine"-->
-                        <!--android:paddingTop="11dp"-->
-                        <!--android:paddingBottom="10dp"-->
-                        <!--android:paddingLeft="16dp"-->
-                        <!--android:paddingRight ="16dp"/>-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textSize="14dp"-->
+                <!--android:text="Medicine"-->
+                <!--android:paddingTop="11dp"-->
+                <!--android:paddingBottom="10dp"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:paddingRight ="16dp"/>-->
 
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:clickable="true"-->
-                        <!--android:background="?android:attr/selectableItemBackgroundBorderless"-->
-                        <!--android:id="@+id/lin_schedule_medicine"-->
-                        <!--android:paddingTop="11dp"-->
-                        <!--android:paddingBottom="10dp"-->
-                        <!--android:paddingLeft="16dp"-->
-                        <!--android:paddingRight ="16dp">-->
+                <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:clickable="true"-->
+                <!--android:background="?android:attr/selectableItemBackgroundBorderless"-->
+                <!--android:id="@+id/lin_schedule_medicine"-->
+                <!--android:paddingTop="11dp"-->
+                <!--android:paddingBottom="10dp"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:paddingRight ="16dp">-->
 
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:textSize="14dp"-->
-                            <!--android:text="Choose medicine" />-->
-                        <!--&lt;!&ndash;android:id="@+id/tv_schedule_ringtone_name"&ndash;&gt;-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textSize="14dp"-->
+                <!--android:text="Choose medicine" />-->
+                <!--&lt;!&ndash;android:id="@+id/tv_schedule_ringtone_name"&ndash;&gt;-->
 
-                        <!--<ImageView-->
-                            <!--android:layout_width="20dp"-->
-                            <!--android:layout_height="20dp"-->
-                            <!--android:src="@drawable/ic_keyboard_arrow_right_black_24dp"-->
-                            <!--android:layout_marginLeft="5dp"/>-->
-                        <!--&lt;!&ndash;android:id="@+id/iv_schedule_ringtone_selector"&ndash;&gt;-->
+                <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:src="@drawable/ic_keyboard_arrow_right_black_24dp"-->
+                <!--android:layout_marginLeft="5dp"/>-->
+                <!--&lt;!&ndash;android:id="@+id/iv_schedule_ringtone_selector"&ndash;&gt;-->
 
-                    <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
 
                 <!--</LinearLayout>-->
                 <!--<View-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:background="@android:color/darker_gray"/>-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@android:color/darker_gray"/>-->
 
                 <Space
                     android:layout_width="match_parent"

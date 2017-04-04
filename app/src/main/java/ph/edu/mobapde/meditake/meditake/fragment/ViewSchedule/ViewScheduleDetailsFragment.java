@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +31,11 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
+import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.ViewScheduleMedicineAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.util.AlarmUtil;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
+import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 
 import static android.widget.FrameLayout.*;
 
@@ -72,25 +75,29 @@ public class ViewScheduleDetailsFragment extends Fragment {
     LinearLayout linRingtone;
     @BindView(R.id.tv_schedule_ringtone_name)
     TextView tvRingtone;
-    @BindView(R.id.iv_schedule_ringtone_selector)
-    ImageView ivScheduleRingtonePicker;
     @BindView(R.id.tv_schedule_repeat_time)
     TextView tvRepeat;
     @BindView(R.id.tv_schedule_label)
     TextView tvLabel;
 
+    @BindView(R.id.rv_schedule_medicine_view)
+    RecyclerView rvMedicineView;
+
     @BindView(R.id.switch_schedule_vibrate)
     Switch switchIsVibrate;
 
-    private Schedule schedule;
-    private int sectionNumber;
+    ViewScheduleMedicineAdapter viewScheduleMedicineAdapter;
 
-    private Uri ringtoneUriUsed;
+    ScheduleUtil scheduleUtil;
+    Schedule schedule;
+    int sectionNumber;
+
+    Uri ringtoneUriUsed;
 
     boolean isMilitary;
 
-    private OnViewScheduleDetailsFragmentInteractionListener OnViewScheduleDetailsFragmentInteractionListener;
-    private Context contextHolder;
+    OnViewScheduleDetailsFragmentInteractionListener OnViewScheduleDetailsFragmentInteractionListener;
+    Context contextHolder;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -123,6 +130,7 @@ public class ViewScheduleDetailsFragment extends Fragment {
             this.sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             schedule = getArguments().getParcelable(ARG_SCHEDULE);
         }
+        scheduleUtil = new ScheduleUtil(contextHolder);
     }
 
     @Override
@@ -212,6 +220,8 @@ public class ViewScheduleDetailsFragment extends Fragment {
         tvRingtone.setText(AlarmUtil.convertStringToRingtone(contextHolder, schedule.getRingtone()).getTitle(contextHolder));
         switchIsVibrate.setChecked(schedule.isVibrate());
         tvLabel.setText(schedule.getLabel());
+
+        rvMedicineView.setAdapter(viewScheduleMedicineAdapter);
 
         return v;
     }

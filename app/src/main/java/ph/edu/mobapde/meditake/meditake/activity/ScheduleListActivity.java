@@ -76,8 +76,6 @@ public class ScheduleListActivity extends AppCompatActivity
     RecyclerView rvSchedule;
 
     RepeatingTimePickerFragment repeatingTimePickerFragment;
-    AddScheduleActivity addScheduleFragment;
-
     ViewScheduleFragment viewScheduleFragment;
 
     ScheduleAdapter scheduleAdapter;
@@ -151,6 +149,12 @@ public class ScheduleListActivity extends AppCompatActivity
         checkIntent();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateList();
+    }
+
     public void initializeDrawer(){
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, view_schedule_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -172,7 +176,7 @@ public class ScheduleListActivity extends AppCompatActivity
         rvSchedule.setAdapter(scheduleAdapter);
         rvSchedule.setLayoutManager(mLayoutManager);
 
-        addScheduleFragment = new AddScheduleActivity();
+        repeatingTimePickerFragment = RepeatingTimePickerFragment.newInstance();
     }
 
     public void initializeAdapter(){
@@ -329,7 +333,9 @@ public class ScheduleListActivity extends AppCompatActivity
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }else if(viewScheduleFragment.isVisible()){
+            closeViewScheduleFragment();
+        }else{
             super.onBackPressed();
         }
     }

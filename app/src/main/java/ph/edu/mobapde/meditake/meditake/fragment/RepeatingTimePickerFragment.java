@@ -42,19 +42,9 @@ public class RepeatingTimePickerFragment extends Fragment {
     private OnRepeatingTimePickerFragmentInteractionListener onRepeatingTimePickerFragmentInteractionListener;
 
     public RepeatingTimePickerFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RepeatingTimePickerFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RepeatingTimePickerFragment newInstance(String param1, String param2) {
+    public static RepeatingTimePickerFragment newInstance() {
         RepeatingTimePickerFragment fragment = new RepeatingTimePickerFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -85,12 +75,16 @@ public class RepeatingTimePickerFragment extends Fragment {
         if(tvRepeat != null){
             int hourValue = 0;
             int minuteValue = 1;
-            int[] timeValues = DateUtil.parseFromTimePicker(tvRepeat.getText().toString());
-            
-            Log.wtf("GOT VALUES", timeValues[hourValue] + " hour(s) and " + timeValues[minuteValue] + " minutes");
-            npHour.setValue(npHour.getMinValue() <= timeValues[hourValue] && npHour.getMaxValue() >= timeValues[hourValue] ? timeValues[hourValue] : 0);
-            npMinutes.setValue(npMinutes.getMinValue() <= timeValues[minuteValue] && npMinutes.getMaxValue() >= timeValues[minuteValue] ? timeValues[minuteValue] : 0);
+            int[] timeValues;
+            if(!tvRepeat.getText().toString().equals(DateUtil.REPEATING_TIME_NOT_SET)){
+                timeValues = DateUtil.parseFromTimePicker(tvRepeat.getText().toString());
 
+                Log.wtf("GOT VALUES", timeValues[hourValue] + " hour(s) and " + timeValues[minuteValue] + " minutes");
+                npHour.setValue(npHour.getMinValue() <= timeValues[hourValue] && npHour.getMaxValue() >= timeValues[hourValue] ? timeValues[hourValue] : 0);
+                npMinutes.setValue(npMinutes.getMinValue() <= timeValues[minuteValue] && npMinutes.getMaxValue() >= timeValues[minuteValue] ? timeValues[minuteValue] : 0);
+            }else{
+                timeValues = new int[]{0, 0};
+            }
         }
 
         npMinutes.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {

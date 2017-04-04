@@ -29,13 +29,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay">
+
+                <!--<com.tech.freak.wizardpager.ui.StepPagerStrip-->
+                    <!--android:id="@+id/strip"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="16dp"-->
+                    <!--android:layout_marginRight="16dp"-->
+                    <!--android:gravity="left"-->
+                    <!--android:paddingBottom="8dp"-->
+                    <!--android:paddingLeft="@dimen/list_item_padding_left"-->
+                    <!--android:paddingRight="@dimen/list_item_padding_right"-->
+                    <!--android:paddingTop="16dp" />-->
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay">
 
             </android.support.v7.widget.Toolbar>
 
@@ -49,17 +62,10 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:background="@android:color/transparent"
                 android:layout_height="match_parent"
+                android:background="@color/white"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_margin="@dimen/fab_margin"
-                app:srcCompat="@android:drawable/ic_dialog_email" />
         </LinearLayout>
 
     </RelativeLayout>

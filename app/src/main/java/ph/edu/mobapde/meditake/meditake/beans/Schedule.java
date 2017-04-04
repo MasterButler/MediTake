@@ -126,6 +126,7 @@ public class Schedule implements Parcelable {
     }
 
 
+
     protected Schedule(Parcel in) {
         dosagePerDrinkingInterval = in.readDouble();
         sqlId = in.readInt();
@@ -135,7 +136,12 @@ public class Schedule implements Parcelable {
         drinkingInterval = in.readLong();
         isVibrate = in.readByte() != 0x00;
         isActivated = in.readByte() != 0x00;
-        medicinePlanList = in.readArrayList(null);
+        if (in.readByte() == 0x01) {
+            medicinePlanList = new ArrayList<MedicinePlan>();
+            in.readList(medicinePlanList, MedicinePlan.class.getClassLoader());
+        } else {
+            medicinePlanList = null;
+        }
     }
 
     @Override
@@ -153,8 +159,12 @@ public class Schedule implements Parcelable {
         dest.writeLong(drinkingInterval);
         dest.writeByte((byte) (isVibrate ? 0x01 : 0x00));
         dest.writeByte((byte) (isActivated ? 0x01 : 0x00));
-        //dest.writeValue(medicinePlanList);
-        dest.writeList(medicinePlanList);
+        if (medicinePlanList == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(medicinePlanList);
+        }
     }
 
     @SuppressWarnings("unused")

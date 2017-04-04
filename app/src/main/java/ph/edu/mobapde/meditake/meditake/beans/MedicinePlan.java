@@ -75,7 +75,6 @@ public class MedicinePlan implements Parcelable {
         dest.writeInt(dosage);
     }
 
-    @SuppressWarnings("unused")
     public static final Parcelable.Creator<MedicinePlan> CREATOR = new Parcelable.Creator<MedicinePlan>() {
         @Override
         public MedicinePlan createFromParcel(Parcel in) {
