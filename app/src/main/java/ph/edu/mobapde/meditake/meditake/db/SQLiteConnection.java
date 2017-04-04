@@ -397,6 +397,17 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         return rows;
     }
 
+    /**
+     * Deletes all schedule in the db.
+     */
+    public int deleteAllSchedule(){
+        SQLiteDatabase db = getWritableDatabase();
+        /* DELETE FROM medicine WHERE _id = ? */
+        int rows = db.delete(Schedule.TABLE, null, null);
+        db.close();
+        return rows;
+    }
+
 
     /*********************
      * MEDICINE PLAN CRUD

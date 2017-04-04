@@ -40,8 +40,6 @@
             android:name=".activity.AddScheduleActivity"
             android:label="@string/title_activity_add_schedule"
             android:theme="@style/AppTheme.NoActionBar" />
-
-
         <activity android:name=".activity.WelcomeScreenActivity">
 
             <!-- INTENT FILTER NAME WILL ON -->
@@ -61,6 +59,8 @@
         <service
             android:name=".service.AlarmService"
             android:exported="false" />
+
+        <activity android:name=".activity.SettingsActivity"></activity>
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@ import android.widget.Toast;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.activity.MedicineListActivity;
 import ph.edu.mobapde.meditake.meditake.activity.ScheduleListActivity;
+import ph.edu.mobapde.meditake.meditake.activity.SettingsActivity;
 
 /**
  * Created by Winfred Villaluna on 3/12/2017.
@@ -34,6 +35,10 @@ public class DrawerManager {
                 activity.startActivity(i);
                 break;
             case R.id.nav_settings:
+                i = new Intent();
+                i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                i.setClass(activity.getBaseContext(), SettingsActivity.class);
+                activity.startActivity(i);
                 break;
             default: Toast.makeText(activity.getBaseContext(), "Unexpected error encountered. Please try again", Toast.LENGTH_SHORT);
         }
