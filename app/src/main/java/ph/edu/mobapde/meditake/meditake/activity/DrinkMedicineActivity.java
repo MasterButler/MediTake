@@ -24,7 +24,7 @@ import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class DrinkMedicineActivity extends AppCompatActivity {
 
-    @BindView(R.id.drink_medicine)
+    @BindView(R.id.Snooze)
     Button buttonMedicineDrink;
 
     private PowerManager.WakeLock wl;
@@ -76,7 +76,7 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         v.vibrate(new long[]{0l,200l,100l,100l}, 0);
     }
 
-    @OnClick(R.id.drink_medicine)
+    @OnClick(R.id.Snooze)
     public void drinkMedicine(){
         Intent i = new Intent(getBaseContext(), ScheduleListActivity.class);
         i.putExtra(Schedule.TABLE, schedule);
