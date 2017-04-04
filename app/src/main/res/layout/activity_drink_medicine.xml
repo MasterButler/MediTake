@@ -44,9 +44,9 @@
 
             android:padding="30dp"
             circular:angle="3.14"
-            circular:border_color="#505090"
+            circular:border_color="?attr/colorAccent"
             circular:border_thickness="14dp"
-            circular:thumb_color="#30AEFF"
+            circular:thumb_color="?attr/colorPrimaryDark"
             circular:thumb_size="24dp"
 
             />
@@ -61,7 +61,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="the slide Once Taken!!!"
+            android:text="the slider Once Taken!!!"
             android:textColor="@color/white"
             android:textAlignment="center"
             android:textSize="20dp"/>
