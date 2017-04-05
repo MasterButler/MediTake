@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.MedicinePlan;
@@ -77,13 +78,13 @@ public class SQLiteConnection extends SQLiteOpenHelper{
 
 
         sqlMedicine = "CREATE TABLE " + Medicine.TABLE + " ( "
-            + Medicine.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + Medicine.COLUMN_BRAND_NAME + " TEXT, "
-            + Medicine.COLUMN_GENERIC_NAME + " TEXT NOT NULL, "
-            + Medicine.COLUMN_MEDICINE_FOR + " TEXT, "
-            + Medicine.COLUMN_AMOUNT + " REAL NOT NULL, "
-            + Medicine.COLUMN_DOSAGE + " REAL NOT NULL, "
-            + Medicine.COLUMN_MEDICINE_TYPE + " TEXT NOT NULL);";
+                + Medicine.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Medicine.COLUMN_BRAND_NAME + " TEXT, "
+                + Medicine.COLUMN_GENERIC_NAME + " TEXT NOT NULL, "
+                + Medicine.COLUMN_MEDICINE_FOR + " TEXT, "
+                + Medicine.COLUMN_AMOUNT + " REAL NOT NULL, "
+                + Medicine.COLUMN_DOSAGE + " REAL NOT NULL, "
+                + Medicine.COLUMN_MEDICINE_TYPE + " TEXT NOT NULL);";
 
         sqlSchedule = "CREATE TABLE " + Schedule.TABLE + " ( "
                 + Schedule.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -184,6 +185,39 @@ public class SQLiteConnection extends SQLiteOpenHelper{
     }
 
     /**
+     * Retrieves the medicine through the id.
+     * @param id value that points to the object.
+     * @return medicine object referenced by the id.
+     */
+    public Cursor getMedicine(int[] id){
+        //SELECT * FROM medicine WHERE _id = ?
+        Medicine medicine = null;
+        SQLiteDatabase db = getReadableDatabase();
+
+        String stringIdPattern = "";
+        String[] stringId = new String[id.length];
+        for(int i = 0; i < id.length; i++) {
+            stringId[i] = id[i] + "";
+            stringIdPattern += "?";
+            if(i != id.length-1){
+                stringIdPattern += ",";
+            }
+        }
+
+        for(int i = 0; i < id.length; i++){
+            Log.wtf("IDS TO CHECK", stringId[i]);
+        }
+
+        return db.query(Medicine.TABLE,
+                null,
+                Medicine.COLUMN_ID + " IN(" + stringIdPattern + ")",
+                stringId,
+                null,
+                null,
+                null);
+    }
+
+    /**
      * Retrieves the medicine through the given conditions
      * @param conditions array of strings that dictate the values being searched.
      * @return medicines referenced by the id.
@@ -222,9 +256,9 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         Cursor cursor = db.query(Medicine.TABLE,
                 null,
                 brandNameLike + " OR " +
-                genericNameLike + " OR " +
-                medicineForLike + " OR " +
-                medicineTypeLike,
+                        genericNameLike + " OR " +
+                        medicineForLike + " OR " +
+                        medicineTypeLike,
                 newConditions,
                 null,
                 null,
@@ -245,9 +279,9 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         ContentValues cv = MedicineInstantiatorUtil.createCVMapFromBean(medicine);
 
         int rows = db.update(Medicine.TABLE,
-                    cv,
-                    Medicine.COLUMN_ID + " = ? ",
-                    new String[]{medicine.getSqlId()+""});
+                cv,
+                Medicine.COLUMN_ID + " = ? ",
+                new String[]{medicine.getSqlId()+""});
 
         db.close();
         return rows;
@@ -345,7 +379,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 " WHERE " +
 //                Schedule.TABLE + "." + Schedule.COLUMN_MEDICINE_TO_DRINK +
 //                " = " + Medicine.TABLE + "." + Medicine.COLUMN_ID + " AND "
-                 Schedule.TABLE + "." + Schedule.COLUMN_ID + " = " + id;
+                Schedule.TABLE + "." + Schedule.COLUMN_ID + " = " + id;
         Cursor cursor = db.query(Schedule.TABLE,
                 null,
                 Schedule.TABLE + "." + Schedule.COLUMN_ID + " = ?",
@@ -488,20 +522,28 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(SchedulePlan.TABLE,
                 null,
-                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_SCHEDULE_ID+ " = ?",
+                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_SCHEDULE_ID+ " = ? ",
                 new String[]{scheduleId+""},
                 null,
                 null,
                 null);
+
+
         if(cursor.moveToFirst()){
             medicinePlanList = new ArrayList<>();
             while(!cursor.isAfterLast()) {
-                medicinePlanList.add(MedicinePlanInstantiatorUtil.createBeanFromCursor(cursor));
+                int medicinePlanId = cursor.getInt(cursor.getColumnIndex(SchedulePlan.COLUMN_MEDICINE_PLAN_ID));
+                Log.wtf("ITERATE", "GETTING MEDICINE PLAN WITH ID " + medicinePlanId);
+                Log.wtf("ITERATE", "GETTING SCHEDULE ID " + cursor.getInt(cursor.getColumnIndex(SchedulePlan.COLUMN_SCHEDULE_ID)));
+                medicinePlanList.add(getMedicinePlan(medicinePlanId));
+
                 cursor.moveToNext();
             }
         }
+
         cursor.close();
         db.close();
+
         return medicinePlanList;
     }
 
@@ -511,7 +553,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         Cursor cursor = db.query(SchedulePlan.TABLE,
                 null,
                 SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_SCHEDULE_ID + " = ? AND " +
-                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_MEDICINE_PLAN_ID + " = ? ",
+                        SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_MEDICINE_PLAN_ID + " = ? ",
                 new String[]{scheduleId+"", medicinePlanId+""},
                 null,
                 null,
@@ -531,7 +573,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         /* DELETE FROM medicine WHERE _id = ? */
         int rows = db.delete(SchedulePlan.TABLE,
                 SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_SCHEDULE_ID + " = ? AND " +
-                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_MEDICINE_PLAN_ID + " = ? ",
+                        SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_MEDICINE_PLAN_ID + " = ? ",
                 new String[]{scheudleId+"", medicinePlanId+""});
         db.close();
         Log.wtf("DELETE", "Deleted Medicine plan with ID " + scheudleId + " AND " + medicinePlanId);

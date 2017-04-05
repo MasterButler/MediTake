@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +34,10 @@ public class ViewScheduleFragment extends Fragment {
 
     @BindView(R.id.container)
     ViewPager mViewPager;
-    @BindView(R.id.tabs)
-    TabLayout tabLayout;
+//    @BindView(R.id.tabs)
+//    TabLayout tabLayout;
 
     public ViewScheduleFragment() {
-        // Required empty public constructor
     }
 
     public static ViewScheduleFragment newInstance(Schedule schedule) {
@@ -72,7 +73,7 @@ public class ViewScheduleFragment extends Fragment {
         int[] attrs = {android.R.attr.colorBackground};
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs);
         mViewPager.setBackgroundColor(typedArray.getColor(0, Color.WHITE));
-        tabLayout.setupWithViewPager(mViewPager);
+//        tabLayout.setupWithViewPager(mViewPager);
 
         return v;
     }

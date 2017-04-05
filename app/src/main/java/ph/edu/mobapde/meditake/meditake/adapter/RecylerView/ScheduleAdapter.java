@@ -66,8 +66,6 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
             Log.d("CHECK", "SCHEDULEID: " + sched.getSqlId());
 
             String displayTime = DateUtil.convertToReadableFormat(sched.getNextDrinkingTime(), isMilitary);
-            Log.d("CHECK", "HOURS: " + sched.getNextDrinkingTime()/DateUtil.MILLIS_TO_HOURS);
-            Log.d("CHECK", "DISPLAYTIME: " + displayTime);
 
             viewHolder.cardViewBackground.setImageResource(DateUtil.pickBackground(sched.getNextDrinkingTime()));
             viewHolder.cardViewBackground.setColorFilter(Color.parseColor("#AAFFFFFF"), PorterDuff.Mode.SRC_ATOP);
@@ -91,14 +89,10 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
             }
 
             String drinkingTime = DateUtil.parseToTimePickerDisplay(sched.getDrinkingInterval());
-            viewHolder.tvMedicineToDrink.setText("TO BE FIXED");
             viewHolder.scheduleSwitch.setChecked(sched.isActivated());
             viewHolder.tvDrinkingInterval.setText(sched.getNextDrinkingTime() == 0 ? drinkingTime : "Medicine taken " + drinkingTime.toLowerCase() + ".");
 
             viewHolder.etDrinkingIntervals.setText(String.valueOf(sched.getDrinkingInterval()));
-
-            Log.wtf("action", "ACTIVATED: " + sched.isActivated());
-            Log.wtf("check", "VALUE OF SWITCH IS " + viewHolder.scheduleSwitch.isChecked());
 
 
 
@@ -115,7 +109,6 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
 //            alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 5 * 1000, pendingAlarm);
 //            }
 
-            //TODO add listeners here
             boolean isExpanded = id == expandedPositionId;
             viewHolder.parentView.setTag(id);
             viewHolder.linExpandedInformation.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
@@ -125,7 +118,6 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                 public void onClick(View v) {
                     if(onScheduleClickListener != null){
                         int value = (int)v.getTag();
-                        Log.d("action", "EXPANDING ITEM WITH ID OF " + value /*+ " AND MEDICINE ID OF " +*/);
                         onScheduleClickListener.onItemClick(value);
                     }
                 }
@@ -159,13 +151,25 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
                 }
             });
 
-            viewHolder.linSaveSchedule.setTag(R.string.SCHEDULE, sched);
-            viewHolder.linSaveSchedule.setTag(R.string.SCHEDULE_HOLDER, viewHolder);
-            viewHolder.linSaveSchedule.setOnClickListener(new View.OnClickListener() {
+            viewHolder.scheduleSwitch.setTag(sched);
+            viewHolder.scheduleSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(onScheduleClickListener != null){
-//                        boolean isDosagePerDrinkingIntervalEmpty = viewHolder.etDosagePerDrinkingInterval.getText().toString().isEmpty();
+                        Schedule value = (Schedule) v.getTag();
+                        Log.wtf("action", "SWITCHING SCHEDULE WITH ID OF " + value.getSqlId());
+                        onScheduleClickListener.onSwitchClick(value);
+                    }
+                }
+            });
+
+//            viewHolder.linSaveSchedule.setTag(R.string.SCHEDULE, sched);
+//            viewHolder.linSaveSchedule.setTag(R.string.SCHEDULE_HOLDER, viewHolder);
+//            viewHolder.linSaveSchedule.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(onScheduleClickListener != null){
+//                        boolean isDosagePerDrinkingIntervalEmpty = viewHolder.etDosagePerDrinkingInterval.getText().toString().isE mpty();
 //                        boolean isDrinkingIntervalsEmpty = viewHolder.etDrinkingIntervals.getText().toString().isEmpty();
 //                        Log.d("check bool", "dosage is " + isDosagePerDrinkingIntervalEmpty);
 //                        if(isDosagePerDrinkingIntervalEmpty || isDrinkingIntervalsEmpty){
@@ -191,57 +195,45 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
 //                            }
 //                            onScheduleClickListener.onItemSaveClick(sched);
 //                        }
-                    }
-                }
-            });
+//                    }
+//                }
+//            });
 
-            viewHolder.linDeleteSchedule.setTag(id);
-            viewHolder.linDeleteSchedule.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(onScheduleClickListener != null){
-                        int value = (int)v.getTag();
-                        if(value != -1){
-                            Log.wtf("action", "DELETING SCHEDULE WITH ID OF " + value);
-                            onScheduleClickListener.onItemDeleteClick(value);
-                        }
-                    }
-                }
-            });
+//            viewHolder.linDeleteSchedule.setTag(id);
+//            viewHolder.linDeleteSchedule.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(onScheduleClickListener != null){
+//                        int value = (int)v.getTag();
+//                        if(value != -1){
+//                            Log.wtf("action", "DELETING SCHEDULE WITH ID OF " + value);
+//                            onScheduleClickListener.onItemDeleteClick(value);
+//                        }
+//                    }
+//                }
+//            });
 
-            viewHolder.scheduleSwitch.setTag(sched);
-            viewHolder.scheduleSwitch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(onScheduleClickListener != null){
-                        Schedule value = (Schedule) v.getTag();
-                        Log.wtf("action", "SWITCHING SCHEDULE WITH ID OF " + value.getSqlId());
-                        onScheduleClickListener.onSwitchClick(value);
-                    }
-                }
-            });
+//            viewHolder.etScheduleTime.setTag(sched);
+//            viewHolder.etScheduleTime.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(onScheduleClickListener!= null){
+//                        Schedule sched = (Schedule) v.getTag();
+//                        onScheduleClickListener.onEditTimeClick(sched, viewHolder.etScheduleTime, viewHolder.etScheduleTimePeriod, isMilitary);
+//                    }
+//                }
+//            });
 
-            viewHolder.etScheduleTime.setTag(sched);
-            viewHolder.etScheduleTime.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(onScheduleClickListener!= null){
-                        Schedule sched = (Schedule) v.getTag();
-                        //onScheduleClickListener.onEditTimeClick(sched, viewHolder.etScheduleTime, viewHolder.etScheduleTimePeriod, isMilitary);
-                    }
-                }
-            });
-
-            viewHolder.tvToFragmentMedicineToDrink.setTag(sched);
-            viewHolder.tvToFragmentMedicineToDrink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(onScheduleClickListener != null){
-                        Schedule sched = (Schedule) v.getTag();
-                        //onScheduleClickListener.onMedicineListClick(sched, viewHolder.tvToFragmentMedicineToDrink);
-                    }
-                }
-            });
+//            viewHolder.tvToFragmentMedicineToDrink.setTag(sched);
+//            viewHolder.tvToFragmentMedicineToDrink.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(onScheduleClickListener != null){
+//                        Schedule sched = (Schedule) v.getTag();
+//                        onScheduleClickListener.onMedicineListClick(sched, viewHolder.tvToFragmentMedicineToDrink);
+//                    }
+//                }
+//            });
         }
     }
 

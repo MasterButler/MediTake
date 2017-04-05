@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,15 +28,20 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.ViewScheduleMedicineAdapter;
+import ph.edu.mobapde.meditake.meditake.beans.Medicine;
+import ph.edu.mobapde.meditake.meditake.beans.MedicinePlan;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.util.AlarmUtil;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
+import ph.edu.mobapde.meditake.meditake.util.MedicinePlanUtil;
+import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 
 import static android.widget.FrameLayout.*;
@@ -66,10 +73,10 @@ public class ViewScheduleDetailsFragment extends Fragment {
     @BindView(R.id.lin_schedule_repeat_selection)
     LinearLayout linRepeatSelection;
 
-    @BindView(R.id.lin_discard_schedule)
-    LinearLayout linDiscardSchedule;
-    @BindView(R.id.lin_continue_schedule)
-    LinearLayout linContinueSchedule;
+    @BindView(R.id.lin_delete_schedule)
+    LinearLayout linDeleteSchedule;
+    @BindView(R.id.lin_close_schedule)
+    LinearLayout linCloseSchedule;
 
     @BindView(R.id.lin_schedule_ringtone)
     LinearLayout linRingtone;
@@ -89,6 +96,9 @@ public class ViewScheduleDetailsFragment extends Fragment {
     ViewScheduleMedicineAdapter viewScheduleMedicineAdapter;
 
     ScheduleUtil scheduleUtil;
+    MedicineUtil medicineUtil;
+    MedicinePlanUtil medicinePlanUtil;
+
     Schedule schedule;
     int sectionNumber;
 
@@ -110,12 +120,9 @@ public class ViewScheduleDetailsFragment extends Fragment {
         }
     }
 
-    public ViewScheduleDetailsFragment() {
-        // Required empty public constructor
-    }
-
     public static ViewScheduleDetailsFragment newInstance(int sectionNumber, Schedule schedule) {
         ViewScheduleDetailsFragment fragment = new ViewScheduleDetailsFragment();
+        Log.wtf("IN CONSTRUCTOR VIEWSCHED", "CREATED THE FRAGMENT");
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         args.putParcelable(ARG_SCHEDULE, schedule);
@@ -128,9 +135,12 @@ public class ViewScheduleDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-            schedule = getArguments().getParcelable(ARG_SCHEDULE);
+            this.schedule = getArguments().getParcelable(ARG_SCHEDULE);
         }
         scheduleUtil = new ScheduleUtil(contextHolder);
+        medicineUtil = new MedicineUtil(contextHolder);
+        medicinePlanUtil = new MedicinePlanUtil(contextHolder);
+        Log.wtf("UTIL", "INTIALIZED ALL UTIL: " + (scheduleUtil != null) + ", " + (medicineUtil != null) + ", " + (medicinePlanUtil != null));
     }
 
     @Override
@@ -180,21 +190,19 @@ public class ViewScheduleDetailsFragment extends Fragment {
             }
         });
 
-        linContinueSchedule.setOnClickListener(new OnClickListener() {
+        linDeleteSchedule.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(OnViewScheduleDetailsFragmentInteractionListener != null){
-//                    ViewPager viewPager = (ViewPager)getActivity().findViewById(R.id.container);
-//                    viewPager.setCurrentItem(1);
-                    OnViewScheduleDetailsFragmentInteractionListener.onViewScheduleMedicineFragmentUpdate(updateScheduleFromUserInput(schedule));
+                    OnViewScheduleDetailsFragmentInteractionListener.onViewScheduleMedicineFragmentDelete(schedule.getSqlId());
                 }
             }
         });
-        linDiscardSchedule.setOnClickListener(new OnClickListener() {
+        linCloseSchedule.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(OnViewScheduleDetailsFragmentInteractionListener != null){
-                    OnViewScheduleDetailsFragmentInteractionListener.onViewScheduleDetailsFragmentCancel();
+                    OnViewScheduleDetailsFragmentInteractionListener.onViewScheduleDetailsFragmentClose(updateScheduleFromUserInput(schedule));
                 }
             }
         });
@@ -213,6 +221,18 @@ public class ViewScheduleDetailsFragment extends Fragment {
             }
         });
 
+        initializeAdapter();
+
+        Log.wtf("ADAPTER", "INITIALIZED VIEWSCHEDMED ADAPTER WITH SIZE OF " + viewScheduleMedicineAdapter.getItemCount());
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(contextHolder);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+
+        rvMedicineView.setAdapter(viewScheduleMedicineAdapter);
+        rvMedicineView.setLayoutManager(mLayoutManager);
+
         cbRepeat.setChecked(schedule.getDrinkingInterval() != 0);
         tvScheduleTime.setText(DateUtil.convertToReadableFormat(schedule.getNextDrinkingTime(), isMilitary).split(" ")[0]);
         tvScheduleTimePeriod.setText(DateUtil.convertToReadableFormat(schedule.getNextDrinkingTime(), isMilitary).split(" ")[1]);
@@ -221,9 +241,29 @@ public class ViewScheduleDetailsFragment extends Fragment {
         switchIsVibrate.setChecked(schedule.isVibrate());
         tvLabel.setText(schedule.getLabel());
 
-        rvMedicineView.setAdapter(viewScheduleMedicineAdapter);
-
         return v;
+    }
+
+    public void updateMedicineList(){
+        Cursor c = getMedicine(schedule);
+        viewScheduleMedicineAdapter.changeCursor(c);
+    }
+
+    public Cursor getMedicine(Schedule schedule){
+        ArrayList<MedicinePlan> medicinePlanList = medicinePlanUtil.getMedicinePlanListWithScheduleId(schedule.getSqlId());
+        Cursor c = null;
+        if(medicinePlanList != null) {
+            int[] schedId = new int[medicinePlanList.size()];
+            for (int i = 0; i < medicinePlanList.size(); i++) {
+                schedId[i] = medicinePlanList.get(i).getMedicineId();
+            }
+            c = medicineUtil.getMedicine(schedId);
+        }
+        return c;
+    }
+
+    public void initializeAdapter(){
+        viewScheduleMedicineAdapter = new ViewScheduleMedicineAdapter(contextHolder, getMedicine(schedule), Medicine.COLUMN_ID);
     }
 
     @Override
@@ -232,6 +272,7 @@ public class ViewScheduleDetailsFragment extends Fragment {
         if (context instanceof OnViewScheduleDetailsFragmentInteractionListener) {
             OnViewScheduleDetailsFragmentInteractionListener = (OnViewScheduleDetailsFragmentInteractionListener) context;
             contextHolder = context;
+            Log.wtf("CHECKING CONTEXT", "CONTEXT IS " + (contextHolder != null));
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnViewScheduleDetailsFragmentInteractionListener");
@@ -301,8 +342,8 @@ public class ViewScheduleDetailsFragment extends Fragment {
     public interface OnViewScheduleDetailsFragmentInteractionListener {
         void onViewScheduleDetailsFragmentRepeatClick(TextView tvRepeat);
         void onViewScheduleDetailsFragmentTimeClick(TextView tvTime, TextView tvTimePeriod);
-        void onViewScheduleDetailsFragmentCancel();
-        void onViewScheduleMedicineFragmentUpdate(Schedule schedule);
+        void onViewScheduleDetailsFragmentClose(Schedule schedule);
+        void onViewScheduleMedicineFragmentDelete(int id);
     }
 
 

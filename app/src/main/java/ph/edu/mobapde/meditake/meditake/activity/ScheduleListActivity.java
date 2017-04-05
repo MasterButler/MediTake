@@ -401,13 +401,16 @@ public class ScheduleListActivity extends AppCompatActivity
     }
 
     @Override
-    public void onViewScheduleDetailsFragmentCancel() {
+    public void onViewScheduleDetailsFragmentClose(Schedule schedule) {
+        save(schedule);
+        updateList();
         closeViewScheduleFragment();
     }
 
     @Override
-    public void onViewScheduleMedicineFragmentUpdate(Schedule schedule) {
-        save(schedule);
+    public void onViewScheduleMedicineFragmentDelete(int id) {
+        delete(id);
+        updateList();
         closeViewScheduleFragment();
     }
 

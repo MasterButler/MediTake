@@ -21,7 +21,9 @@
         <activity
             android:name=".activity.MedicineListActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:hardwareAccelerated="true" />
+
         <activity
             android:name=".activity.ViewMedicineActivity"
             android:label="@string/view_medicine"
@@ -35,7 +37,8 @@
         <activity
             android:name=".activity.ScheduleListActivity"
             android:label="@string/title_activity_schedule_list"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".activity.AddScheduleActivity"
             android:label="@string/title_activity_add_schedule"

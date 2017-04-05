@@ -162,6 +162,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:gravity="end"
                         android:id="@+id/lin_action_viewing_schedule">
 
                         <LinearLayout
@@ -386,7 +387,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:id="@+id/lin_action_editing_schedule">
+                    android:id="@+id/lin_action_editing_schedule"
+                    android:gravity="end">
 
                     <LinearLayout
                         android:layout_width="wrap_content"

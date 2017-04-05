@@ -45,7 +45,9 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         schedule = data.getParcelable(Schedule.TABLE);
 
         playRingtone();
-        enableVibration();
+        if(schedule.isVibrate()) {
+            enableVibration();
+        }
 
         new Handler().postDelayed(new Runnable() {
             @Override

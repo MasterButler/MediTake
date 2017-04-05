@@ -51,6 +51,12 @@ public class MedicineUtil {
         initializeDBConnection(this.context);
         return databaseConnection.getAllMedicine();
     }
+
+    public Cursor getMedicine(int[] id){
+        initializeDBConnection(this.context);
+        return databaseConnection.getMedicine(id);
+    }
+
     public Medicine getMedicine(int id){
         initializeDBConnection(this.context);
         return databaseConnection.getMedicine(id);
