@@ -41,6 +41,11 @@ public class ScheduleUtil {
         return databaseConnection.deleteSchedule(id);
     }
 
+    public int deleteAllSchedule(){
+        initializeDBConnection(context);
+        return databaseConnection.deleteAllSchedule();
+    }
+
     public int updateSchedule(Schedule schedule){
         initializeDBConnection(context);
         return databaseConnection.updateSchedule(schedule);

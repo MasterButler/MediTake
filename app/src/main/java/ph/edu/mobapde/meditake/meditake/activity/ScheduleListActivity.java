@@ -1,16 +1,13 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.app.AlarmManager;
-import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.os.SystemClock;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -29,35 +26,36 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.edu.mobapde.meditake.meditake.R;
-import ph.edu.mobapde.meditake.meditake.adapter.ScheduleAdapter;
-import ph.edu.mobapde.meditake.meditake.beans.Medicine;
+import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.ScheduleAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
-import ph.edu.mobapde.meditake.meditake.beans.Syrup;
-import ph.edu.mobapde.meditake.meditake.fragment.AddScheduleFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleDetailsFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleMedicineFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.MedicineListFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.RepeatingTimePickerFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.ViewSchedule.ViewScheduleDetailsFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.ViewSchedule.ViewScheduleFragment;
 import ph.edu.mobapde.meditake.meditake.listener.CustomOnTimeSetListener;
 import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
 import ph.edu.mobapde.meditake.meditake.service.AlarmReceiver;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
-import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class ScheduleListActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MedicineListFragment.OnDataPass, AddScheduleFragment.OnAddScheduleFragmentInteractionListener {
+        implements  NavigationView.OnNavigationItemSelectedListener,
+                    RepeatingTimePickerFragment.OnRepeatingTimePickerFragmentInteractionListener,
+                    ViewScheduleDetailsFragment.OnViewScheduleDetailsFragmentInteractionListener{
+
+    public static final int REQUEST_ADD_SCHEDULE = 1;
 
     @BindView(R.id.snackbar_position)
     CoordinatorLayout clSnackbar;
@@ -77,23 +75,57 @@ public class ScheduleListActivity extends AppCompatActivity
     @BindView(R.id.rv_schedule)
     RecyclerView rvSchedule;
 
-    MedicineListFragment medicineListFragment;
-    AddScheduleFragment addScheduleFragment;
+    RepeatingTimePickerFragment repeatingTimePickerFragment;
+    ViewScheduleFragment viewScheduleFragment;
 
     ScheduleAdapter scheduleAdapter;
 
     ScheduleUtil scheduleUtil;
     MedicineUtil medicineUtil;
 
+    FragmentTransaction ft;
+
     int CREATING_NEW_ITEM;
-    Schedule schedule;
-    Medicine selectedMedicine;
-    TextView tvToFragmentMedicineToDrink;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_ADD_SCHEDULE){
+            if(resultCode == RESULT_OK) {
+                Schedule addedScheudle = data.getExtras().getParcelable(Schedule.TABLE);
+                updateList();
+                if(addedScheudle.isActivated()) {
+                    setAlarmForSchedule(addedScheudle);
+                }
+            }else if(resultCode == RESULT_CANCELED){
+                showGenericSnackbar("Medicine creation cancelled", Snackbar.LENGTH_SHORT);
+            }
+        }
+    }
 
     public void setUpActionBar(){
         setSupportActionBar(view_schedule_toolbar);
         getSupportActionBar().setTitle("Schedules");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void checkIntent(){
+        Bundle data = getIntent().getExtras();
+
+        if(data != null) {
+            Schedule schedule = data.getParcelable(Schedule.TABLE);
+            Log.wtf("NEW", "PREV DRINKING SCHED IS " + schedule.getNextDrinkingTime());
+            Log.wtf("NEW", "DRINKING INTERVAL   IS " + schedule.getDrinkingInterval());
+            Log.wtf("NEW", "NEXT TIME AFTER " + schedule.getDrinkingInterval()*DateUtil.MILLIS_TO_MINUTES);
+            if(schedule.getDrinkingInterval() == 0){
+                schedule.setActivated(false);
+            }else{
+                schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + schedule.getDrinkingInterval()*DateUtil.MILLIS_TO_MINUTES);
+            }
+            scheduleUtil.updateSchedule(schedule);
+            updateList();
+            setAlarmForSchedule(schedule);
+        }
     }
 
     @Override
@@ -113,6 +145,26 @@ public class ScheduleListActivity extends AppCompatActivity
         initializeAdapter();
         initializeContent();
         CREATING_NEW_ITEM = -1;
+
+        checkIntent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateList();
+    }
+
+    public void initializeDrawer(){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, view_schedule_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
+
     }
 
     public void initializeContent(){
@@ -124,7 +176,7 @@ public class ScheduleListActivity extends AppCompatActivity
         rvSchedule.setAdapter(scheduleAdapter);
         rvSchedule.setLayoutManager(mLayoutManager);
 
-        addScheduleFragment = new AddScheduleFragment();
+        repeatingTimePickerFragment = RepeatingTimePickerFragment.newInstance();
     }
 
     public void initializeAdapter(){
@@ -133,7 +185,13 @@ public class ScheduleListActivity extends AppCompatActivity
         scheduleAdapter.setOnScheduleClickListener(new OnScheduleClickListener() {
             @Override
             public void onItemClick(int id) {
-                expand(id);
+//                expand(id);
+                Log.wtf("SCHEDLIST", "SCHEDULE IS " + scheduleUtil.getSchedule(id));
+                viewScheduleFragment = ViewScheduleFragment.newInstance(scheduleUtil.getSchedule(id));
+                ft = getSupportFragmentManager().beginTransaction();
+                ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+                ft.replace(R.id.fragment_medicine_list_placeholder, viewScheduleFragment);
+                ft.commit();
             }
 
             @Override
@@ -171,21 +229,19 @@ public class ScheduleListActivity extends AppCompatActivity
 
     public void addNewSchedule(){
         if(CREATING_NEW_ITEM == -1) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            ft.replace(R.id.fragment_medicine_list_placeholder, addScheduleFragment);
-            ft.addToBackStack(null);
-            ft.commit();
-            } else {
-                Toast.makeText(getBaseContext(), "No medicines in list. Adding Schedule without any medicine not yet supported.", Toast.LENGTH_LONG).show();
-            }
+            //showAddScheduleFragment();
+            Intent i = new Intent(getBaseContext(), AddScheduleActivity.class);
+            startActivityForResult(i, REQUEST_ADD_SCHEDULE);
+        } else {
+            Toast.makeText(getBaseContext(), "No medicines in list. Adding Schedule without any medicine not yet supported.", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void cancel(int id){
         if(CREATING_NEW_ITEM == -1){
             returnToView(id);
         }else{
-            delete((int)CREATING_NEW_ITEM);
+            delete(CREATING_NEW_ITEM);
             CREATING_NEW_ITEM = -1;
         }
     }
@@ -202,18 +258,6 @@ public class ScheduleListActivity extends AppCompatActivity
         Log.wtf("action", "IS EDITING (AT ID" + id + ")? " + isEditing);
         scheduleAdapter.setEditingPositionId(isEditing ? -1 : id);
         scheduleAdapter.notifyDataSetChanged();
-    }
-
-    public void editTime(TextView tvTime, TextView tvTimePeriod){
-        if(tvTime != null){
-                int selectedHour = Integer.valueOf(tvTime.getText().toString().split(":")[0]);
-                int selectedMinute = Integer.valueOf(tvTime.getText().toString().split(":")[1]);
-                CustomOnTimeSetListener timeSet = new CustomOnTimeSetListener(getBaseContext(), tvTime, tvTimePeriod, false);
-                TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(ScheduleListActivity.this, timeSet, selectedHour, selectedMinute, false);
-                mTimePicker.setTitle("Select Time");
-                mTimePicker.show();
-        }
     }
 
     public void expand(int id){
@@ -234,32 +278,11 @@ public class ScheduleListActivity extends AppCompatActivity
         scheduleAdapter.notifyDataSetChanged();
 
         updateList();
-        returnToView(schedule.getSqlId());
+        if(scheduleAdapter.isEditing(schedule.getSqlId()))
+            returnToView(schedule.getSqlId());
 
         if(CREATING_NEW_ITEM != -1)
             CREATING_NEW_ITEM = -1;
-    }
-
-    public void showMedicineList(Schedule schedule, TextView tvToFragmentMedicineToDrink){
-        this.tvToFragmentMedicineToDrink = tvToFragmentMedicineToDrink;
-        this.schedule = schedule;
-
-        medicineListFragment = new MedicineListFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        ft.add(R.id.fragment_medicine_list_placeholder, medicineListFragment);
-        ft.commit();
-
-        Toast.makeText(getBaseContext(), medicineListFragment.isVisible() + " << ", Toast.LENGTH_SHORT).show();
-
-    }
-
-    public void closeMedicineList(){
-        getSupportFragmentManager().beginTransaction().remove(medicineListFragment).commit();
-        Log.d("action", "REMOVED");
-
-        this.tvToFragmentMedicineToDrink = null;
-        this.schedule = null;
     }
 
     public void toggleSwitch(Schedule schedule){
@@ -291,7 +314,6 @@ public class ScheduleListActivity extends AppCompatActivity
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
     }
 
     public void updateList(){
@@ -300,21 +322,6 @@ public class ScheduleListActivity extends AppCompatActivity
         scheduleAdapter.changeCursor(c);
     }
 
-    public void initializeDrawer(){
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, view_schedule_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(true);
-
-    }
-
-    public void closeAddScheduleFragment(){
-        getSupportFragmentManager().beginTransaction().remove(addScheduleFragment).commit();
-    }
 
     @OnClick(R.id.fab_add_schedule)
     public void addSchedule(){
@@ -326,7 +333,9 @@ public class ScheduleListActivity extends AppCompatActivity
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }else if(viewScheduleFragment.isVisible()){
+            closeViewScheduleFragment();
+        }else{
             super.onBackPressed();
         }
     }
@@ -360,32 +369,6 @@ public class ScheduleListActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onDataPass(Medicine medicine) {
-        selectedMedicine = medicine;
-//        schedule.setMedicineToDrink(selectedMedicine);
-        this.tvToFragmentMedicineToDrink.setText(medicine.getModifier() + " of " + medicine.getName());
-        closeMedicineList();
-    }
-
-    @Override
-    public void onFragmentTimeClick(TextView tvTime, TextView tvTimePeriod) {
-        editTime(tvTime, tvTimePeriod);
-    }
-
-    @Override
-    public void onFragmentSave(Schedule schedule) {
-        scheduleUtil.addNewSchedule(schedule);
-        updateList();
-        closeAddScheduleFragment();
-    }
-
-    @Override
-    public void onFragmentCancel(){
-        closeAddScheduleFragment();
-    }
-
-
     public void showGenericSnackbar(String message, int length){
         int[] attrs = {android.R.attr.color};
         Snackbar snackbarNotify = Snackbar.make(clSnackbar, message, length);
@@ -398,4 +381,93 @@ public class ScheduleListActivity extends AppCompatActivity
         snackbarNotify.show();
     }
 
+    public void closeViewScheduleFragment(){
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.remove(viewScheduleFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+
+    }
+
+    @Override
+    public void onViewScheduleDetailsFragmentRepeatClick(TextView tvRepeat) {
+        editRepeatingTime(tvRepeat);
+    }
+
+    @Override
+    public void onViewScheduleDetailsFragmentTimeClick(TextView tvTime, TextView tvTimePeriod) {
+        editTime(tvTime, tvTimePeriod);
+    }
+
+    @Override
+    public void onViewScheduleDetailsFragmentCancel() {
+        closeViewScheduleFragment();
+    }
+
+    @Override
+    public void onViewScheduleMedicineFragmentUpdate(Schedule schedule) {
+        save(schedule);
+        closeViewScheduleFragment();
+    }
+
+
+    @Override
+    public void onRepeatingTimePickerFragmentCancel() {
+        closeRepeatingTimePickerFragment();
+    }
+
+    @Override
+    public void onRepeatingTimePickerFragmentSave() {
+        closeRepeatingTimePickerFragment();
+    }
+
+
+    /***********************
+     * TIME PICKER FRAGMENT
+     ***********************/
+
+    public void editRepeatingTime(TextView tvRepeat){
+        repeatingTimePickerFragment.attachTextView(tvRepeat);
+        showRepeatingTimePickerFragment();
+    }
+
+    private void showRepeatingTimePickerFragment() {
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.add(R.id.fragment_schedule_options_selection, repeatingTimePickerFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    private void closeRepeatingTimePickerFragment() {
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.remove(repeatingTimePickerFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void editTime(TextView tvTime, TextView tvTimePeriod){
+        if(tvTime != null){
+            int selectedHour = Integer.valueOf(tvTime.getText().toString().split(":")[0]);
+            int selectedMinute = Integer.valueOf(tvTime.getText().toString().split(":")[1]);
+
+            if(tvTimePeriod.getText().toString().toLowerCase().trim().equals("pm")){
+                if(selectedHour != 12){
+                    selectedHour+=12;
+                }
+            }else if(tvTimePeriod.getText().toString().toLowerCase().trim().equals("am")){
+                if(selectedHour == 12){
+                    selectedHour-=12;
+                }
+            }
+
+            CustomOnTimeSetListener timeSet = new CustomOnTimeSetListener(getBaseContext(), tvTime, tvTimePeriod, false);
+            TimePickerDialog mTimePicker;
+            mTimePicker = new TimePickerDialog(ScheduleListActivity.this, timeSet, selectedHour, selectedMinute, false);
+            mTimePicker.setTitle("Select Time");
+            mTimePicker.show();
+        }
+    }
 }

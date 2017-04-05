@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:hint="Paracetamol(Biogesic)"
+                android:textSize="14sp"
+                android:gravity="center_vertical"
+                android:textColor="?attr/editTextColor"
+                android:paddingRight="16dp"
+                android:id="@+id/tv_view_medicine_name"
+                android:text="Generic Medicine (Brand Medicine)"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:hint="5mL"
+                android:text="5mL"
+                android:textSize="11sp"
+                android:id="@+id/tv_view_medicine_dosage"/>
+
+        </LinearLayout>
+    </LinearLayout>
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--tools:src="@drawable/selection_lozenge_colored"-->
+            <!--android:paddingRight="8sp"-->
+            <!--android:id="@+id/iv_selection_medicine_type"-->
+            <!--android:paddingLeft="16sp"/>-->
+
+</LinearLayout>

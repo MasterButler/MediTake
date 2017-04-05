@@ -25,7 +25,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
@@ -33,14 +32,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.edu.mobapde.meditake.meditake.R;
-import ph.edu.mobapde.meditake.meditake.adapter.MedicineAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.MedicineAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Syrup;
 import ph.edu.mobapde.meditake.meditake.beans.Tablet;
 import ph.edu.mobapde.meditake.meditake.listener.OnMedicineClickListener;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
-import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
+import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.SearchUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
@@ -95,6 +94,18 @@ public class MedicineListActivity extends AppCompatActivity
         initializeContents();
         CREATING_NEW_ITEM = -1;
         LAST_DELETED = null;
+
+        //addHardcodedData()
+    }
+
+    public void addHardcodedData(){
+        Medicine medA = new Capsule("Capsule A", "Generic capsule", "Something bad", 0.0);
+        Medicine medB = new Syrup("Syrup A", "Generic syrup", "Something bad", 0.0);
+        Medicine medC = new Tablet("Tablet A", "Generic tablet", "Something bad", 0.0);
+        medicineUtil.addMedicine(medA);
+        medicineUtil.addMedicine(medB);
+        medicineUtil.addMedicine(medC);
+        updateList();
     }
 
     public void setUpActionBar(){

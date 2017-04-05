@@ -1,4 +1,4 @@
-package ph.edu.mobapde.meditake.meditake.adapter;
+package ph.edu.mobapde.meditake.meditake.adapter.RecylerView;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.listener.OnMedicineListFragmentClickListener;
-import ph.edu.mobapde.meditake.meditake.util.MedicineInstantiatorUtil;
+import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicineInstantiatorUtil;
 
 /**
  * Created by Winfred Villaluna on 3/20/2017.

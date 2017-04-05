@@ -40,4 +40,8 @@
     <string name="message_medicine_delete">Medicine deleted</string>
     <string name="message_medicine_add">Medicine added</string>
     <string name="message_medicine_edit">Changes saved</string>
+    <string name="drink_medicine">drink_medicine_in_schedule</string>
+    <string name="title_activity_add_schedule_fragment">Information</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_add_schedule">AddScheduleActivity</string>
 </resources>

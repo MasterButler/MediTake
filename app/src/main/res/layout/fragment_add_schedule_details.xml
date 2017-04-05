@@ -1,0 +1,383 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleDetailsFragment"
+    android:background="@android:color/white">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <!--android:layout_marginLeft="36dp"-->
+        <!--android:layout_marginRight="36dp"-->
+        <!--android:layout_marginTop="60dp"-->
+        <!--android:layout_marginBottom="60dp"-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/white">
+
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textSize="16sp"-->
+                <!--android:textColor="?attr/editTextColor"-->
+                <!--android:text="Set time for schedule"/>-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center|bottom"
+                    android:layout_margin="16dp"
+                    android:id="@+id/lin_display_edit_time">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="56dp"
+                        android:textColor="@android:color/black"
+                        android:text="09:00"
+                        android:id="@+id/tv_display_time"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AM"
+                        android:textColor="@android:color/black"
+                        android:textSize="36dp"
+                        android:textStyle="bold"
+                        android:paddingLeft="5dp"
+                        android:id="@+id/tv_display_time_period"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="11dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight ="16dp">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Repeat"
+                            android:buttonTint="?attr/colorPrimary"
+                            android:id="@+id/checkbox_repeat"/>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:id="@+id/lin_schedule_repeat">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:textSize="14dp"
+                            android:text="Interval per repeat"
+                            android:paddingTop="6dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight ="16dp"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingTop="6dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight ="16dp"
+                            android:id="@+id/lin_schedule_repeat_selection"
+                            android:clickable="true"
+                            android:background="?android:attr/selectableItemBackgroundBorderless">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14dp"
+                                android:text="Every 4 hour(s) and 30 minutes"
+                                android:maxWidth="110dp"
+                                android:ellipsize="marquee"
+                                android:scrollHorizontally="true"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:id="@+id/tv_schedule_repeat_time"/>
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                                android:layout_marginLeft="5dp"
+                                android:id="@+id/iv_schedule_repeat_icon"/>
+                            <!--android:clickable="true"-->
+                            <!--android:background="?android:attr/selectableItemBackgroundBorderless"-->
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textSize="14dp"
+                        android:text="Ringtone"
+                        android:paddingTop="11dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight ="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingTop="11dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight ="16dp"
+                        android:id="@+id/lin_schedule_ringtone"
+                        android:clickable="true"
+                        android:background="?android:attr/selectableItemBackgroundBorderless">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14dp"
+                            android:text="Default Ringtone"
+                            android:maxWidth="110dp"
+                            android:ellipsize="marquee"
+                            android:scrollHorizontally="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:id="@+id/tv_schedule_ringtone_name"/>
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                            android:layout_marginLeft="5dp"
+                            android:id="@+id/iv_schedule_ringtone_selector"/>
+                        <!--android:clickable="true"-->
+                        <!--android:background="?android:attr/selectableItemBackgroundBorderless"-->
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="11dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight ="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14dp"
+                        android:text="Vibrate"/>
+
+                    <Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/switch_schedule_vibrate"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="11dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight ="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14dp"
+                        android:text="Label"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:hint="No label specified"
+                        android:id="@+id/tv_schedule_label"
+                        android:gravity="end"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textSize="14dp"-->
+                <!--android:text="Medicine"-->
+                <!--android:paddingTop="11dp"-->
+                <!--android:paddingBottom="10dp"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:paddingRight ="16dp"/>-->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:clickable="true"-->
+                <!--android:background="?android:attr/selectableItemBackgroundBorderless"-->
+                <!--android:id="@+id/lin_schedule_medicine"-->
+                <!--android:paddingTop="11dp"-->
+                <!--android:paddingBottom="10dp"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:paddingRight ="16dp">-->
+
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textSize="14dp"-->
+                <!--android:text="Choose medicine" />-->
+                <!--&lt;!&ndash;android:id="@+id/tv_schedule_ringtone_name"&ndash;&gt;-->
+
+                <!--<ImageView-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:src="@drawable/ic_keyboard_arrow_right_black_24dp"-->
+                <!--android:layout_marginLeft="5dp"/>-->
+                <!--&lt;!&ndash;android:id="@+id/iv_schedule_ringtone_selector"&ndash;&gt;-->
+
+                <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+                <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@android:color/darker_gray"/>-->
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="8sp"
+                    android:gravity="right|bottom">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:id="@+id/lin_discard_schedule"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:text="DISCARD"
+                            android:textSize="14sp"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:id="@+id/lin_continue_schedule"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:text="CONTINUE"
+                            android:textSize="14sp"
+                            android:paddingTop="8dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_schedule_options_selection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+</FrameLayout>

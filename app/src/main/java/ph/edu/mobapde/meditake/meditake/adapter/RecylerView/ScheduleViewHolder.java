@@ -1,4 +1,4 @@
-package ph.edu.mobapde.meditake.meditake.adapter;
+package ph.edu.mobapde.meditake.meditake.adapter.RecylerView;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

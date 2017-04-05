@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,8 @@ public class ViewMedicineActivity extends AppCompatActivity {
     TextView tvGenericName;
     @BindView(R.id.tv_view_medicine_for)
     TextView tvMedicineFor;
+    @BindView(R.id.rv_schedule_medicine_view)
+    RecyclerView rvMedicineView;
 
     SQLiteConnection connection;
     int id;
@@ -52,7 +55,6 @@ public class ViewMedicineActivity extends AppCompatActivity {
         if(id != -1){
             initializeMedicineContent();
         }
-
 
     }
 

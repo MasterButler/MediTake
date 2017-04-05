@@ -10,21 +10,6 @@ import java.util.ArrayList;
 
 public class MedicineList extends ArrayList<Medicine>{
 
-    public MedicineList(){
-        super();
-    }
-
-    public boolean add(Medicine medicine){
-
-        if(super.add(medicine)){
-            //<#DEBUG_AREA>
-            System.out.println("AddingMedicineInfo: Medicine " + medicine.getName());
-            //</#DEBUG_AREA>
-            return true;
-        }
-        return false;
-    }
-
     public Medicine getUsingBrandName(String brandName){
         for(Medicine inList : this){
             if(inList.getBrandName().equals(brandName)){
@@ -41,14 +26,6 @@ public class MedicineList extends ArrayList<Medicine>{
             }
         }
         return null;
-    }
-
-    public Medicine get(int index){
-        return super.get(index);
-    }
-
-    public MedicineList getMedicines() {
-        return this;
     }
 
     public void setMedicineList(MedicineList medicines) {
