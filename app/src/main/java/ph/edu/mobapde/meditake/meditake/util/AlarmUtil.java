@@ -1,12 +1,21 @@
 package ph.edu.mobapde.meditake.meditake.util;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.SystemClock;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import ph.edu.mobapde.meditake.meditake.beans.Schedule;
+import ph.edu.mobapde.meditake.meditake.service.AlarmReceiver;
 
 /**
  * Created by Winfred Villaluna on 3/29/2017.
@@ -44,4 +53,20 @@ public class AlarmUtil {
         }
         return ringtone;
     }
+
+    public static void setAlarmForSchedule(Context context, Schedule schedule) {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra(Schedule.COLUMN_ID, schedule.getSqlId());
+        PendingIntent pendingAlarm = PendingIntent
+                .getBroadcast(
+                        context,
+                        schedule.getSqlId(),
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + DateUtil.getDelay(schedule.getNextDrinkingTime()), pendingAlarm);
+    }
+
+
 }

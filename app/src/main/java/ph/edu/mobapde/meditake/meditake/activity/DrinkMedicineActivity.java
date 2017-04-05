@@ -45,9 +45,7 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         schedule = data.getParcelable(Schedule.TABLE);
 
         playRingtone();
-        if(schedule.isVibrate()) {
-            enableVibration();
-        }
+        playVibration();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -73,9 +71,11 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         r.play();
     }
 
-    public void enableVibration(){
+    public void playVibration(){
         v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(new long[]{0l,200l,100l,100l}, 0);
+        if(schedule.isActivated()) {
+            v.vibrate(new long[]{0l, 200l, 100l, 100l}, 0);
+        }
     }
 
     @OnClick(R.id.Snooze)

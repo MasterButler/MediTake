@@ -44,6 +44,7 @@ import ph.edu.mobapde.meditake.meditake.fragment.ViewSchedule.ViewScheduleFragme
 import ph.edu.mobapde.meditake.meditake.listener.CustomOnTimeSetListener;
 import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
 import ph.edu.mobapde.meditake.meditake.service.AlarmReceiver;
+import ph.edu.mobapde.meditake.meditake.util.AlarmUtil;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
@@ -297,18 +298,10 @@ public class ScheduleListActivity extends AppCompatActivity
     }
 
     private void setAlarmForSchedule(Schedule schedule) {
-        showGenericSnackbar("Alarm set for " + DateUtil.convertToNotificationFormat(schedule.getNextDrinkingTime()) + " from now.", Snackbar.LENGTH_SHORT);
-        Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
-        intent.putExtra(Schedule.COLUMN_ID, schedule.getSqlId());
-        PendingIntent pendingAlarm = PendingIntent
-                .getBroadcast(
-                        getBaseContext(),
-                        schedule.getSqlId(),
-                        intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + DateUtil.getDelay(schedule.getNextDrinkingTime()), pendingAlarm);
+        if(schedule.isActivated()) {
+            AlarmUtil.setAlarmForSchedule(getBaseContext(), schedule);
+            showGenericSnackbar("Alarm set for " + DateUtil.convertToNotificationFormat(schedule.getNextDrinkingTime()) + " from now.", Snackbar.LENGTH_SHORT);
+        }
     }
 
     @Override
@@ -405,6 +398,7 @@ public class ScheduleListActivity extends AppCompatActivity
         save(schedule);
         updateList();
         closeViewScheduleFragment();
+        setAlarmForSchedule(schedule);
     }
 
     @Override

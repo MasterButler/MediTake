@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
+import ph.edu.mobapde.meditake.meditake.util.AlarmUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.instantiator.ScheduleInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
@@ -108,6 +109,10 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
 //            Log.d("action", "DELAY IS " + delay + " milliseconds (" + (delay/DateUtil.MILLIS_TO_SECONDS) + ")");
 //            alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 5 * 1000, pendingAlarm);
 //            }
+
+            if(sched.isActivated()){
+                AlarmUtil.setAlarmForSchedule(contextHolder, sched);
+            }
 
             boolean isExpanded = id == expandedPositionId;
             viewHolder.parentView.setTag(id);
