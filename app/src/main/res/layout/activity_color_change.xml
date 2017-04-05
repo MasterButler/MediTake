@@ -1,9 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="2dp"
     tools:context="ph.edu.mobapde.meditake.meditake.activity.ColorChangeActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="137dp"
+            android:id="@+id/iv_theme1"
+            android:layout_weight="0.50"
+            app:srcCompat="@mipmap/theme_1"/>
+            <!-- app:srcCompat="@mipmap/selected_theme_1"-->
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="137dp"
+            android:id="@+id/iv_theme2"
+            android:layout_weight="0.50"
+            app:srcCompat="@mipmap/theme_2"/>
+            <!-- app:srcCompat="@mipmap/selected_theme_2"-->
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="137dp"
+            android:id="@+id/iv_theme3"
+            android:layout_weight="0.50"
+            app:srcCompat="@mipmap/theme_3"/>
+            <!-- app:srcCompat="@mipmap/selected_theme_3"-->
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="137dp"
+            android:id="@+id/iv_theme4"
+            android:layout_weight="0.50"
+            app:srcCompat="@mipmap/theme_4"/>
+            <!-- app:srcCompat="@mipmap/selected_theme_4"-->
+    </LinearLayout>
+</LinearLayout>
