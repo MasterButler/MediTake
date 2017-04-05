@@ -248,6 +248,7 @@ public class ScheduleListActivity extends AppCompatActivity
     }
 
     public void delete(int id){
+        AlarmUtil.stopAssociatedAlarmsWithSchedule(getBaseContext(), scheduleUtil.getSchedule(id));
         scheduleUtil.deleteSchedule(id);
         scheduleAdapter.notifyDataSetChanged();
         updateList();

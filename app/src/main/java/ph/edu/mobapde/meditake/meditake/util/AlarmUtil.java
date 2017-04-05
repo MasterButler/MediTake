@@ -24,6 +24,7 @@ import ph.edu.mobapde.meditake.meditake.service.AlarmReceiver;
 public class AlarmUtil {
 
     public static final int REQUEST_RINGTONE = 1;
+    public static AlarmManager alarmManager;
 
     public static void chooseRingtone(Fragment f){
         Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
@@ -64,9 +65,20 @@ public class AlarmUtil {
                         intent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
+        alarmManager = (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + DateUtil.getDelay(schedule.getNextDrinkingTime()), pendingAlarm);
     }
 
-
+    public static void stopAssociatedAlarmsWithSchedule(Context context, Schedule schedule){
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra(Schedule.COLUMN_ID, schedule.getSqlId());
+        PendingIntent pendingAlarm = PendingIntent
+                .getBroadcast(
+                        context,
+                        schedule.getSqlId(),
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager = (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
+        alarmManager.cancel(pendingAlarm);
+    }
 }
