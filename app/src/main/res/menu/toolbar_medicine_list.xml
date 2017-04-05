@@ -10,4 +10,38 @@
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
 
+    <item
+        android:id="@+id/action_sort_medicine"
+        android:title="@string/search_medicine"
+        android:icon="@drawable/ic_sort_by_alpha_white_24dp"
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/action_sort_medicine_brandname_ascending"
+                android:title="Sort Brand Name A-Z" />
+            <item
+                android:id="@+id/action_sort_medicine_brandname_descending"
+                android:title="Sort Brand Name Z-A" />
+            <item
+                android:id="@+id/action_sort_medicine_genericname_ascending"
+                android:title="Sort Generic Name A-Z" />
+            <item
+                android:id="@+id/action_sort_medicine_genericname_descending"
+                android:title="Sort Generic Name Z-A" />
+            <item
+                android:id="@+id/action_sort_medicine_medicinetype_ascending"
+                android:title="Sort Medicine Type A-Z" />
+            <item
+                android:id="@+id/action_sort_medicine_medicinetype_descending"
+                android:title="Sort Medicine Type Z-A" />
+            <item
+                android:id="@+id/action_sort_medicine_id_ascending"
+                android:title="Time created Ascending" />
+            <item
+                android:id="@+id/action_sort_medicine_id_descending"
+                android:title="Time created Descending" />
+        </menu>
+    </item>
+
 </menu>

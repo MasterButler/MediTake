@@ -35,6 +35,7 @@ import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.MedicineAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
+import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.beans.Syrup;
 import ph.edu.mobapde.meditake.meditake.beans.Tablet;
 import ph.edu.mobapde.meditake.meditake.listener.OnMedicineClickListener;
@@ -68,15 +69,19 @@ public class MedicineListActivity extends AppCompatActivity
     MenuItem actionSearchMedicineIcon;
     SearchView actionSearchMedicineMenu;
 
+    MenuItem actionSortMedicineIcon;
+
     MedicineAdapter medicineAdapter;
     ItemTouchHelper.SimpleCallback simpleItemTouchCallback;
     ItemTouchHelper itemTouchHelper;
 
+    LinearLayoutManager mLayoutManager;
     MedicineUtil medicineUtil;
 
     long CREATING_NEW_ITEM;
-
     Medicine LAST_DELETED;
+
+    String columnName, order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,9 @@ public class MedicineListActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setUpActionBar();
         medicineUtil = new MedicineUtil(getBaseContext());
+        columnName = "";
+        order = "";
+
 
         initializeDrawer();
         initializeAdapter();
@@ -94,7 +102,6 @@ public class MedicineListActivity extends AppCompatActivity
         initializeContents();
         CREATING_NEW_ITEM = -1;
         LAST_DELETED = null;
-
         //addHardcodedData()
     }
 
@@ -115,7 +122,7 @@ public class MedicineListActivity extends AppCompatActivity
     }
 
     public void initializeContents(){
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getBaseContext());
+        mLayoutManager = new LinearLayoutManager(getBaseContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
@@ -127,7 +134,7 @@ public class MedicineListActivity extends AppCompatActivity
     }
 
     public void initializeAdapter(){
-        medicineAdapter = new MedicineAdapter(getBaseContext(), medicineUtil.getAllMedicine(), Medicine.COLUMN_ID);
+        medicineAdapter = new MedicineAdapter(getBaseContext(), getMedicineList(columnName, order), Medicine.COLUMN_ID);
         medicineAdapter.setHasStableIds(true);
 
         medicineAdapter.setOnMedicineClickListener(new OnMedicineClickListener() {
@@ -268,6 +275,30 @@ public class MedicineListActivity extends AppCompatActivity
         switch(id){
             case R.id.action_search_medicine:
                 break;
+            case R.id.action_sort_medicine_brandname_ascending:
+                updateList(getMedicineList(Medicine.COLUMN_BRAND_NAME, MedicineUtil.ORDER_ASCENDING));
+                break;
+            case R.id.action_sort_medicine_brandname_descending:
+                updateList(getMedicineList(Medicine.COLUMN_BRAND_NAME, MedicineUtil.ORDER_DESENDING));
+                break;
+            case R.id.action_sort_medicine_genericname_ascending:
+                updateList(getMedicineList(Medicine.COLUMN_GENERIC_NAME, MedicineUtil.ORDER_ASCENDING));
+                break;
+            case R.id.action_sort_medicine_genericname_descending:
+                updateList(getMedicineList(Medicine.COLUMN_GENERIC_NAME, MedicineUtil.ORDER_DESENDING));
+                break;
+            case R.id.action_sort_medicine_medicinetype_ascending:
+                updateList(getMedicineList(Medicine.COLUMN_MEDICINE_TYPE, MedicineUtil.ORDER_ASCENDING));
+                break;
+            case R.id.action_sort_medicine_medicinetype_descending:
+                updateList(getMedicineList(Medicine.COLUMN_MEDICINE_TYPE, MedicineUtil.ORDER_DESENDING));
+                break;
+            case R.id.action_sort_medicine_id_ascending:
+                updateList(getMedicineList(Medicine.COLUMN_ID, MedicineUtil.ORDER_ASCENDING));
+                break;
+            case R.id.action_sort_medicine_id_descending:
+                updateList(getMedicineList(Medicine.COLUMN_ID, MedicineUtil.ORDER_DESENDING));
+                break;
             default: showGenericSnackbar("Unexpected error encoutered. Please try again.", Snackbar.LENGTH_SHORT);
         }
         return false;
@@ -331,8 +362,18 @@ public class MedicineListActivity extends AppCompatActivity
         }
     }
 
+    public Cursor getMedicineList(String columnName, String order){
+        Cursor cursor = null;
+        if((columnName + order).trim().isEmpty()){
+            Log.wtf("SORT STATE", "EMPTY --> GENERIC NAME ASC BY DEFAULT");
+            columnName = Medicine.COLUMN_GENERIC_NAME;
+            order = MedicineUtil.ORDER_ASCENDING;
+        }
+        return medicineUtil.getAllMedicine(columnName, order);
+    }
+
     public void updateList(){
-        medicineAdapter.changeCursor(medicineUtil.getAllMedicine());
+        medicineAdapter.changeCursor(getMedicineList(columnName, order));
     }
 
     public void updateList(Cursor c){
@@ -402,6 +443,7 @@ public class MedicineListActivity extends AppCompatActivity
                 medicineAdapter.setExpandedPositionId(isExpanded ? -1 : id);
                 TransitionManager.beginDelayedTransition(rvMedicine);
                 medicineAdapter.notifyDataSetChanged();
+                //rvMedicine.smoothScrollToPosition(medicineAdapter.getExpandedPosition() );
             } else {
                 delete((int) CREATING_NEW_ITEM);
                 CREATING_NEW_ITEM = -1;

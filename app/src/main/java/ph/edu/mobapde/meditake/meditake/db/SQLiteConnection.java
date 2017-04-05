@@ -137,7 +137,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
      * @return id of the created object
      */
     public long createMedicine(Medicine medicine){
-        Log.wtf("DB_ADD", "instance of " + medicine.getClass().getSimpleName() + " to be inserted");
+        //Log.wtf("DB_ADD", "instance of " + medicine.getClass().getSimpleName() + " to be inserted");
 
         SQLiteDatabase db = getWritableDatabase();
         long id = db.insert(Medicine.TABLE, null, MedicineInstantiatorUtil.createCVMapFromBean(medicine));
@@ -156,6 +156,18 @@ public class SQLiteConnection extends SQLiteOpenHelper{
          */
         SQLiteDatabase db = getReadableDatabase();
         return db.query(Medicine.TABLE, null, null, null, null, null, null);
+    }
+
+    /**
+     * Retrieves all medicine in the database given an order to follow.
+     * @return cursor containing all the medicines in the database
+     */
+    public Cursor getAllMedicine(String orderBy){
+        /* SELECT * FROM medicine
+         *null == '*'
+         */
+        SQLiteDatabase db = getReadableDatabase();
+        return db.query(Medicine.TABLE, null, null, null, null, null, orderBy);
     }
 
     /**
@@ -204,9 +216,9 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             }
         }
 
-        for(int i = 0; i < id.length; i++){
-            Log.wtf("IDS TO CHECK", stringId[i]);
-        }
+//        for(int i = 0; i < id.length; i++){
+//            Log.wtf("IDS TO CHECK", stringId[i]);
+//        }
 
         return db.query(Medicine.TABLE,
                 null,
@@ -249,7 +261,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
 
 
         for(int i = 0; i < newConditions.length; i++){
-            Log.wtf("AT ARRAY", " AT INDEX " + i + ": " + conditions[i%conditions.length]);
+            //Log.wtf("AT ARRAY", " AT INDEX " + i + ": " + conditions[i%conditions.length]);
             newConditions[i] = "%" + conditions[i%conditions.length] + "%";
         }
 
@@ -341,7 +353,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         SQLiteDatabase db;
         db = getWritableDatabase();
         long id = db.insert(Schedule.TABLE, null, cv);
-        Log.wtf("DB_ADD", "instance of schedule with id " + id + " inserted");
+        //Log.wtf("DB_ADD", "instance of schedule with id " + id + " inserted");
 
         for(MedicinePlan medicinePlan : schedule.getMedicinePlanList()){
             long medicinePlanId = createMedicinePlan(medicinePlan);
@@ -410,7 +422,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 cv,
                 Schedule.COLUMN_ID + " = ? ",
                 new String[]{schedule.getSqlId()+""});
-        Log.d("ROWS AFFECTED", rows+"");
+        //Log.d("ROWS AFFECTED", rows+"");
         db.close();
         return rows;
     }
@@ -427,7 +439,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 Schedule.COLUMN_ID + " = ? ",
                 new String[]{id+""});
         db.close();
-        Log.wtf("DELETE", "Deleted Schedule with id " + id);
+        //Log.wtf("DELETE", "Deleted Schedule with id " + id);
         return rows;
     }
 
@@ -448,7 +460,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
      *********************/
 
     public long createMedicinePlan(MedicinePlan medicinePlan){
-        Log.wtf("DB_ADD", "ADDING MedicinePlan with id of " + medicinePlan);
+        //Log.wtf("DB_ADD", "ADDING MedicinePlan with id of " + medicinePlan);
 
         SQLiteDatabase db = getWritableDatabase();
         long id = db.insert(MedicinePlan.TABLE, null, MedicinePlanInstantiatorUtil.createCVMapFromBean(medicinePlan));
@@ -483,7 +495,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 cv,
                 MedicinePlan.COLUMN_ID + " = ? ",
                 new String[]{medicinePlan.getSqlId()+""});
-        Log.d("ROWS AFFECTED", rows+"");
+        //Log.d("ROWS AFFECTED", rows+"");
         db.close();
         return rows;
 
@@ -505,8 +517,8 @@ public class SQLiteConnection extends SQLiteOpenHelper{
             medicinePlanList = new ArrayList<>();
             while(!cursor.isAfterLast()) {
                 int medicinePlanId = cursor.getInt(cursor.getColumnIndex(SchedulePlan.COLUMN_MEDICINE_PLAN_ID));
-                Log.wtf("ITERATE", "GETTING MEDICINE PLAN WITH ID " + medicinePlanId);
-                Log.wtf("ITERATE", "GETTING SCHEDULE ID " + cursor.getInt(cursor.getColumnIndex(SchedulePlan.COLUMN_SCHEDULE_ID)));
+//                Log.wtf("ITERATE", "GETTING MEDICINE PLAN WITH ID " + medicinePlanId);
+//                Log.wtf("ITERATE", "GETTING SCHEDULE ID " + cursor.getInt(cursor.getColumnIndex(SchedulePlan.COLUMN_SCHEDULE_ID)));
                 medicinePlanList.add(getMedicinePlan(medicinePlanId));
 
                 cursor.moveToNext();
@@ -526,7 +538,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 MedicinePlan.COLUMN_ID + " = ? ",
                 new String[]{id+""});
         db.close();
-        Log.wtf("DELETE", "Deleted Medicine plan with ID " + id);
+        //Log.wtf("DELETE", "Deleted Medicine plan with ID " + id);
         return rows;
     }
 
@@ -535,7 +547,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
      *********************/
 
     public long createSchedulePlan(long scheduleId, long medicinePlanId){
-        Log.wtf("DB_ADD", "ADDING SchedulePlan with id of " + scheduleId + " AND " + medicinePlanId);
+        //Log.wtf("DB_ADD", "ADDING SchedulePlan with id of " + scheduleId + " AND " + medicinePlanId);
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(SchedulePlan.COLUMN_MEDICINE_PLAN_ID, medicinePlanId);
@@ -554,7 +566,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_SCHEDULE_ID + " = ? ",
                 new String[]{scheudleId+""});
         db.close();
-        Log.wtf("DELETE", "Deleted Schedule plan with ID " + scheudleId);
+        //Log.wtf("DELETE", "Deleted Schedule plan with ID " + scheudleId);
         return rows;
     }
 }

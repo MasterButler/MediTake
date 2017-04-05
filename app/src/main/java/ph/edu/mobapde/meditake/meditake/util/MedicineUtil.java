@@ -3,6 +3,7 @@ package ph.edu.mobapde.meditake.meditake.util;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.db.SQLiteConnection;
@@ -14,6 +15,9 @@ import ph.edu.mobapde.meditake.meditake.db.SQLiteConnection;
 public class MedicineUtil {
     SQLiteConnection databaseConnection;
     Context context;
+
+    public static final String ORDER_ASCENDING = "DESC";
+    public static final String ORDER_DESENDING = "ASC";
 
     public MedicineUtil(Context context){
         this.context = context;
@@ -50,6 +54,15 @@ public class MedicineUtil {
     public Cursor getAllMedicine(){
         initializeDBConnection(this.context);
         return databaseConnection.getAllMedicine();
+    }
+
+    public Cursor getAllMedicine(String column, String order){
+        initializeDBConnection(this.context);
+        String orderBy = column + " " + order;
+        if(column.equals(Medicine.COLUMN_MEDICINE_TYPE)){
+            orderBy += ", " + Medicine.COLUMN_GENERIC_NAME + " " + ORDER_ASCENDING;
+        }
+        return databaseConnection.getAllMedicine(orderBy);
     }
 
     public Cursor getMedicine(int[] id){

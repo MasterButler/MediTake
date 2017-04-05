@@ -22,7 +22,7 @@
     <string name="generic_name_required">Generic Name*</string>
     <string name="helper_text_required_fields">* indicates required field</string>
 
-    <string name="MEDICINE_ID">position</string>
+    <string name="MEDICINE_ID">id</string>
     <string name="MEDICINE_TYPE">medicineType</string>
     <string name="MEDICINE_HOLDER">viewholder</string>
     <string name="search_medicine">Search Medicine</string>
@@ -44,4 +44,5 @@
     <string name="title_activity_add_schedule_fragment">Information</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_add_schedule">AddScheduleActivity</string>
+    <string name="MEDICINE_POSITION">position</string>
 </resources>
