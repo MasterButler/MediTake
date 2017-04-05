@@ -489,34 +489,6 @@ public class SQLiteConnection extends SQLiteOpenHelper{
 
     }
 
-    public int deleteMedicinePlan(int id){
-        SQLiteDatabase db = getWritableDatabase();
-        /* DELETE FROM medicine WHERE _id = ? */
-        int rows = db.delete(MedicinePlan.TABLE,
-                MedicinePlan.COLUMN_ID + " = ? ",
-                new String[]{id+""});
-        db.close();
-        Log.wtf("DELETE", "Deleted Medicine plan with ID " + id);
-        return rows;
-    }
-
-    /*********************
-     * SCHEDULE PLAN CRUD
-     *********************/
-
-    public long createSchedulePlan(long scheduleId, long medicinePlanId){
-        Log.wtf("DB_ADD", "ADDING SchedulePlan with id of " + scheduleId + " AND " + medicinePlanId);
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put(SchedulePlan.COLUMN_MEDICINE_PLAN_ID, medicinePlanId);
-        cv.put(SchedulePlan.COLUMN_SCHEDULE_ID, scheduleId);
-
-        long id = db.insert(SchedulePlan.TABLE, null, cv);
-
-        db.close();
-        return id;
-    }
-
     public ArrayList<MedicinePlan> getMedicinePlanListWithScheduleId(int scheduleId){
         ArrayList<MedicinePlan> medicinePlanList = null;
         SQLiteDatabase db = getReadableDatabase();
@@ -547,36 +519,42 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         return medicinePlanList;
     }
 
-    public MedicinePlan getMedicinePlanList(int scheduleId, int medicinePlanId){
-        MedicinePlan medicinePlan = null;
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(SchedulePlan.TABLE,
-                null,
-                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_SCHEDULE_ID + " = ? AND " +
-                        SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_MEDICINE_PLAN_ID + " = ? ",
-                new String[]{scheduleId+"", medicinePlanId+""},
-                null,
-                null,
-                null);
-        if(cursor.moveToFirst()){
-            medicinePlan = MedicinePlanInstantiatorUtil.createBeanFromCursor(cursor);
-            cursor.moveToNext();
-        }
-        cursor.close();
+    public int deleteMedicinePlan(int id){
+        SQLiteDatabase db = getWritableDatabase();
+        /* DELETE FROM medicine WHERE _id = ? */
+        int rows = db.delete(MedicinePlan.TABLE,
+                MedicinePlan.COLUMN_ID + " = ? ",
+                new String[]{id+""});
         db.close();
-        return medicinePlan;
+        Log.wtf("DELETE", "Deleted Medicine plan with ID " + id);
+        return rows;
     }
 
+    /*********************
+     * SCHEDULE PLAN CRUD
+     *********************/
 
-    public int deleteMedicinePlanList(int scheudleId, int medicinePlanId){
+    public long createSchedulePlan(long scheduleId, long medicinePlanId){
+        Log.wtf("DB_ADD", "ADDING SchedulePlan with id of " + scheduleId + " AND " + medicinePlanId);
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(SchedulePlan.COLUMN_MEDICINE_PLAN_ID, medicinePlanId);
+        cv.put(SchedulePlan.COLUMN_SCHEDULE_ID, scheduleId);
+
+        long id = db.insert(SchedulePlan.TABLE, null, cv);
+
+        db.close();
+        return id;
+    }
+
+    public int deleteSchedulePlan(int scheudleId){
         SQLiteDatabase db = getWritableDatabase();
         /* DELETE FROM medicine WHERE _id = ? */
         int rows = db.delete(SchedulePlan.TABLE,
-                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_SCHEDULE_ID + " = ? AND " +
-                        SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_MEDICINE_PLAN_ID + " = ? ",
-                new String[]{scheudleId+"", medicinePlanId+""});
+                SchedulePlan.TABLE + "." + SchedulePlan.COLUMN_SCHEDULE_ID + " = ? ",
+                new String[]{scheudleId+""});
         db.close();
-        Log.wtf("DELETE", "Deleted Medicine plan with ID " + scheudleId + " AND " + medicinePlanId);
+        Log.wtf("DELETE", "Deleted Schedule plan with ID " + scheudleId);
         return rows;
     }
 }

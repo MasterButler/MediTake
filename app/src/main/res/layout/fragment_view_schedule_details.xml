@@ -75,7 +75,7 @@
                             android:text="Repeat"
                             android:buttonTint="?attr/colorPrimary"
                             android:id="@+id/checkbox_repeat"
-                            android:paddingLeft="16dp"
+                            android:paddingLeft="10dp"
                             />
 
                     </LinearLayout>
@@ -279,16 +279,21 @@
                             android:src="@drawable/aspirins_black"
                             android:alpha="0.54"/>
 
-                        <ScrollView
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <!--<LinearLayout-->
+                            <ScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:id="@+id/siv_schedule_medicine_list">
+
+                                <!--<LinearLayout-->
                                 <!--android:layout_width="match_parent"-->
                                 <!--android:layout_height="match_parent"-->
                                 <!--android:orientation="vertical"-->
                                 <!--android:layout_weight="1">-->
-<!---->
+                                <!---->
                                 <!--<include layout="@layout/row_medicine_view"/>-->
                                 <!--<include layout="@layout/row_medicine_view"/>-->
                                 <!--<include layout="@layout/row_medicine_view"/>-->
@@ -298,15 +303,24 @@
                                 <!--<include layout="@layout/row_medicine_view"/>-->
                                 <!--<include layout="@layout/row_medicine_view"/>-->
                                 <!--<include layout="@layout/row_medicine_view"/>-->
-                        <!---->
-                            <!--</LinearLayout>-->
+                                <!---->
+                                <!--</LinearLayout>-->
 
-                            <android.support.v7.widget.RecyclerView
+                                <android.support.v7.widget.RecyclerView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/rv_schedule_medicine_view"/>
+
+                            </ScrollView>
+
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:id="@+id/rv_schedule_medicine_view"/>
-
-                        </ScrollView>
+                                android:text="No Medicine Added"
+                                android:paddingLeft="16dp"
+                                android:paddingTop="10dp"
+                                android:id="@+id/schedule_medicine_view_empty"/>
+                        </RelativeLayout>
 
                     </LinearLayout>
 
@@ -388,42 +402,6 @@
                         android:paddingRight="8dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
-                        android:id="@+id/lin_delete_schedule"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_delete_black_24dp"
-
-                            android:tint="@color/colorPrimary"
-                            android:padding="2dp"
-                            android:layout_gravity="center"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:text="DELETE"
-                            android:textSize="14sp"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="2dp"
-                            android:paddingRight="2dp"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorPrimary"
-                            android:textStyle="bold"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
                         android:id="@+id/lin_close_schedule"
                         android:gravity="center">
 
@@ -450,6 +428,41 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:id="@+id/lin_delete_schedule"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_delete_black_24dp"
+
+                            android:tint="@color/colorPrimary"
+                            android:padding="2dp"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:text="DELETE"
+                            android:textSize="14sp"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

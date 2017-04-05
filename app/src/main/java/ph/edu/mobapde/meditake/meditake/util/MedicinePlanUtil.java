@@ -24,8 +24,18 @@ public class MedicinePlanUtil {
         databaseConnection = new SQLiteConnection(context);
     }
 
+    public long addMedicinePlan(MedicinePlan medicinePlan){
+        initializeDBConnection(context);
+        return databaseConnection.createMedicinePlan(medicinePlan);
+    }
+
     public ArrayList<MedicinePlan> getMedicinePlanListWithScheduleId(int id){
         initializeDBConnection(context);
         return databaseConnection.getMedicinePlanListWithScheduleId(id);
+    }
+
+    public int deleteMedicinePlan(int id){
+        initializeDBConnection(context);
+        return databaseConnection.deleteMedicinePlan(id);
     }
 }

@@ -24,6 +24,8 @@ public class ViewScheduleMedicineAdapter extends CursorRecyclerViewAdapter<ViewS
     private Context contextHolder;
     private RecyclerView mRecyclerView;
 
+    private OnViewScheduleMedicineClickListener onViewScheduleMedicineClickListener;
+
     public ViewScheduleMedicineAdapter(Context context, Cursor cursor, String column) {
         super(context, cursor, column);
         this.contextHolder = context;
@@ -45,7 +47,13 @@ public class ViewScheduleMedicineAdapter extends CursorRecyclerViewAdapter<ViewS
         if(id != -1){
             Medicine medicine = MedicineInstantiatorUtil.createBeanFromCursor(cursor);
             viewHolder.tvName.setText(medicine.getName());
-            viewHolder.tvDosage.setText(String.valueOf(medicine.getDosage()));
+            viewHolder.tvDosage.setText(String.valueOf(medicine.getDosage() + medicine.getModifier()));
+            viewHolder.parentView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onViewScheduleMedicineClickListener.onItemClick();
+                }
+            });
         }
     }
 
@@ -70,5 +78,17 @@ public class ViewScheduleMedicineAdapter extends CursorRecyclerViewAdapter<ViewS
             ButterKnife.bind(this, itemView);
             parentView = itemView;
         }
+    }
+
+    public OnViewScheduleMedicineClickListener getOnViewScheduleMedicineClickListener() {
+        return onViewScheduleMedicineClickListener;
+    }
+
+    public void setOnViewScheduleMedicineClickListener(OnViewScheduleMedicineClickListener onViewScheduleMedicineClickListener) {
+        this.onViewScheduleMedicineClickListener = onViewScheduleMedicineClickListener;
+    }
+
+    public interface OnViewScheduleMedicineClickListener{
+        void onItemClick();
     }
 }

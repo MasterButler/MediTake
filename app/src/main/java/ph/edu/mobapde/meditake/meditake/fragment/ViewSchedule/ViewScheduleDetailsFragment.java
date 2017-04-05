@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -35,14 +36,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.ViewScheduleMedicineAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.ViewScheduleMedicineSelectionAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
+import ph.edu.mobapde.meditake.meditake.beans.MedicineList;
 import ph.edu.mobapde.meditake.meditake.beans.MedicinePlan;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.util.AlarmUtil;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicinePlanUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
+import ph.edu.mobapde.meditake.meditake.util.SchedulePlanUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
+import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicinePlanInstantiatorUtil;
 
 import static android.widget.FrameLayout.*;
 
@@ -86,6 +91,8 @@ public class ViewScheduleDetailsFragment extends Fragment {
     TextView tvRepeat;
     @BindView(R.id.tv_schedule_label)
     TextView tvLabel;
+    @BindView(R.id.schedule_medicine_view_empty)
+    TextView tvMedicineEmpty;
 
     @BindView(R.id.rv_schedule_medicine_view)
     RecyclerView rvMedicineView;
@@ -93,11 +100,15 @@ public class ViewScheduleDetailsFragment extends Fragment {
     @BindView(R.id.switch_schedule_vibrate)
     Switch switchIsVibrate;
 
+    @BindView(R.id.siv_schedule_medicine_list)
+    ScrollView sivMedicineList;
+
     ViewScheduleMedicineAdapter viewScheduleMedicineAdapter;
 
     ScheduleUtil scheduleUtil;
     MedicineUtil medicineUtil;
     MedicinePlanUtil medicinePlanUtil;
+    SchedulePlanUtil schedulePlanUtil;
 
     Schedule schedule;
     int sectionNumber;
@@ -140,6 +151,7 @@ public class ViewScheduleDetailsFragment extends Fragment {
         scheduleUtil = new ScheduleUtil(contextHolder);
         medicineUtil = new MedicineUtil(contextHolder);
         medicinePlanUtil = new MedicinePlanUtil(contextHolder);
+        schedulePlanUtil = new SchedulePlanUtil(contextHolder);
         Log.wtf("UTIL", "INTIALIZED ALL UTIL: " + (scheduleUtil != null) + ", " + (medicineUtil != null) + ", " + (medicinePlanUtil != null));
     }
 
@@ -207,6 +219,13 @@ public class ViewScheduleDetailsFragment extends Fragment {
             }
         });
 
+        tvMedicineEmpty.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMedicineList();
+            }
+        });
+
         linRingtone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,6 +240,14 @@ public class ViewScheduleDetailsFragment extends Fragment {
             }
         });
 
+        sivMedicineList.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.wtf("CLICK", "CHECKED MEDICINE LIST");
+                showMedicineList();
+            }
+        });
+
         initializeAdapter();
 
         Log.wtf("ADAPTER", "INITIALIZED VIEWSCHEDMED ADAPTER WITH SIZE OF " + viewScheduleMedicineAdapter.getItemCount());
@@ -232,6 +259,7 @@ public class ViewScheduleDetailsFragment extends Fragment {
 
         rvMedicineView.setAdapter(viewScheduleMedicineAdapter);
         rvMedicineView.setLayoutManager(mLayoutManager);
+        updateRecyclerViewVisibility();
 
         cbRepeat.setChecked(schedule.getDrinkingInterval() != 0);
         tvScheduleTime.setText(DateUtil.convertToReadableFormat(schedule.getNextDrinkingTime(), isMilitary).split(" ")[0]);
@@ -247,10 +275,13 @@ public class ViewScheduleDetailsFragment extends Fragment {
     public void updateMedicineList(){
         Cursor c = getMedicine(schedule);
         viewScheduleMedicineAdapter.changeCursor(c);
+        viewScheduleMedicineAdapter.notifyDataSetChanged();
+        updateRecyclerViewVisibility();
     }
 
     public Cursor getMedicine(Schedule schedule){
         ArrayList<MedicinePlan> medicinePlanList = medicinePlanUtil.getMedicinePlanListWithScheduleId(schedule.getSqlId());
+        schedule.setMedicinePlanList(medicinePlanList);
         Cursor c = null;
         if(medicinePlanList != null) {
             int[] schedId = new int[medicinePlanList.size()];
@@ -264,6 +295,12 @@ public class ViewScheduleDetailsFragment extends Fragment {
 
     public void initializeAdapter(){
         viewScheduleMedicineAdapter = new ViewScheduleMedicineAdapter(contextHolder, getMedicine(schedule), Medicine.COLUMN_ID);
+        viewScheduleMedicineAdapter.setOnViewScheduleMedicineClickListener(new ViewScheduleMedicineAdapter.OnViewScheduleMedicineClickListener() {
+            @Override
+            public void onItemClick() {
+                showMedicineList();
+            }
+        });
     }
 
     @Override
@@ -367,5 +404,117 @@ public class ViewScheduleDetailsFragment extends Fragment {
         schedule.setDrinkingInterval(drinkingInterval);
         //OnViewScheduleDetailsFragmentInteractionListener.onAddScheduleFragmentSave(schedule);
         return schedule;
+    }
+
+    public void showMedicineList(){
+        Log.wtf("CLICK", "CHECKED MEDICINE LIST");
+        final ArrayList<Medicine> newMedicineList = new ArrayList<>();
+
+        final AlertDialog.Builder alert = new AlertDialog.Builder(contextHolder);
+        final RecyclerView rvMedicineSelection = new RecyclerView(contextHolder);
+        final EditText input = new EditText(contextHolder);
+
+        ArrayList<Integer> idsToRemove = new ArrayList<>();
+        if(schedule.getMedicinePlanList() != null) {
+            for (int i = 0; i < schedule.getMedicinePlanList().size(); i++) {
+                idsToRemove.add(schedule.getMedicinePlanList().get(i).getMedicineId());
+            }
+        }
+
+        ViewScheduleMedicineSelectionAdapter viewScheduleMedicineSelectionAdapter =
+                new ViewScheduleMedicineSelectionAdapter(
+                        contextHolder,
+                        medicineUtil.getAllMedicine(),
+                        Medicine.COLUMN_ID,
+                        idsToRemove);
+        viewScheduleMedicineSelectionAdapter.setOnViewScheduleMedicineSelectionClickListener(new ViewScheduleMedicineSelectionAdapter.OnViewScheduleMedicineSelectionClickListener() {
+            @Override
+            public void onItemCheck(Medicine medicine) {
+                newMedicineList.add(medicine);
+            }
+
+            @Override
+            public void onItemUncheck(Medicine medicine) {
+                newMedicineList.remove(medicine);
+            }
+        });
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(contextHolder);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+
+        rvMedicineSelection.setAdapter(viewScheduleMedicineSelectionAdapter);
+        rvMedicineSelection.setLayoutManager(mLayoutManager);
+
+        ScrollView container = new ScrollView(contextHolder);
+        ScrollView.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_left_margin);
+        params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_right_margin);
+
+//        input.setText(tvScheduleLabel.getText().toString());
+//        input.setSingleLine();
+        rvMedicineSelection.setLayoutParams(params);
+
+        container.addView(rvMedicineSelection);
+
+        alert.setTitle("Choose Medicines To Add");
+        alert.setView(container);
+        alert.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = input.getText().toString().trim();
+                //TODO get Medicine checked from the dialog
+                //schedule.setMedicinePlanList();
+                editMedicineList(newMedicineList);
+            }
+        });
+
+        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
+
+        final AlertDialog dialog = alert.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                int[] attrs = {android.R.attr.colorPrimary};
+                TypedArray typedArray = contextHolder.obtainStyledAttributes(attrs);
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
+            }
+        });
+
+
+        dialog.show();
+    }
+
+    public void editMedicineList(ArrayList<Medicine> medicinePlanToAdd){
+        int schedulePlanIdToChange = schedule.getSqlId();
+        if(schedule.getMedicinePlanList() != null) {
+            int[] medicinePlanIdToRemove = new int[schedule.getMedicinePlanList().size()];
+
+            for (int i = 0; i < medicinePlanIdToRemove.length; i++) {
+                medicinePlanIdToRemove[i] = schedule.getMedicinePlanList().get(i).getMedicineId();
+                Log.wtf("MEDICINEPLAN", "WILL REMOVE MED PLAN WITH ID " + medicinePlanIdToRemove);
+                medicinePlanUtil.deleteMedicinePlan(medicinePlanIdToRemove[i]);
+            }
+            schedulePlanUtil.deleteSchedulePlan(schedulePlanIdToChange);
+            Log.wtf("END", "WILL REMOVE " + medicinePlanIdToRemove.length + " MED PLAN");
+        }
+        for(int i = 0; i < medicinePlanToAdd.size(); i++){
+            long medicinePlanIdToAdd = medicinePlanUtil.addMedicinePlan(MedicinePlanInstantiatorUtil.convertMedicineToMedicinePlan(medicinePlanToAdd.get(i)));
+            schedulePlanUtil.addSchedulePlan(schedulePlanIdToChange, medicinePlanIdToAdd);
+        }
+        updateMedicineList();
+    }
+
+    public void updateRecyclerViewVisibility(){
+        int rv_visibility = viewScheduleMedicineAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
+        int tv_visibility = viewScheduleMedicineAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE;
+        rvMedicineView.setVisibility(rv_visibility);
+        tvMedicineEmpty.setVisibility(tv_visibility);
     }
 }
