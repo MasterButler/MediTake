@@ -42,4 +42,8 @@ public class SettingsActivity extends AppCompatActivity{
         finish();
     }
 
+    @OnClick(R.id.settings_color_theme)
+    public void changeColorTheme(){
+
+    }
 }

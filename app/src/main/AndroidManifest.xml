@@ -60,7 +60,8 @@
             android:name=".service.AlarmService"
             android:exported="false" />
 
-        <activity android:name=".activity.SettingsActivity"></activity>
+        <activity android:name=".activity.SettingsActivity" />
+        <activity android:name=".activity.ColorChangeActivity"></activity>
     </application>
 
 </manifest>
