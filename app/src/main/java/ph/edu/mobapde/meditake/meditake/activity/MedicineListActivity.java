@@ -275,6 +275,8 @@ public class MedicineListActivity extends AppCompatActivity
         switch(id){
             case R.id.action_search_medicine:
                 break;
+            case R.id.action_sort_medicine:
+                break;
             case R.id.action_sort_medicine_brandname_ascending:
                 updateList(getMedicineList(Medicine.COLUMN_BRAND_NAME, MedicineUtil.ORDER_ASCENDING));
                 break;
