@@ -6,14 +6,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="2dp"
+    android:background="@color/colorBackgroundInSelection"
     tools:context="ph.edu.mobapde.meditake.meditake.activity.ColorChangeActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Color Theme"
+        android:padding="22dp"
+        android:textSize="20dp"
+        android:textColor="@color/colorFontInBackgroundBlueTheme"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/cardview_light_background"
         android:weightSum="1">
-
 
         <ImageView
             android:layout_width="wrap_content"
@@ -38,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@color/cardview_light_background"
         android:weightSum="1">
 
         <ImageView
