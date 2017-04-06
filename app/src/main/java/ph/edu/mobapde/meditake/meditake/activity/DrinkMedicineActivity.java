@@ -87,36 +87,26 @@ public class DrinkMedicineActivity extends AppCompatActivity {
                 i.putExtra(Schedule.TABLE, schedule);
                 i.putExtra(getString(R.string.schedule_snooze), 5);
                 startActivity(i);
-                handler.postDelayed(this, 45000);
             }
-
         };
-
-//        handler = new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                if(r.isPlaying()){
-//                    r.stop();
-//                }
-//                if(v.hasVibrator()){
-//                    v.cancel();
-//                }
-//                Intent i = new Intent(getBaseContext(), ScheduleListActivity.class);
-//                i.putExtra(Schedule.TABLE, schedule);
-//                i.putExtra(getString(R.string.schedule_snooze), 5);
-//                startActivity(i);
-//            }
-//        }, 45*DateUtil.MILLIS_TO_SECONDS);
-
+        handler.postDelayed(autoCloser, 45000);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        Log.wtf("STOP", "STOPPING DRINK MED ACT");
+        handler.removeCallbacks(autoCloser);
     }
 
     @OnClick(R.id.Snooze)
     public void drinkMedicine(){
+        if(r.isPlaying()){
+            r.stop();
+        }
+        if(v.hasVibrator()){
+            v.cancel();
+        }
         Intent i = new Intent(getBaseContext(), ScheduleListActivity.class);
         i.putExtra(Schedule.TABLE, schedule);
         i.putExtra(getString(R.string.schedule_snooze), 5);
@@ -158,10 +148,5 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         rvMedicineAlert.setLayoutManager(mLayoutManager);
     }
 
-    @Override
-    protected void onDestroy() {
-        handler.removeCallbacks(autoCloser);
-        //handler.post(autoCloser);
-        super.onDestroy();
-    }
+
 }
