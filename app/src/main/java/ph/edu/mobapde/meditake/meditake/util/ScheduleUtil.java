@@ -49,6 +49,10 @@ public class ScheduleUtil {
         initializeDBConnection(context);
         return databaseConnection.deleteAllSchedulePlan();
     }
+    public int deleteAllMedicinePlan(){
+        initializeDBConnection(context);
+        return databaseConnection.deleteAllMedicinePlan();
+    }
 
 
     public int deleteAllMedicine(){

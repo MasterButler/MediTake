@@ -43,11 +43,12 @@ public class SettingsActivity extends AppCompatActivity{
         finish();
     }
 
-    @OnClick(R.id.settings_delete_all_medicine)
+    @OnClick(R.id.settings_clear_all_data)
     public void deleteAllMedicine(){
         scheduleUtil.deleteAllSchedule();
         scheduleUtil.deleteAllMedicine();
         scheduleUtil.deleteAllSchedulePlan();
+        scheduleUtil.deleteAllMedicinePlan();
         finish();
     }
 

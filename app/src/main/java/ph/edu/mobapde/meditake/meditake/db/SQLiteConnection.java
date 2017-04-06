@@ -339,6 +339,18 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         return rows;
     }
 
+
+    /**
+     * Deletes all medicine in the db.
+     */
+    public int deleteAllMedicine(){
+        SQLiteDatabase db = getWritableDatabase();
+        /* DELETE FROM medicine WHERE _id = ? */
+        int rows = db.delete(Medicine.TABLE, null, null);
+        db.close();
+        return rows;
+    }
+
     /****************
      * SCHEDULE CRUD
      ****************/
@@ -543,13 +555,14 @@ public class SQLiteConnection extends SQLiteOpenHelper{
     }
 
 
+
     /**
-     * Deletes all medicine in the db.
+     * Deletes all medicinePlan in the db.
      */
-    public int deleteAllMedicine(){
+    public int deleteAllMedicinePlan(){
         SQLiteDatabase db = getWritableDatabase();
         /* DELETE FROM medicine WHERE _id = ? */
-        int rows = db.delete(Medicine.TABLE, null, null);
+        int rows = db.delete(MedicinePlan.TABLE, null, null);
         db.close();
         return rows;
     }
