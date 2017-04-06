@@ -15,16 +15,31 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_centerVertical="true"
         android:layout_alignParentStart="true">
-        <android.support.v7.widget.RecyclerView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorLogoDarkGray">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="@color/cardview_light_background"
+            android:elevation="4dp">
 
-        </android.support.v7.widget.RecyclerView>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight ="16dp">
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rv_medicine_alarm"/>
+            </ScrollView>
+        </LinearLayout>
+
+
+
         <!--<ImageView-->
             <!--android:id="@+id/imageView2"-->
             <!--android:layout_width="match_parent"-->
@@ -35,18 +50,21 @@
             android:layout_height="wrap_content"
             android:text="Snooze"
             android:layout_gravity="center"
-            android:id="@+id/Snooze"/>
+            android:id="@+id/Snooze"
+            android:layout_margin="16dp"
+            android:background="@drawable/rounded_button"
+            android:textColor="?android:attr/color"
+            />
 
         <me.angrybyte.circularslider.CircularSlider
             android:id="@+id/circular"
             android:layout_width="match_parent"
             android:layout_height="186dp"
-
-            android:padding="30dp"
+            android:padding="16dp"
             circular:angle="3.14"
-            circular:border_color="?attr/colorAccent"
+            circular:border_color="?android:attr/colorBackground"
             circular:border_thickness="14dp"
-            circular:thumb_color="?attr/colorPrimaryDark"
+            circular:thumb_color="?android:attr/colorPrimaryDark"
             circular:thumb_size="24dp"
 
             />

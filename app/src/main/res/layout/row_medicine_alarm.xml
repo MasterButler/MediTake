@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            tools:src="@drawable/selection_lozenge_colored"
+            android:paddingRight="8sp"
+            android:id="@+id/iv_medicine_alarm_type"
+            android:paddingLeft="16sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingTop="11sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10sp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    tools:hint="Paracetamol(Biogesic)"
+                    android:textSize="14sp"
+                    android:gravity="center_vertical"
+                    android:textColor="?attr/editTextColor"
+                    android:paddingRight="16dp"
+                    android:id="@+id/tv_medicine_alarm_name"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    tools:hint="Paracetamol(Biogesic)"
+                    android:textSize="11sp"
+                    android:gravity="center_vertical"
+                    android:textColor="?attr/editTextColor"
+                    android:paddingRight="16dp"
+                    android:id="@+id/tv_medicine_alarm_dosage"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

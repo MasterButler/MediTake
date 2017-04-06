@@ -1,20 +1,16 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.transition.TransitionManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -35,15 +31,11 @@ import butterknife.OnClick;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.ScheduleAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
-import ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleDetailsFragment;
-import ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleMedicineFragment;
-import ph.edu.mobapde.meditake.meditake.fragment.MedicineListFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.RepeatingTimePickerFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.ViewSchedule.ViewScheduleDetailsFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.ViewSchedule.ViewScheduleFragment;
 import ph.edu.mobapde.meditake.meditake.listener.CustomOnTimeSetListener;
 import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
-import ph.edu.mobapde.meditake.meditake.service.AlarmReceiver;
 import ph.edu.mobapde.meditake.meditake.util.AlarmUtil;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
@@ -115,17 +107,27 @@ public class ScheduleListActivity extends AppCompatActivity
 
         if(data != null) {
             Schedule schedule = data.getParcelable(Schedule.TABLE);
-            Log.wtf("NEW", "PREV DRINKING SCHED IS " + schedule.getNextDrinkingTime());
-            Log.wtf("NEW", "DRINKING INTERVAL   IS " + schedule.getDrinkingInterval());
-            Log.wtf("NEW", "NEXT TIME AFTER " + schedule.getDrinkingInterval()*DateUtil.MILLIS_TO_MINUTES);
-            if(schedule.getDrinkingInterval() == 0){
-                schedule.setActivated(false);
+            if(data.getParcelable(getString(R.string.schedule_snooze)) == null){
+                int snoozeTime = data.getInt(getString(R.string.schedule_snooze));
+                snoozeTime = snoozeTime == 0 ? 5 : snoozeTime;
+                schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + snoozeTime * DateUtil.MILLIS_TO_MINUTES);
+
+                scheduleUtil.updateSchedule(schedule);
+                updateList();
+                setAlarmForSchedule(schedule);
             }else{
-                schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + schedule.getDrinkingInterval()*DateUtil.MILLIS_TO_MINUTES);
+                Log.wtf("NEW", "PREV DRINKING SCHED IS " + schedule.getNextDrinkingTime());
+                Log.wtf("NEW", "DRINKING INTERVAL   IS " + schedule.getDrinkingInterval());
+                Log.wtf("NEW", "NEXT TIME AFTER " + schedule.getDrinkingInterval() * DateUtil.MILLIS_TO_MINUTES);
+                if (schedule.getDrinkingInterval() == 0) {
+                    schedule.setActivated(false);
+                } else {
+                    schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + schedule.getDrinkingInterval() * DateUtil.MILLIS_TO_MINUTES);
+                }
+                scheduleUtil.updateSchedule(schedule);
+                updateList();
+                setAlarmForSchedule(schedule);
             }
-            scheduleUtil.updateSchedule(schedule);
-            updateList();
-            setAlarmForSchedule(schedule);
         }
     }
 

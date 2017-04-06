@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/fab_addButtonColorPressed" >
+    <item>
+        <selector>
+            <item android:state_pressed="true" >
+                <shape android:shape="rectangle"  >
+                    <corners android:radius="48dip" />
+                    <gradient android:angle="-90" android:startColor="?attr/fab_addButtonColorNormal" android:endColor="?attr/fab_addButtonColorNormal"  />
+                </shape>
+            </item>
+            <item >
+                <shape android:shape="rectangle"  >
+                    <corners android:radius="48dip" />
+                    <gradient android:angle="-90" android:startColor="?attr/fab_addButtonColorNormal" android:endColor="?attr/fab_addButtonColorNormal" />
+                </shape>
+            </item>
+        </selector>
+    </item>
+</ripple>
