@@ -15,33 +15,71 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.NoActionBar.DefaultColorScheme">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
-        <item name="android:textColor">@color/colorFontInBackground</item>
-        <item name="android:textColorPrimary">@color/colorFontInBackground</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="android:editTextColor">@color/colorFontInBackground</item>
-        <item name="android:color">@color/colorFont</item>
+        <item name="colorPrimary">@color/theme3_primary</item>
+        <item name="colorPrimaryDark">@color/theme3_primaryDark</item>
+        <item name="colorAccent">@color/theme3_accent</item>
+        <item name="android:statusBarColor">@color/theme3_primaryDark</item>
+        <item name="android:textColor">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:textColorPrimary">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:colorBackground">@color/theme3_background</item>
+        <item name="android:editTextColor">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:color">@color/colorFontLightTheme</item>
 
-        <item name="fab_addButtonColorNormal">@color/colorAccent</item>
-        <item name="fab_addButtonColorPressed">@color/colorAccentDark</item>
-        <item name="fab_colorNormal">@color/colorAccent</item>
-        <item name="fab_colorPressed">@color/colorAccentDark</item>
-
+        <item name="fab_addButtonColorNormal">@color/theme3_accent</item>
+        <item name="fab_addButtonColorPressed">@color/theme3_accentDark</item>
+        <item name="fab_colorNormal">@color/theme3_accent</item>
+        <item name="fab_colorPressed">@color/theme3_accentDark</item>
     </style>
 
     <style name="AppTheme.NoActionBar.BlueColorScheme">
-        <item name="colorPrimary">@color/colorPrimaryBlueTheme</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlueTheme</item>
-        <item name="colorAccent">@color/colorAccentBlueTheme</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDarkBlueTheme</item>
-        <item name="android:textColor">@color/colorFontInBackground</item>
-        <item name="android:textColorPrimary">@color/colorFontInBackground</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="android:editTextColor">@color/colorFontInBackground</item>
-        <item name="android:color">@color/colorFont</item>
+        <item name="colorPrimary">@color/theme4_primary</item>
+        <item name="colorPrimaryDark">@color/theme4_primaryDark</item>
+        <item name="colorAccent">@color/theme4_accent</item>
+        <item name="android:statusBarColor">@color/theme4_primaryDark</item>
+        <item name="android:textColor">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:textColorPrimary">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:colorBackground">@color/theme4_background</item>
+        <item name="android:editTextColor">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:color">@color/colorFontLightTheme</item>
+
+        <item name="fab_addButtonColorNormal">@color/theme4_accent</item>
+        <item name="fab_addButtonColorPressed">@color/theme4_accentDark</item>
+        <item name="fab_colorNormal">@color/theme4_accent</item>
+        <item name="fab_colorPressed">@color/theme4_accentDark</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.IndigoColorScheme">
+        <item name="colorPrimary">@color/theme2_primary</item>
+        <item name="colorPrimaryDark">@color/theme2_primaryDark</item>
+        <item name="colorAccent">@color/theme2_accent</item>
+        <item name="android:statusBarColor">@color/theme2_primaryDark</item>
+        <item name="android:textColor">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:textColorPrimary">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:colorBackground">@color/theme2_background</item>
+        <item name="android:editTextColor">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:color">@color/colorFontLightTheme</item>
+
+        <item name="fab_addButtonColorNormal">@color/theme2_accent</item>
+        <item name="fab_addButtonColorPressed">@color/theme2_accentDark</item>
+        <item name="fab_colorNormal">@color/theme2_accent</item>
+        <item name="fab_colorPressed">@color/theme2_accentDark</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.PurpleColorScheme">
+        <item name="colorPrimary">@color/theme1_primary</item>
+        <item name="colorPrimaryDark">@color/theme1_primaryDark</item>
+        <item name="colorAccent">@color/theme1_accent</item>
+        <item name="android:statusBarColor">@color/theme1_primaryDark</item>
+        <item name="android:textColor">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:textColorPrimary">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:colorBackground">@color/theme1_background</item>
+        <item name="android:editTextColor">@color/colorFontInBackgroundLightTheme</item>
+        <item name="android:color">@color/colorFontLightTheme</item>
+
+        <item name="fab_addButtonColorNormal">@color/theme1_accent</item>
+        <item name="fab_addButtonColorPressed">@color/theme1_accentDark</item>
+        <item name="fab_colorNormal">@color/theme1_accent</item>
+        <item name="fab_colorPressed">@color/theme1_accentDark</item>
     </style>
 
     <style name="menu_labels_style">

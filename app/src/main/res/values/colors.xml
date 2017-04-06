@@ -34,24 +34,24 @@
     <color name="theme4_accent">#795548</color>
     <color name="theme4_accentDark">#4E342E</color>
 
-    <color name="colorBackground">#E0F2F1</color>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00796B</color>
-    <color name="colorAccent">#FF5252</color>
-    <color name="colorAccentDark">#FF1744</color>
+    <!--<color name="colorBackground">#E0F2F1</color>-->
+    <!--<color name="colorPrimary">#009688</color>-->
+    <!--<color name="colorPrimaryDark">#00796B</color>-->
+    <!--<color name="colorAccent">#FF5252</color>-->
+    <!--<color name="colorAccentDark">#FF1744</color>-->
 
 
-    <color name="colorBackgroundBlueTheme">#E3F2FD</color>
-    <color name="colorPrimaryBlueTheme">#2196F3</color>
-    <color name="colorPrimaryDarkBlueTheme">#1976D2</color>
-    <color name="colorAccentBlueTheme">#FFAB40</color>
-    <color name="colorAccentDarkBlueTheme">#FF9100</color>
+    <!--<color name="colorBackgroundBlueTheme">#E3F2FD</color>-->
+    <!--<color name="colorPrimaryBlueTheme">#2196F3</color>-->
+    <!--<color name="colorPrimaryDarkBlueTheme">#1976D2</color>-->
+    <!--<color name="colorAccentBlueTheme">#FFAB40</color>-->
+    <!--<color name="colorAccentDarkBlueTheme">#FF9100</color>-->
 
-    <color name="colorFont">#FFFFFF</color>
-    <color name="colorFontInBackground">#DE000000</color>
-    <color name="colorBackgroundInSelection">#EEEEEE</color>
-    <color name="colorFontDescription">#212121</color>
-    <color name="colorDivider">#BDBDBD</color>
+    <color name="colorFontLightTheme">#FFFFFF</color>
+    <color name="colorFontInBackgroundLightTheme">#DE000000</color>
+    <color name="colorBackgroundInSelectionLightTheme">#EEEEEE</color>
+    <color name="colorFontDescriptionLightTheme">#212121</color>
+    <color name="colorDividerLightTheme">#BDBDBD</color>
 
     <color name="medicine_background">#FFFFFF</color>
     <color name="selected_medicine_background">#F5F5F5</color>

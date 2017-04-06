@@ -40,7 +40,7 @@
                     android:text="Color Theme                                                       "
                     android:textSize="16sp"
                     android:layout_marginTop="4dp"
-                    android:textColor="@color/colorFontInBackground"/>
+                    android:textColor="@color/colorFontInBackgroundLightTheme"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
                     android:id="@+id/switch_military"
                     android:text="Military Time"
                     android:textSize="16sp"
-                    android:textColor="@color/colorFontInBackground"/>
+                    android:textColor="@color/colorFontInBackgroundLightTheme"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -105,7 +105,7 @@
                         android:padding="16dp"
                         android:text="Delete All Schedule"
                         android:textSize="16sp"
-                        android:textColor="@color/colorFontInBackground"/>
+                        android:textColor="@color/colorFontInBackgroundLightTheme"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -115,7 +115,7 @@
                         android:padding="16dp"
                         android:text="Clear All Data"
                         android:textSize="16sp"
-                        android:textColor="@color/colorFontInBackground"/>
+                        android:textColor="@color/colorFontInBackgroundLightTheme"/>
             </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

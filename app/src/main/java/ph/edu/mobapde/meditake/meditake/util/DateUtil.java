@@ -100,14 +100,8 @@ public class DateUtil {
         int minute = mcurrentTime.get(Calendar.MINUTE);
         int second = mcurrentTime.get(Calendar.SECOND);
 
-        Log.wtf("IN GETDELAY", "HOUR OF DAY IS " + hour);
-        Log.wtf("IN GETDELAY", "MINT OF DAY IS " + minute);
-        Log.wtf("IN GETDELAY", "SECD OF DAY IS " + second);
-
         long currTime = second * MILLIS_TO_SECONDS + minute * MILLIS_TO_MINUTES + hour * MILLIS_TO_HOURS;
 
-        Log.wtf("IN GETDELAY", "ALRMTIME IS " + timeToAlarm + " OR " + convertToReadableFormat(timeToAlarm, false) );
-        Log.wtf("IN GETDELAY", "CURRTIME IS " + currTime + " OR " + convertToReadableFormat(currTime, false) );
         return timeToAlarm-currTime;
     }
 
