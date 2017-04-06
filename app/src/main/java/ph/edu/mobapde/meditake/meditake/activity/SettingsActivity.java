@@ -39,6 +39,15 @@ public class SettingsActivity extends AppCompatActivity{
     @OnClick(R.id.settings_delete_all_schedule)
     public void deleteAllSchedule(){
         scheduleUtil.deleteAllSchedule();
+        scheduleUtil.deleteAllSchedulePlan();
+        finish();
+    }
+
+    @OnClick(R.id.settings_delete_all_medicine)
+    public void deleteAllMedicine(){
+        scheduleUtil.deleteAllSchedule();
+        scheduleUtil.deleteAllMedicine();
+        scheduleUtil.deleteAllSchedulePlan();
         finish();
     }
 
@@ -46,4 +55,5 @@ public class SettingsActivity extends AppCompatActivity{
     public void changeColorTheme(){
 
     }
+
 }

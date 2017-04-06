@@ -542,6 +542,17 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         return rows;
     }
 
+
+    /**
+     * Deletes all medicine in the db.
+     */
+    public int deleteAllMedicine(){
+        SQLiteDatabase db = getWritableDatabase();
+        /* DELETE FROM medicine WHERE _id = ? */
+        int rows = db.delete(Medicine.TABLE, null, null);
+        db.close();
+        return rows;
+    }
     /*********************
      * SCHEDULE PLAN CRUD
      *********************/
@@ -567,6 +578,16 @@ public class SQLiteConnection extends SQLiteOpenHelper{
                 new String[]{scheudleId+""});
         db.close();
         //Log.wtf("DELETE", "Deleted Schedule plan with ID " + scheudleId);
+        return rows;
+    }
+    /**
+     * Deletes all SchedulePlan in the db.
+     */
+    public int deleteAllSchedulePlan(){
+        SQLiteDatabase db = getWritableDatabase();
+        /* DELETE FROM medicine WHERE _id = ? */
+        int rows = db.delete(SchedulePlan.TABLE, null, null);
+        db.close();
         return rows;
     }
 }

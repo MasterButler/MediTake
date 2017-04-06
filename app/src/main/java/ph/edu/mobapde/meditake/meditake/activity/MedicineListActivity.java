@@ -344,6 +344,7 @@ public class MedicineListActivity extends AppCompatActivity
             delete((int) CREATING_NEW_ITEM);
             CREATING_NEW_ITEM = -1;
         }
+        updateList();
     }
 
     @Override
