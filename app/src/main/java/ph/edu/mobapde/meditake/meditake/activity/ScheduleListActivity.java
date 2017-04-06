@@ -108,27 +108,39 @@ public class ScheduleListActivity extends AppCompatActivity
         if(data != null) {
             Schedule schedule = data.getParcelable(Schedule.TABLE);
             if(data.getParcelable(getString(R.string.schedule_snooze)) == null){
-                int snoozeTime = data.getInt(getString(R.string.schedule_snooze));
-                snoozeTime = snoozeTime == 0 ? 5 : snoozeTime;
-                schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + snoozeTime * DateUtil.MILLIS_TO_MINUTES);
-
-                scheduleUtil.updateSchedule(schedule);
-                updateList();
-                setAlarmForSchedule(schedule);
+                setNextDrinking(schedule);
             }else{
-                Log.wtf("NEW", "PREV DRINKING SCHED IS " + schedule.getNextDrinkingTime());
-                Log.wtf("NEW", "DRINKING INTERVAL   IS " + schedule.getDrinkingInterval());
-                Log.wtf("NEW", "NEXT TIME AFTER " + schedule.getDrinkingInterval() * DateUtil.MILLIS_TO_MINUTES);
-                if (schedule.getDrinkingInterval() == 0) {
-                    schedule.setActivated(false);
-                } else {
-                    schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + schedule.getDrinkingInterval() * DateUtil.MILLIS_TO_MINUTES);
+                int snoozeTime = data.getInt(getString(R.string.schedule_snooze));
+                if(snoozeTime == 0){
+                    setNextDrinking(schedule);
+                }else {
+                    setSnooze(schedule, snoozeTime);
                 }
-                scheduleUtil.updateSchedule(schedule);
-                updateList();
-                setAlarmForSchedule(schedule);
             }
         }
+    }
+
+    public void setSnooze(Schedule schedule, int snoozeTime){
+        snoozeTime = snoozeTime == 0 ? 5 : snoozeTime;
+        schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + snoozeTime * DateUtil.MILLIS_TO_MINUTES);
+
+        scheduleUtil.updateSchedule(schedule);
+        updateList();
+        setAlarmForSchedule(schedule);
+    }
+
+    public void setNextDrinking(Schedule schedule){
+        Log.wtf("NEW", "PREV DRINKING SCHED IS " + schedule.getNextDrinkingTime());
+        Log.wtf("NEW", "DRINKING INTERVAL   IS " + schedule.getDrinkingInterval());
+        Log.wtf("NEW", "NEXT TIME AFTER " + schedule.getDrinkingInterval() * DateUtil.MILLIS_TO_MINUTES);
+        if (schedule.getDrinkingInterval() == 0) {
+            schedule.setActivated(false);
+        } else {
+            schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + schedule.getDrinkingInterval() * DateUtil.MILLIS_TO_MINUTES);
+        }
+        scheduleUtil.updateSchedule(schedule);
+        updateList();
+        setAlarmForSchedule(schedule);
     }
 
     @Override

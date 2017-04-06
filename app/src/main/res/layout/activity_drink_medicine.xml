@@ -12,7 +12,6 @@
     android:background="?attr/colorPrimary"
     tools:context="ph.edu.mobapde.meditake.meditake.activity.DrinkMedicineActivity">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,7 +21,35 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center|bottom"
+            android:layout_margin="16dp"
+            android:id="@+id/lin_alarm_time">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="56dp"
+                android:textColor="?android:attr/color"
+                android:text="09:00"
+                android:id="@+id/tv_alarm_display_time"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AM"
+                android:textColor="?android:attr/color"
+                android:textSize="36dp"
+                android:textStyle="bold"
+                android:paddingLeft="5dp"
+                android:id="@+id/tv_alarm_display_time_period"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@color/cardview_light_background"
             android:elevation="4dp">
@@ -32,6 +59,7 @@
                 android:layout_height="match_parent"
                 android:paddingRight ="16dp"
                 android:background="?android:attr/colorBackground">
+                <!--android:layout_weight="1"-->
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -46,44 +74,79 @@
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="200dp"-->
             <!--android:src="@drawable/alarm_clock_colored" />-->
-        <Button
+
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Snooze"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:id="@+id/Snooze"-->
+            <!--android:layout_margin="16dp"-->
+            <!--android:background="@drawable/rounded_button"-->
+            <!--android:textColor="?android:attr/color"-->
+            <!--/>-->
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Snooze"
             android:layout_gravity="center"
-            android:id="@+id/Snooze"
-            android:layout_margin="16dp"
-            android:background="@drawable/rounded_button"
-            android:textColor="?android:attr/color"
-            />
+            android:padding="20dp"
+            android:gravity="center">
 
-        <me.angrybyte.circularslider.CircularSlider
-            android:id="@+id/circular"
-            android:layout_width="match_parent"
-            android:layout_height="186dp"
-            android:padding="16dp"
-            circular:angle="3.14"
-            circular:border_color="?android:attr/colorBackground"
-            circular:border_thickness="14dp"
-            circular:thumb_color="?android:attr/colorPrimaryDark"
-            circular:thumb_size="24dp"
+            <net.frakbot.glowpadbackport.GlowPadView
+                android:id="@+id/gpv_alarm_medicine"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                android:gravity="center"
+                app:targetDrawables="@array/incoming_alarm_widget_2way_targets"
+                app:handleDrawable="@drawable/ic_in_alarm_touch_handle"
+                app:innerRadius="@dimen/glowpadview_inner_radius"
+                app:outerRadius="@dimen/glowpadview_target_placement_radius"
+                app:outerRingDrawable="@drawable/ic_lockscreen_outerring"
+                app:snapMargin="@dimen/glowpadview_snap_margin"
+                app:vibrationDuration="20"
+                app:feedbackCount="1"
+                app:glowRadius="@dimen/glowpadview_glow_radius"
+                app:pointDrawable="@drawable/ic_lockscreen_glowdot"/>
+        </LinearLayout>
 
-            />
+        <!--<Button-->
+            <!--android:id="@+id/btn_toggle_padmult"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentTop="true"/>-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Draw a Circle using "
-            android:textColor="@color/white"
-            android:textAlignment="center"
-            android:textSize="20dp"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="the slider Once Taken!!!"
-            android:textColor="@color/white"
-            android:textAlignment="center"
-            android:textSize="20dp"/>
+        <!--<me.angrybyte.circularslider.CircularSlider-->
+            <!--android:id="@+id/circular"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="186dp"-->
+            <!--android:padding="16dp"-->
+            <!--circular:angle="3.14"-->
+            <!--circular:border_color="?android:attr/colorBackground"-->
+            <!--circular:border_thickness="14dp"-->
+            <!--circular:thumb_color="?android:attr/colorPrimaryDark"-->
+            <!--circular:thumb_size="24dp"-->
+
+            <!--/>-->
+
+
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Draw a Circle using "-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textSize="20dp"/>-->
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="the slider Once Taken!!!"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textSize="20dp"/>-->
 
     </LinearLayout>
 
