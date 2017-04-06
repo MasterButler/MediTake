@@ -6,44 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="2dp"
-    tools:context="ph.edu.mobapde.meditake.meditake.activity.ColorChangeActivity"
     android:weightSum="1">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Color Theme"
-        android:padding="22dp"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:textColor="?android:attr/colorAccent"
-        />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/cardview_light_background"
-        android:weightSum="1">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="137dp"
-            android:id="@+id/iv_theme1"
-            android:layout_weight="0.50"
-            app:srcCompat="@mipmap/theme_1"/>
-            <!-- app:srcCompat="@mipmap/selected_theme_1"-->
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="137dp"
-            android:id="@+id/iv_theme2"
-            android:layout_weight="0.50"
-            app:srcCompat="@mipmap/theme_2"/>
-            <!-- app:srcCompat="@mipmap/selected_theme_2"-->
-
-    </LinearLayout>
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Color Theme"-->
+        <!--android:padding="22dp"-->
+        <!--android:textSize="16dp"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="?android:attr/colorAccent"-->
+        <!--/>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,15 +30,47 @@
             android:layout_height="137dp"
             android:id="@+id/iv_theme3"
             android:layout_weight="0.50"
-            app:srcCompat="@mipmap/theme_3"/>
-            <!-- app:srcCompat="@mipmap/selected_theme_3"-->
+            app:srcCompat="@drawable/theme_3"
+            android:padding="16dp"/>
+        <!-- app:srcCompat="@drawable/selected_theme_3"-->
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="137dp"
             android:id="@+id/iv_theme4"
             android:layout_weight="0.50"
-            app:srcCompat="@mipmap/theme_4"/>
-            <!-- app:srcCompat="@mipmap/selected_theme_4"-->
+            app:srcCompat="@drawable/theme_4"
+            android:padding="16dp"/>
+        <!-- app:srcCompat="@drawable/selected_theme_4"-->
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/cardview_light_background"
+        android:weightSum="1">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="137dp"
+            android:id="@+id/iv_theme1"
+            android:layout_weight="0.50"
+            app:srcCompat="@drawable/theme_1"
+            android:padding="16dp"/>
+            <!-- app:srcCompat="@drawable/selected_theme_1"-->
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="137dp"
+            android:id="@+id/iv_theme2"
+            android:layout_weight="0.50"
+            app:srcCompat="@drawable/theme_2"
+            android:padding="16dp"/>
+            <!-- app:srcCompat="@drawable/selected_theme_2"-->
+
+    </LinearLayout>
+
+
 </LinearLayout>

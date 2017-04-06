@@ -25,10 +25,13 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.edu.mobapde.meditake.meditake.R;
+import ph.edu.mobapde.meditake.meditake.RequestCodes;
 import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.ScheduleAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.fragment.RepeatingTimePickerFragment;
@@ -45,10 +48,9 @@ import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class ScheduleListActivity extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener,
-                    RepeatingTimePickerFragment.OnRepeatingTimePickerFragmentInteractionListener,
-                    ViewScheduleDetailsFragment.OnViewScheduleDetailsFragmentInteractionListener{
+        RepeatingTimePickerFragment.OnRepeatingTimePickerFragmentInteractionListener,
+        ViewScheduleDetailsFragment.OnViewScheduleDetailsFragmentInteractionListener{
 
-    public static final int REQUEST_ADD_SCHEDULE = 1;
 
     @BindView(R.id.snackbar_position)
     CoordinatorLayout clSnackbar;
@@ -83,7 +85,7 @@ public class ScheduleListActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_ADD_SCHEDULE){
+        if(requestCode == RequestCodes.REQUEST_ADD_SCHEDULE){
             if(resultCode == RESULT_OK) {
                 Schedule addedScheudle = data.getExtras().getParcelable(Schedule.TABLE);
                 updateList();
@@ -93,6 +95,8 @@ public class ScheduleListActivity extends AppCompatActivity
             }else if(resultCode == RESULT_CANCELED){
                 showGenericSnackbar("Medicine creation cancelled", Snackbar.LENGTH_SHORT);
             }
+        }else if(requestCode == RequestCodes.REQUEST_SETTINGS_UPDATE){
+            ThemeUtil.reloadWithTheme(this);
         }
     }
 
@@ -146,6 +150,7 @@ public class ScheduleListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.wtf("ONCREATE", "SCHEDULELISTACTIVITY");
         ThemeUtil.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_schedule_list);
 
@@ -164,19 +169,20 @@ public class ScheduleListActivity extends AppCompatActivity
         checkIntent();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateList();
-    }
-
     public void initializeDrawer(){
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, view_schedule_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        ArrayList<Integer> navHeaders = new ArrayList<>();
+        navHeaders.add(R.drawable.drawer_wallpaper_1);
+        navHeaders.add(R.drawable.drawer_wallpaper_2);
+        navHeaders.add(R.drawable.drawer_wallpaper_3);
+        navHeaders.add(R.drawable.drawer_wallpaper_4);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.getHeaderView(0).findViewById(R.id.nav_header).setBackgroundResource(navHeaders.get(ThemeUtil.getSelectedTheme(getBaseContext())-1));
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
@@ -246,7 +252,7 @@ public class ScheduleListActivity extends AppCompatActivity
         if(CREATING_NEW_ITEM == -1) {
             //showAddScheduleFragment();
             Intent i = new Intent(getBaseContext(), AddScheduleActivity.class);
-            startActivityForResult(i, REQUEST_ADD_SCHEDULE);
+            startActivityForResult(i, RequestCodes.REQUEST_ADD_SCHEDULE);
         } else {
             Toast.makeText(getBaseContext(), "No medicines in list. Adding Schedule without any medicine not yet supported.", Toast.LENGTH_LONG).show();
         }

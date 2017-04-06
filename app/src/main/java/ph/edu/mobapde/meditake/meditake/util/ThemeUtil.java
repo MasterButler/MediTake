@@ -1,7 +1,12 @@
 package ph.edu.mobapde.meditake.meditake.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import ph.edu.mobapde.meditake.meditake.R;
@@ -12,7 +17,7 @@ import ph.edu.mobapde.meditake.meditake.R;
 
 public class ThemeUtil {
 
-    private static int selectedTheme;
+    public static final String SELECTED_THEME = "theme";
     public final static int THEME_DEFAULT = 3;
     public final static int THEME_BLUE = 4;
     public final static int THEME_PURPLE = 1;
@@ -22,15 +27,22 @@ public class ThemeUtil {
      */
     public static void changeToTheme(Activity activity, int theme)
     {
-        selectedTheme = theme;
+        Log.wtf("THEME_INFO", "THEME PASSED IS: " + theme);
+        setSelectedTheme(activity.getBaseContext(), theme);
+        Log.wtf("THEME_INFO", "THEME STORED IS: " + getSelectedTheme(activity.getBaseContext()));
         activity.finish();
         activity.startActivity(new Intent(activity, activity.getClass()));
     }
+
+    public static void reloadWithTheme(Activity activity){
+        changeToTheme(activity, getSelectedTheme(activity.getBaseContext()));
+    }
+
     /** Set the theme of the activity, according to the configuration. */
     public static void onActivityCreateSetTheme(Activity activity)
     {
-        Log.wtf("THEME_INFO", "THEME SELECTED IS: " + selectedTheme);
-        switch (selectedTheme)
+        Log.wtf("THEME_INFO", "THEME SELECTED IS: " + getSelectedTheme(activity.getBaseContext()));
+        switch (getSelectedTheme(activity.getBaseContext()))
         {
             default:
             case THEME_DEFAULT:
@@ -48,7 +60,17 @@ public class ThemeUtil {
         }
     }
 
-    public static int getSelectedTheme(){
-        return selectedTheme;
+    public static int getSelectedTheme(Context context){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getInt(SELECTED_THEME, THEME_DEFAULT);
+    }
+
+    public static void setSelectedTheme(Context context, int selectedTheme){
+        SharedPreferences sp =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+
+        editor.putInt(SELECTED_THEME, selectedTheme);
+        editor.commit();
     }
 }

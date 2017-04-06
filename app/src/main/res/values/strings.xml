@@ -46,4 +46,5 @@
     <string name="title_activity_add_schedule">AddScheduleActivity</string>
     <string name="MEDICINE_POSITION">position</string>
     <string name="schedule_snooze">SCHEDULE_SNOOZED</string>
+    <string name="settings">SettingsActivity</string>
 </resources>

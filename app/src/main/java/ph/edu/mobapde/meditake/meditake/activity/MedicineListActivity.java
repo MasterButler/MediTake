@@ -1,8 +1,10 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -28,10 +30,13 @@ import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.edu.mobapde.meditake.meditake.R;
+import ph.edu.mobapde.meditake.meditake.RequestCodes;
 import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.MedicineAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
@@ -103,6 +108,13 @@ public class MedicineListActivity extends AppCompatActivity
         CREATING_NEW_ITEM = -1;
         LAST_DELETED = null;
         //addHardcodedData()
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == RequestCodes.REQUEST_SETTINGS_UPDATE){
+            ThemeUtil.reloadWithTheme(this);
+        }
     }
 
     public void addHardcodedData(){
@@ -192,7 +204,14 @@ public class MedicineListActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        ArrayList<Integer> navHeaders = new ArrayList<>();
+        navHeaders.add(R.drawable.drawer_wallpaper_1);
+        navHeaders.add(R.drawable.drawer_wallpaper_2);
+        navHeaders.add(R.drawable.drawer_wallpaper_3);
+        navHeaders.add(R.drawable.drawer_wallpaper_4);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.getHeaderView(0).findViewById(R.id.nav_header).setBackgroundResource(navHeaders.get(ThemeUtil.getSelectedTheme(getBaseContext())-1));
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(1).setChecked(true);
     }
