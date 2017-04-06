@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="2dp"
-    android:background="@color/colorBackgroundInSelection"
     tools:context="ph.edu.mobapde.meditake.meditake.activity.ColorChangeActivity"
     android:weightSum="1">
 
@@ -15,8 +14,10 @@
         android:layout_height="wrap_content"
         android:text="Color Theme"
         android:padding="22dp"
-        android:textSize="20dp"
-        android:textColor="@color/colorFontInBackgroundBlueTheme"/>
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccentBlueTheme"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
