@@ -336,7 +336,7 @@
                             android:paddingLeft="2dp"
                             android:paddingRight="2dp"
                             android:textAlignment="center"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="?attr/colorPrimary"
                             android:textStyle="bold"/>
 
                     </LinearLayout>
@@ -362,7 +362,7 @@
                             android:paddingLeft="2dp"
                             android:paddingRight="2dp"
                             android:textAlignment="center"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="?attr/colorPrimary"
                             android:textStyle="bold"/>
 
                     </LinearLayout>

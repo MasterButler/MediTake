@@ -16,7 +16,7 @@
         android:padding="22dp"
         android:textSize="16dp"
         android:textStyle="bold"
-        android:textColor="@color/colorAccentBlueTheme"
+        android:textColor="?android:attr/colorAccent"
         />
 
     <LinearLayout
