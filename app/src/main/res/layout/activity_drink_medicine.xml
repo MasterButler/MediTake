@@ -75,16 +75,16 @@
             <!--android:layout_height="200dp"-->
             <!--android:src="@drawable/alarm_clock_colored" />-->
 
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Snooze"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:id="@+id/Snooze"-->
-            <!--android:layout_margin="16dp"-->
-            <!--android:background="@drawable/rounded_button"-->
-            <!--android:textColor="?android:attr/color"-->
-            <!--/>-->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Snooze"
+            android:layout_gravity="center"
+            android:id="@+id/snooze"
+            android:layout_margin="16dp"
+            android:background="@drawable/rounded_button"
+            android:textColor="?android:attr/color"
+            />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"

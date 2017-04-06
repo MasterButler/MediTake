@@ -1,5 +1,8 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Ringtone;
@@ -8,6 +11,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +32,7 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ph.edu.mobapde.meditake.meditake.AlarmReceiver;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.AlarmMedicineAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
@@ -44,6 +49,9 @@ public class DrinkMedicineActivity extends AppCompatActivity {
 
     public static final int TARGET_SNOOZE = 0;
     public static final int TARGET_DRINK = 2;
+    public static final int PENDING_NEXT_ACTIVITY=55;
+    public static final int NOTIFICATION_ANNOUNCEMENT=55;
+    public static final int PENDING_ALARM_RECEIVER=56;
 
     @BindView(R.id.rv_medicine_alarm)
     RecyclerView rvMedicineAlert;
@@ -242,6 +250,26 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         i.putExtra(Schedule.TABLE, schedule);
         i.putExtra(getString(R.string.schedule_snooze), 0);
         startActivity(i);
+    }
+
+    @OnClick (R.id.snooze)
+    public void snoozeClicked(){
+
+        Log.d("HELLO","HELLO HELLO HELLO");
+        AlarmManager alarmManager=(AlarmManager)getSystemService(Service.ALARM_SERVICE);
+
+        Intent intentAlarm= new Intent(getBaseContext(),AlarmReceiver.class);
+
+        PendingIntent pendingAlarm = PendingIntent.getBroadcast(getBaseContext()
+                ,PENDING_ALARM_RECEIVER
+                ,intentAlarm
+                ,PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME
+                , SystemClock.elapsedRealtime()+(2000)
+                , pendingAlarm
+        );
+        Log.d("HELLO","HELLO HELLO HELLO HELLO");
+        snooze();
     }
 
     public void snooze(){

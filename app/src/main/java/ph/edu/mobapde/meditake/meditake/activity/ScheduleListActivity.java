@@ -341,7 +341,7 @@ public class ScheduleListActivity extends AppCompatActivity
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else if(viewScheduleFragment.isVisible()){
+        }else if(viewScheduleFragment != null && viewScheduleFragment.isVisible()){
             closeViewScheduleFragment();
         }else{
             super.onBackPressed();
