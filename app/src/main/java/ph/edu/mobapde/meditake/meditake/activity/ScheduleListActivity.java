@@ -111,7 +111,7 @@ public class ScheduleListActivity extends AppCompatActivity
 
         if(data != null) {
             Schedule schedule = data.getParcelable(Schedule.TABLE);
-            if(data.getParcelable(getString(R.string.schedule_snooze)) == null){
+            if(data.get(getString(R.string.schedule_snooze)) == null){
                 setNextDrinking(schedule);
             }else{
                 int snoozeTime = data.getInt(getString(R.string.schedule_snooze));

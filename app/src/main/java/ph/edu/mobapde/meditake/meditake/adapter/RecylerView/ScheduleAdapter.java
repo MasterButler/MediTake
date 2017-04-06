@@ -74,6 +74,7 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
             viewHolder.cardEditBackground.setImageResource(DateUtil.pickBackground(sched.getNextDrinkingTime()));
             viewHolder.cardEditBackground.setColorFilter(Color.parseColor("#AAFFFFFF"), PorterDuff.Mode.SRC_ATOP);
 
+            viewHolder.tvMedicineToDrink.setText(DateUtil.convertToCardDisplayFormat(sched.getDrinkingInterval()));
             if(isMilitary){
                 viewHolder.tvScheduleTimePeriod.setVisibility(View.GONE);
 

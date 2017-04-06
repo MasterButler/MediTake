@@ -111,6 +111,10 @@ public class DateUtil {
         return format(hours, minutes, isMilitary);
     }
 
+    public static String convertToCardDisplayFormat(long drinkingTime){
+        return parseToTimePickerDisplay(drinkingTime);
+    }
+
     public static String convertToNotificationFormat(long drinkingTime){
         String message = "";
         long delay = getDelay(drinkingTime);

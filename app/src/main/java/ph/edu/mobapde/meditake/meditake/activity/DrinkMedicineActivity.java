@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,9 @@ public class DrinkMedicineActivity extends AppCompatActivity {
     public static final int NOTIFICATION_ANNOUNCEMENT=55;
     public static final int PENDING_ALARM_RECEIVER=56;
 
+    @BindView(R.id.lin_rv_empty)
+    LinearLayout linEmptyMedicineList;
+
     @BindView(R.id.rv_medicine_alarm)
     RecyclerView rvMedicineAlert;
 
@@ -63,7 +67,6 @@ public class DrinkMedicineActivity extends AppCompatActivity {
     TextView tvAlarmTime;
     @BindView(R.id.tv_alarm_display_time_period)
     TextView tvAlarmTimePeriod;
-
 
     AlarmMedicineAdapter alarmMedicineAdapter;
 
@@ -148,6 +151,14 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         this.tvAlarmTime.setText(displayTime.split("\\s+")[0]);
         this.tvAlarmTimePeriod.setText(displayTime.split("\\s+")[1]);
 
+        if(alarmMedicineAdapter.getItemCount() == 0){
+            linEmptyMedicineList.setVisibility(View.VISIBLE);
+            rvMedicineAlert.setVisibility(View.GONE);
+        }else{
+            linEmptyMedicineList.setVisibility(View.GONE);
+            rvMedicineAlert.setVisibility(View.VISIBLE);
+        }
+
         //final int[] mults = {1, 2, 3, 4, 6, 8, 10, 12, 16, 20, 32};
         glowPad.setPointsMultiplier(12);
         glowPad.setOnTriggerListener(new GlowPadView.OnTriggerListener() {
@@ -163,13 +174,7 @@ public class DrinkMedicineActivity extends AppCompatActivity {
 
             @Override
             public void onTrigger(View v, int target) {
-                switch(target){
-                    case TARGET_DRINK:  drink();
-                        break;
-                    case TARGET_SNOOZE: snooze();
-                        break;
-                }
-                Toast.makeText(getBaseContext(), "Target triggered! ID=" + target, Toast.LENGTH_SHORT).show();
+                drink();
                 glowPad.reset(true);
             }
 
@@ -246,6 +251,12 @@ public class DrinkMedicineActivity extends AppCompatActivity {
     }
 
     public void drink(){
+        if(r.isPlaying()){
+            r.stop();
+        }
+        if(v.hasVibrator()){
+            v.cancel();
+        }
         Intent i = new Intent(getBaseContext(), ScheduleListActivity.class);
         i.putExtra(Schedule.TABLE, schedule);
         i.putExtra(getString(R.string.schedule_snooze), 0);
@@ -255,20 +266,20 @@ public class DrinkMedicineActivity extends AppCompatActivity {
     @OnClick (R.id.snooze)
     public void snoozeClicked(){
 
-        Log.d("HELLO","HELLO HELLO HELLO");
-        AlarmManager alarmManager=(AlarmManager)getSystemService(Service.ALARM_SERVICE);
-
-        Intent intentAlarm= new Intent(getBaseContext(),AlarmReceiver.class);
-
-        PendingIntent pendingAlarm = PendingIntent.getBroadcast(getBaseContext()
-                ,PENDING_ALARM_RECEIVER
-                ,intentAlarm
-                ,PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME
-                , SystemClock.elapsedRealtime()+(2000)
-                , pendingAlarm
-        );
-        Log.d("HELLO","HELLO HELLO HELLO HELLO");
+//        Log.d("HELLO","HELLO HELLO HELLO");
+//        AlarmManager alarmManager=(AlarmManager)getSystemService(Service.ALARM_SERVICE);
+//
+//        Intent intentAlarm= new Intent(getBaseContext(),AlarmReceiver.class);
+//
+//        PendingIntent pendingAlarm = PendingIntent.getBroadcast(getBaseContext()
+//                ,PENDING_ALARM_RECEIVER
+//                ,intentAlarm
+//                ,PendingIntent.FLAG_UPDATE_CURRENT);
+//        alarmManager.set(AlarmManager.ELAPSED_REALTIME
+//                , SystemClock.elapsedRealtime()+(2000)
+//                , pendingAlarm
+//        );
+//        Log.d("HELLO","HELLO HELLO HELLO HELLO");
         snooze();
     }
 

@@ -12,6 +12,6 @@
         android:state_enabled="true"
         android:state_active="true"
         android:state_focused="false"
-        android:drawable="@drawable/set_alarm_white" />
+        android:drawable="@drawable/drink_tablet_white" />
 
 </selector>

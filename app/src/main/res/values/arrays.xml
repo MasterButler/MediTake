@@ -6,8 +6,8 @@
      -->
     <array name="incoming_alarm_widget_2way_targets">
         <item>@drawable/ic_drink_medicine</item>
-        <item>@null</item>
-        <item>@drawable/ic_snooze_white_24dp</item>
-        <item>@null</item>"
+        <item>@drawable/ic_drink_medicine</item>
+        <item>@drawable/ic_drink_medicine</item>
+        <item>@drawable/ic_drink_medicine</item>"
     </array>
 </resources>
