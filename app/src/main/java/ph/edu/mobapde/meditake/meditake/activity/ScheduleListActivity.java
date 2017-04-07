@@ -246,6 +246,10 @@ public class ScheduleListActivity extends AppCompatActivity
         boolean isEditing = scheduleAdapter.isEditing(id);
         scheduleAdapter.setEditingPositionId(isEditing ? -1 : id);
         scheduleAdapter.notifyDataSetChanged();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.remove(viewScheduleFragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     public void addNewSchedule(){
@@ -350,7 +354,6 @@ public class ScheduleListActivity extends AppCompatActivity
         }else if(viewScheduleFragment != null && viewScheduleFragment.isVisible()){
             closeViewScheduleFragment();
         }else{
-            super.onBackPressed();
         }
     }
 
