@@ -347,6 +347,12 @@ public class ScheduleListActivity extends AppCompatActivity
         Cursor c = scheduleUtil.getAllSchedule();
         Log.d("count", "FOUND " + c.getCount() + " ROWS IN SCHEDULE");
         scheduleAdapter.changeCursor(c);
+
+        int rvVisibility = scheduleAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
+        int linVisibility = scheduleAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE;
+
+        rvSchedule.setVisibility(rvVisibility);
+        linRvEmpty.setVisibility(linVisibility);
     }
 
 

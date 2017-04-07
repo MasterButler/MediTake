@@ -233,6 +233,7 @@ public class DrinkMedicineActivity extends AppCompatActivity {
     }
 
     public void playRingtone(){
+        Log.wtf("PLAYING", "RINGTONE IS STARTING");
         r = AlarmUtil.convertStringToRingtone(getBaseContext(), schedule.getRingtone());
         r.play();
     }
