@@ -5,8 +5,8 @@
         android:drawable="@drawable/aspirins_white"/>
     <item
         android:state_enabled="true" android:state_active="true"  android:state_focused="false"
-        android:drawable="@drawable/drink_tablet_white" />
+        android:drawable="@drawable/drink_capsule_small" />
     <item
         android:state_enabled="true" android:state_active="false"  android:state_focused="true"
-        android:drawable="@drawable/drink_tablet_white" />
+        android:drawable="@drawable/drink_capsule_small" />
 </selector>

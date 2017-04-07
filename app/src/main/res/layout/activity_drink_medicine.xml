@@ -65,6 +65,8 @@
                     android:text="No Medicine to Drink"
                     android:id="@+id/tv_rv_empty"
                     android:textSize="20sp"
+                    android:textColor="?android:attr/textColor"
+                    android:background="?android:attr/colorBackground"
                     android:padding="16sp"
                     android:gravity="center"/>
             </LinearLayout>

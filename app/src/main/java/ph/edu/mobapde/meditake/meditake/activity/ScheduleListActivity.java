@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -86,6 +87,7 @@ public class ScheduleListActivity extends AppCompatActivity
     FragmentTransaction ft;
 
     int CREATING_NEW_ITEM;
+    private boolean doubleBackToExitPressedOnce;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -118,10 +120,12 @@ public class ScheduleListActivity extends AppCompatActivity
             Schedule schedule = data.getParcelable(Schedule.TABLE);
             if(data.get(getString(R.string.schedule_snooze)) == null){
                 setNextDrinking(schedule);
+//                view(schedule.getSqlId());
             }else{
                 int snoozeTime = data.getInt(getString(R.string.schedule_snooze));
                 if(snoozeTime == 0){
                     setNextDrinking(schedule);
+//                    view(schedule.getSqlId());
                 }else {
                     setSnooze(schedule, snoozeTime);
                 }
@@ -216,12 +220,7 @@ public class ScheduleListActivity extends AppCompatActivity
             @Override
             public void onItemClick(int id) {
 //                expand(id);
-                Log.wtf("SCHEDLIST", "SCHEDULE IS " + scheduleUtil.getSchedule(id));
-                viewScheduleFragment = ViewScheduleFragment.newInstance(scheduleUtil.getSchedule(id));
-                ft = getSupportFragmentManager().beginTransaction();
-                ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
-                ft.replace(R.id.fragment_medicine_list_placeholder, viewScheduleFragment);
-                ft.commit();
+                view(id);
             }
 
             @Override
@@ -356,6 +355,15 @@ public class ScheduleListActivity extends AppCompatActivity
     }
 
 
+    public void view(int id){
+        Log.wtf("SCHEDLIST", "SCHEDULE IS " + scheduleUtil.getSchedule(id));
+        viewScheduleFragment = ViewScheduleFragment.newInstance(scheduleUtil.getSchedule(id));
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.replace(R.id.fragment_medicine_list_placeholder, viewScheduleFragment);
+        ft.commit();
+    }
+
     @OnClick(R.id.fab_add_schedule)
     public void addSchedule(){
         Log.d("action", "ADDING NEW SCHEDULE");
@@ -369,6 +377,21 @@ public class ScheduleListActivity extends AppCompatActivity
         }else if(viewScheduleFragment != null && viewScheduleFragment.isVisible()){
             closeViewScheduleFragment();
         }else{
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
         }
     }
 
@@ -417,9 +440,8 @@ public class ScheduleListActivity extends AppCompatActivity
         ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
         ft.remove(viewScheduleFragment);
-        ft.addToBackStack(null);
         ft.commit();
-
+        getFragmentManager().popBackStack();
     }
 
     @Override
