@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -86,9 +87,21 @@ public class DrinkMedicineActivity extends AppCompatActivity {
     boolean isClicked;
     boolean isMilitary;
 
+    int userRingerMode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AudioManager audioManager = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+
+        userRingerMode = audioManager.getRingerMode();
+
+        int volume = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+
+        audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume,AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+
+
         ThemeUtil.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_drink_medicine);
 
@@ -230,6 +243,12 @@ public class DrinkMedicineActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.wtf("STOP", "STOPPING DRINK MED ACT");
+
+    }
+
+    public void resetRingerMode(){
+        AudioManager audioManager = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setRingerMode(userRingerMode);
     }
 
     public void playRingtone(){
@@ -253,6 +272,7 @@ public class DrinkMedicineActivity extends AppCompatActivity {
     }
 
     public void drink(){
+        resetRingerMode();
         if(r.isPlaying()){
             r.stop();
         }
@@ -287,6 +307,7 @@ public class DrinkMedicineActivity extends AppCompatActivity {
     }
 
     public void snooze(){
+        resetRingerMode();
         if(r.isPlaying()){
             r.stop();
         }
