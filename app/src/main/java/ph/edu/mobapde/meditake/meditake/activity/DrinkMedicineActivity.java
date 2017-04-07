@@ -261,6 +261,7 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         i.putExtra(Schedule.TABLE, schedule);
         i.putExtra(getString(R.string.schedule_snooze), 0);
         startActivity(i);
+        finish();
     }
 
     @OnClick (R.id.snooze)
@@ -295,6 +296,7 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         i.putExtra(Schedule.TABLE, schedule);
         i.putExtra(getString(R.string.schedule_snooze), 5);
         startActivity(i);
+        finish();
     }
 
 }
