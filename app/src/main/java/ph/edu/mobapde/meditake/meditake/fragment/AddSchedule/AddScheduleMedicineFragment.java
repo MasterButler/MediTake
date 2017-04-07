@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,9 @@ public class AddScheduleMedicineFragment extends Fragment {
     LinearLayout linBackSchedule;
     @BindView(R.id.lin_save_schedule)
     LinearLayout linSaveSchedule;
+
+    @BindView(R.id.lin_rv_schedule_medicine_empty)
+    LinearLayout linRvEmpty;
 
     Context contextHolder;
 
@@ -74,6 +78,12 @@ public class AddScheduleMedicineFragment extends Fragment {
 
         rvMedicineSelection.setAdapter(addScheduleMedicineAdapter);
         rvMedicineSelection.setLayoutManager(mLayoutManager);
+
+        int rvVisibility = addScheduleMedicineAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
+        int linVisibility = addScheduleMedicineAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE;
+
+        rvMedicineSelection.setVisibility(rvVisibility);
+        linRvEmpty.setVisibility(linVisibility);
     }
 
     @Override

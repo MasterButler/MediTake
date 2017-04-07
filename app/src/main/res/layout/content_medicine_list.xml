@@ -9,9 +9,49 @@
     android:background="?android:attr/colorBackground"
     tools:context="ph.edu.mobapde.meditake.meditake.activity.AddMedicineActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rv_medicine" />
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:id="@+id/lin_rv_medicine_empty">
+
+                <ImageView
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:src="@drawable/pill_capsule_black"
+                    android:gravity="center"
+                    android:alpha="0.54"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No medicine added yet"
+                    android:gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:textSize="18sp"
+                    android:alpha="0.54"
+                    />
+            </LinearLayout>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rv_medicine" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 </LinearLayout>

@@ -1,6 +1,7 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -9,12 +10,15 @@ import android.support.v4.app.FragmentTransaction;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,14 +27,13 @@ import ph.edu.mobapde.meditake.meditake.adapter.Page.AddSchedulePagerAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleDetailsFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleMedicineFragment;
-import ph.edu.mobapde.meditake.meditake.fragment.RepeatingTimePickerFragment;
 import ph.edu.mobapde.meditake.meditake.listener.CustomOnTimeSetListener;
+import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class AddScheduleActivity extends AppCompatActivity
-        implements  RepeatingTimePickerFragment.OnRepeatingTimePickerFragmentInteractionListener,
-                    AddScheduleDetailsFragment.OnAddScheduleDetailsFragmentInteractionListener,
+        implements  AddScheduleDetailsFragment.OnAddScheduleDetailsFragmentInteractionListener,
                     AddScheduleMedicineFragment.OnAddScheduleMedicineFragmentInteractionListener{
 
     private AddSchedulePagerAdapter mAddSchedulePagerAdapter;
@@ -43,9 +46,6 @@ public class AddScheduleActivity extends AppCompatActivity
     TabLayout tabLayout;
 
     ScheduleUtil scheduleUtil;
-
-    FragmentTransaction ft;
-    RepeatingTimePickerFragment repeatingTimePickerFragment;
 
     public void setUpActionBar(){
         setSupportActionBar(add_schedule_toolbar);
@@ -83,7 +83,6 @@ public class AddScheduleActivity extends AppCompatActivity
     }
 
     public void initializeContents(){
-        repeatingTimePickerFragment = new RepeatingTimePickerFragment();
     }
 
 
@@ -127,16 +126,6 @@ public class AddScheduleActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRepeatingTimePickerFragmentCancel() {
-        closeRepeatingTimePickerFragment();
-    }
-
-    @Override
-    public void onRepeatingTimePickerFragmentSave() {
-        closeRepeatingTimePickerFragment();
-    }
-
-    @Override
     public void onAddScheduleMedicineFragmentSave(Schedule schedule) {
         int id = (int) scheduleUtil.addNewSchedule(schedule);
         schedule.setSqlId(id);
@@ -151,25 +140,75 @@ public class AddScheduleActivity extends AppCompatActivity
      * TIME PICKER FRAGMENT
      ***********************/
 
-    public void editRepeatingTime(TextView tvRepeat){
-        repeatingTimePickerFragment.attachTextView(tvRepeat);
-        showRepeatingTimePickerFragment();
-    }
+    public void editRepeatingTime(final TextView tvRepeat){
+        final AlertDialog.Builder alert = new AlertDialog.Builder(AddScheduleActivity.this);
+        View repeatingTimeSelection = this.getLayoutInflater().inflate(R.layout.fragment_repeating_time_picker, null);
 
-    private void showRepeatingTimePickerFragment() {
-        ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
-        ft.add(R.id.fragment_schedule_options_selection, repeatingTimePickerFragment);
-        ft.addToBackStack(null);
-        ft.commit();
-    }
+        ButterKnife.bind(repeatingTimeSelection, this);
 
-    private void closeRepeatingTimePickerFragment() {
-        ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
-        ft.remove(repeatingTimePickerFragment);
-        ft.addToBackStack(null);
-        ft.commit();
+        Log.wtf("ACTION", "OPENING THE SELCTOR");
+
+        final NumberPicker npHour = (NumberPicker) repeatingTimeSelection.findViewById(R.id.number_picker_hours);
+        final NumberPicker npMinutes = (NumberPicker) repeatingTimeSelection.findViewById(R.id.number_picker_minutes);
+
+
+        npHour.setMinValue(0);
+        npHour.setMaxValue(168);
+        npMinutes.setMinValue(0);
+        npMinutes.setMaxValue(59);
+
+        if(tvRepeat != null){
+            int hourValue = 0;
+            int minuteValue = 1;
+            int[] timeValues;
+            if(!tvRepeat.getText().toString().equals(DateUtil.REPEATING_TIME_NOT_SET)){
+                timeValues = DateUtil.parseFromTimePicker(tvRepeat.getText().toString());
+
+                Log.wtf("GOT VALUES", timeValues[hourValue] + " hour(s) and " + timeValues[minuteValue] + " minutes");
+                npHour.setValue(npHour.getMinValue() <= timeValues[hourValue] && npHour.getMaxValue() >= timeValues[hourValue] ? timeValues[hourValue] : 0);
+                npMinutes.setValue(npMinutes.getMinValue() <= timeValues[minuteValue] && npMinutes.getMaxValue() >= timeValues[minuteValue] ? timeValues[minuteValue] : 0);
+            }else{
+                timeValues = new int[]{0, 0};
+            }
+        }
+
+        npMinutes.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                if(oldVal == npMinutes.getMinValue() && newVal == npMinutes.getMaxValue()){
+                    npHour.setValue(npHour.getValue() != npHour.getMinValue() ? npHour.getValue()-1 : npHour.getValue());
+                }else if(oldVal == npMinutes.getMaxValue() && newVal == npMinutes.getMinValue()){
+                    npHour.setValue(npHour.getValue() != npHour.getMaxValue() ? npHour.getValue()+1 : npHour.getValue());
+                }
+            }
+        });
+
+        alert.setView(repeatingTimeSelection);
+        alert.setTitle("Drinking Interval");
+        alert.setPositiveButton("CHANGE", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                tvRepeat.setText(DateUtil.parseToTimePickerDisplay(npHour.getValue(), npMinutes.getValue()));
+                dialog.dismiss();
+            }
+        });
+
+        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
+
+        final AlertDialog dialog = alert.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                int[] attrs = {android.R.attr.colorPrimary};
+                TypedArray typedArray = AddScheduleActivity.this.obtainStyledAttributes(attrs);
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
+            }
+        });
+        dialog.show();
     }
 
     public void editTime(TextView tvTime, TextView tvTimePeriod){
