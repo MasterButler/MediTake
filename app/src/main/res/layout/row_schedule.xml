@@ -96,12 +96,14 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/pills_1_colored"/>
+                        android:src="@drawable/ic_repeat_black_24dp"
+                        android:alpha="0.54"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -114,10 +116,9 @@
                         android:layout_marginLeft="8dp"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="11dp"
                         android:id="@+id/tv_schedule_medicine_to_drink"/>
-
+                    <!--android:paddingTop="8dp"-->
+                    <!--android:paddingBottom="11dp"-->
 
                 </LinearLayout>
 
