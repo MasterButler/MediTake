@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -45,7 +46,11 @@ public class AlarmUtil {
     }
 
     public static Ringtone convertStringToRingtone(Context context, String string){
-
+        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        int volume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+        if(volume==0)
+            volume = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+        audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume,AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
 
         Uri ringtoneUri = Uri.parse(string);
         Ringtone ringtone = RingtoneManager.getRingtone(context, ringtoneUri);
