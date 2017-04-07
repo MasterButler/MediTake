@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -297,6 +298,10 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         i.putExtra(getString(R.string.schedule_snooze), 5);
         startActivity(i);
         finish();
+    }
+    @Override
+    public void onBackPressed() {
+
     }
 
 }

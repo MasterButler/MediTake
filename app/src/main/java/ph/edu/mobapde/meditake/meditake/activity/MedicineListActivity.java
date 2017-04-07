@@ -283,7 +283,6 @@ public class MedicineListActivity extends AppCompatActivity
         } else if(medicineAdapter.isExpanded()){
             expand(medicineAdapter.getExpandedPositionId());
         } else {
-            super.onBackPressed();
         }
     }
 
