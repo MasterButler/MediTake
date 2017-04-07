@@ -413,6 +413,8 @@ public class MedicineListActivity extends AppCompatActivity
 
     public void addNewMedicine(String className){
         if(CREATING_NEW_ITEM == -1) {
+            linRvEmpty.setVisibility(View.GONE);
+            rvMedicine.setVisibility(View.VISIBLE);
             actionSearchMedicineIcon.collapseActionView();
 
             Medicine tempMed = MedicineInstantiatorUtil.createMedicineInstanceFromString(className);
@@ -455,6 +457,12 @@ public class MedicineListActivity extends AppCompatActivity
         updateList();
         if(CREATING_NEW_ITEM == -1)
             showUndoSnackbar();
+
+        int rvVisibility = medicineAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
+        int linVisibility = medicineAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE;
+
+        rvMedicine.setVisibility(rvVisibility);
+        linRvEmpty.setVisibility(linVisibility);
     }
 
     public void edit(int id){
@@ -560,6 +568,12 @@ public class MedicineListActivity extends AppCompatActivity
         medicineUtil.updateMedicineId(prevId, newId);
         medicineAdapter.notifyDataSetChanged();
         LAST_DELETED = null;
+
+        int rvVisibility = medicineAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
+        int linVisibility = medicineAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE;
+
+        rvMedicine.setVisibility(rvVisibility);
+        linRvEmpty.setVisibility(linVisibility);
 
         updateList();
     }
