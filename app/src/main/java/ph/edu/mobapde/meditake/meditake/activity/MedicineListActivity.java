@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -70,6 +71,9 @@ public class MedicineListActivity extends AppCompatActivity
 
     @BindView(R.id.drawer_layout_medicine_list)
     DrawerLayout drawer;
+
+    @BindView(R.id.lin_rv_medicine_empty)
+    LinearLayout linRvEmpty;
 
     MenuItem actionSearchMedicineIcon;
     SearchView actionSearchMedicineMenu;
@@ -143,6 +147,12 @@ public class MedicineListActivity extends AppCompatActivity
         rvMedicine.setLayoutManager(mLayoutManager);
 
         itemTouchHelper.attachToRecyclerView(rvMedicine);
+
+        int rvVisibility = medicineAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
+        int linVisibility = medicineAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE;
+
+        rvMedicine.setVisibility(rvVisibility);
+        linRvEmpty.setVisibility(linVisibility);
     }
 
     public void initializeAdapter(){
