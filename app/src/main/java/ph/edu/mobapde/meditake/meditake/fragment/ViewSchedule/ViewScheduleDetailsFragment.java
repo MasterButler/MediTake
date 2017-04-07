@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -219,12 +220,6 @@ public class ViewScheduleDetailsFragment extends Fragment {
             }
         });
 
-        tvMedicineEmpty.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showMedicineList();
-            }
-        });
 
         linRingtone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,17 +235,24 @@ public class ViewScheduleDetailsFragment extends Fragment {
             }
         });
 
-        sivMedicineList.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.wtf("CLICK", "CHECKED MEDICINE LIST");
-                showMedicineList();
-            }
-        });
-
         initializeAdapter();
 
         Log.wtf("ADAPTER", "INITIALIZED VIEWSCHEDMED ADAPTER WITH SIZE OF " + viewScheduleMedicineAdapter.getItemCount());
+
+
+        tvMedicineEmpty.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.wtf("CLICK", "CHECKED MEDICINE LIST WITH SIZE " + viewScheduleMedicineAdapter.getItemCount());
+                if(viewScheduleMedicineAdapter.getItemCount() == 0){
+                    Log.wtf("IN", "SHOW TOAST");
+                    Toast.makeText(contextHolder, "There are currently no medicine to show.", Toast.LENGTH_SHORT).show();
+                }else{
+                    Log.wtf("OUT", "SHOW MED");
+                    showMedicineList();
+                }
+            }
+        });
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(contextHolder);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
