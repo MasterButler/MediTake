@@ -39,8 +39,6 @@ public class AlarmService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Bundle data = intent.getExtras();
         Schedule schedule = data.getParcelable(Schedule.TABLE);
-        Log.wtf("ACTION", "RECEIVED MEDICINE WITH ID OF " + schedule.getSqlId());
-        Log.wtf("ACTION", "PLAY " + schedule.getRingtone());
 
         Intent in = new Intent(getBaseContext(), DrinkMedicineActivity.class);
         in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
