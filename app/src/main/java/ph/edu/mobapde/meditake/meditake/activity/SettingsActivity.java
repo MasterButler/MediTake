@@ -336,7 +336,7 @@ public class SettingsActivity extends AppCompatActivity{
 
         container.addView(confirmation);
 
-        alert.setTitle("Clear all data");
+        alert.setTitle("Clear all Schedules");
         alert.setView(container);
         alert.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
