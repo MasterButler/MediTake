@@ -273,6 +273,18 @@ public class DrinkMedicineActivity extends AppCompatActivity {
 
     public void drink(){
         resetRingerMode();
+
+        ArrayList<MedicinePlan> medicinePlanList = medicinePlanUtil.getMedicinePlanListWithScheduleId(schedule.getSqlId());
+        if(medicinePlanList != null) {
+            int[] medicineId = new int[medicinePlanList.size()];
+            for (int i = 0; i < medicinePlanList.size(); i++) {
+                Medicine med = medicineUtil.getMedicine(medicinePlanList.get(i).getMedicineId());
+                Log.wtf("DRINK MEDICINE", "MEDICINE WITH ID OF " + medicineId[i]);
+                med.drink(med.getDosage());
+                medicineUtil.updateMedicine(med);
+            }
+        }else {
+        }
         if(r.isPlaying()){
             r.stop();
         }

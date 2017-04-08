@@ -255,13 +255,9 @@ public class SettingsActivity extends AppCompatActivity{
         alert.setView(container);
         alert.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                String value = input.getText().toString().trim();
-                if(input.equals("Delete All")) {
-                    clearAll();
-                    finish();
-                }else{
-                    input.setError("Invalid input");
-                }
+                clearAll();
+                finish();
+                dialog.dismiss();
             }
         });
 

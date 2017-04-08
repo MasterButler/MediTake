@@ -87,7 +87,10 @@ abstract public class Medicine {
      * @return remainingAmount
      */
     public double drink(double toDrink) {
-        return this.amount - toDrink > NOT_ENOUGH ? this.amount - toDrink : NOT_ENOUGH;
+        //return this.amount - toDrink > NOT_ENOUGH ? this.amount - toDrink : NOT_ENOUGH;
+        this.amount = amount - toDrink;
+        this.amount = amount < 0 ? 0 : amount;
+        return 0;
     }
 
     public int getSqlId() {
