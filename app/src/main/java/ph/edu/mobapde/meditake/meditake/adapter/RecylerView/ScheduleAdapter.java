@@ -113,6 +113,8 @@ public class ScheduleAdapter extends CursorRecyclerViewAdapter<ScheduleViewHolde
 
             if(sched.isActivated()){
                 AlarmUtil.setAlarmForSchedule(contextHolder, sched);
+            }else{
+                AlarmUtil.stopAssociatedAlarmsWithSchedule(contextHolder, sched);
             }
 
             boolean isExpanded = id == expandedPositionId;

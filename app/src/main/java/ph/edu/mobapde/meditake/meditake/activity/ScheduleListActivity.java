@@ -327,6 +327,8 @@ public class ScheduleListActivity extends AppCompatActivity
 
         if(schedule.isActivated()){
             setAlarmForSchedule(schedule);
+        }else{
+            AlarmUtil.stopAssociatedAlarmsWithSchedule(getBaseContext(), schedule);
         }
     }
 
