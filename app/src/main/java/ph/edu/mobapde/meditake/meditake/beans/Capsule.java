@@ -19,7 +19,7 @@ public class Capsule extends Medicine{
         setCapsuleSpecificInfo();
     }
 
-    public Capsule(String brandName, String genericName, String medicineFor, double amount){
+    public Capsule(String brandName, String genericName, String medicineFor, long amount){
         super(brandName, genericName, medicineFor, amount);
         setCapsuleSpecificInfo();
     }

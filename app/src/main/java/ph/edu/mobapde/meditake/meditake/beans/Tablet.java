@@ -19,7 +19,7 @@ public class Tablet extends Medicine{
         setTabletSpecificInfo();
     }
 
-    public Tablet(String brandName, String genericName, String medicineFor, double amount){
+    public Tablet(String brandName, String genericName, String medicineFor, long amount){
         super(brandName, genericName, medicineFor, amount);
         setTabletSpecificInfo();
     }

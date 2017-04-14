@@ -16,14 +16,18 @@ import ph.edu.mobapde.meditake.meditake.beans.Tablet;
  */
 
 public class MedicineInstantiatorUtil {
+    public static final int CAPSULE = 0;
+    public static final int SYRUP = 1;
+    public static final int TABLET = 2;
+
     public static Medicine createMedicineInstanceFromImageView(ImageView imageView){
-        if(imageView.getId() == R.id.selection_capsule){
-            return new Capsule();
-        }else if(imageView.getId() == R.id.selection_lozenge){
-            return new Tablet();
-        }else if(imageView.getId() == R.id.selection_syrup){
-            return new Syrup();
-        }
+//        if(imageView.getId() == R.id.selection_capsule){
+//            return new Capsule();
+//        }else if(imageView.getId() == R.id.selection_lozenge){
+//            return new Tablet();
+//        }else if(imageView.getId() == R.id.selection_syrup){
+//            return new Syrup();
+//        }
         return null;
     }
 
@@ -69,7 +73,7 @@ public class MedicineInstantiatorUtil {
         String brandName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_BRAND_NAME));
         String genericName = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_GENERIC_NAME));
         String medicineFor = cursor.getString(cursor.getColumnIndex(Medicine.COLUMN_MEDICINE_FOR));
-        double amount = cursor.getDouble(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
+        long amount = cursor.getLong(cursor.getColumnIndex(Medicine.COLUMN_AMOUNT));
         int dosage = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_DOSAGE));
 
         Log.wtf("IN SQLITE CONNECTION", "FOUND " + id);
@@ -84,5 +88,31 @@ public class MedicineInstantiatorUtil {
         Log.wtf("FULL INFO", medicine.getSqlId() + ": " + medicine.getBrandName() + ", " + medicine.getGenericName() + ", " + medicine.getMedicineFor());
 
         return medicine;
+    }
+
+    public static Medicine createMedicineFromSelectedValue(int selectedValue) {
+        String medicineType = "";
+        switch(selectedValue){
+            case 0: medicineType = Medicine.CAPSULE;
+                break;
+            case 1: medicineType = Medicine.SYRUP;
+                break;
+            case 2: medicineType = Medicine.TABLET;
+                break;
+        }
+        return createMedicineInstanceFromString(medicineType);
+    }
+
+    public static int getMedicineInstanceOf(Medicine medicine){
+        String name  = medicine.getClass().getSimpleName().toLowerCase();
+        switch(name){
+            case Medicine.CAPSULE:
+                return 0;
+            case Medicine.SYRUP:
+                return 1;
+            case Medicine.TABLET:
+                return 2;
+        }
+        return -1;
     }
 }

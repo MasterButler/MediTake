@@ -1,6 +1,8 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,119 +18,83 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.stepstone.stepper.StepperLayout;
+import com.stepstone.stepper.VerificationError;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.edu.mobapde.meditake.meditake.R;
+import ph.edu.mobapde.meditake.meditake.adapter.page.AddMedicineStepAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.page.AddSchedulePagerAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.page.AddScheduleStepAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
+import ph.edu.mobapde.meditake.meditake.beans.Schedule;
+import ph.edu.mobapde.meditake.meditake.fragment.medicine.add.AddMedicineDetailsFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.medicine.add.AddMedicineTypeFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.schedule.add.AddScheduleDetailsFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.schedule.add.AddScheduleMedicineFragment;
+import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
-public class AddMedicineActivity extends AppCompatActivity {
+public class AddMedicineActivity extends AppCompatActivity
+            implements  AddMedicineDetailsFragment.OnAddMedicineDetailsFragmentInteractionListener,
+                        AddMedicineTypeFragment.OnAddMedicineTypeFragmentInteractionListener,
+                        StepperLayout.StepperListener{
 
-    @BindView(R.id.toolbar_add_medicine)
-    Toolbar add_medicine_toolbar;
-    @BindView(R.id.selection_capsule)
-    ImageView selctedCapsule;
-    @BindView(R.id.selection_lozenge)
-    ImageView selctedLozenge;
-    @BindView(R.id.selection_syrup)
-    ImageView selctedSyrup;
-    @BindView(R.id.medicine_type)
-    ImageView selectedMedicineType;
+    AddMedicineStepAdapter mAddMedicineStepAdapter;
+    MedicineUtil medicineUtil;
 
-    @BindView(R.id.et_add_brand_name)
-    EditText et_brandName;
-    @BindView(R.id.et_add_generic_name)
-    EditText et_genericName;
-    @BindView (R.id.et_add_medicine_for)
-    EditText et_medicineFor;
-
-    @BindView(R.id.add_medicine_information)
-    LinearLayout add_medicine_information;
-    @BindView(R.id.add_medicine_type)
-    LinearLayout add_medicine_type;
-
-    @BindView(R.id.layout_add_brand_name)
-    TextInputLayout tilBrandName;
-
-    @BindView(R.id.layout_add_generic_name)
-    TextInputLayout tilGenericName;
-
-    @BindView(R.id.layout_add_medicine_for)
-    TextInputLayout tilMedicineFor;
-
-    MenuItem actionAddMedicine;
-    Medicine newMedicine;
-
-    private void setUpActionBar(){
-        setSupportActionBar(add_medicine_toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
-    }
+    @BindView(R.id.sl_add_medicine)
+    StepperLayout slAddMedicine;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThemeUtil.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_add_medicine);
+
         ButterKnife.bind(this);
+//        setUpActionBar();
 
-        setUpActionBar();
-        tilGenericName.setError(null);
+        medicineUtil = new MedicineUtil(getBaseContext());
+
+        initializePager();
+        initializeContents();
+
     }
 
-    public void showAddMedicineInformation(ImageView imageView){
-        Animation slideUp = AnimationUtils.makeInAnimation(getBaseContext(), false);
-        add_medicine_type.setVisibility(View.GONE);
-        add_medicine_information.startAnimation(slideUp);
+    public void initializePager(){
+//        mAddSchedulePagerAdapter = new AddSchedulePagerAdapter(getSupportFragmentManager());
+//        mAddSchedulePagerAdapter.add(AddScheduleDetailsFragment.newInstance(1));
+//        mAddSchedulePagerAdapter.add(AddScheduleMedicineFragment.newInstance(2));
 
-        newMedicine = MedicineInstantiatorUtil.createMedicineInstanceFromImageView(imageView);
-        selectedMedicineType.setImageResource(newMedicine.getIcon());
+//        mViewPager.setAdapter(mAddSchedulePagerAdapter);
+        int[] attrs = {android.R.attr.colorBackground};
+        TypedArray typedArray = obtainStyledAttributes(attrs);
 
-        actionAddMedicine.setVisible(true);
+        //mViewPager.setBackgroundColor(typedArray.getColor(0, Color.WHITE));
+        //slAddSchedule.setAdapter();
+        //ciSteps.setViewPager(mViewPager);
+        //tabLayout.setupWithViewPager(mViewPager);
+        mAddMedicineStepAdapter = new AddMedicineStepAdapter(getSupportFragmentManager(), getBaseContext());
+        mAddMedicineStepAdapter.add(AddMedicineTypeFragment.newInstance(1));
+        mAddMedicineStepAdapter.add(AddMedicineDetailsFragment.newInstance(2));
+        slAddMedicine.setAdapter(mAddMedicineStepAdapter, 0);
+        slAddMedicine.setBackgroundColor(typedArray.getColor(0, Color.WHITE));
+        slAddMedicine.setListener(this);
     }
 
-    public boolean addMedicine(){
-        String brandName = et_brandName.getText().toString();
-        String genericName = et_genericName.getText().toString();
-        String medicineFor = et_medicineFor.getText().toString();
-
-        MedicineUtil medicineUtil = new MedicineUtil(getBaseContext());
-        medicineUtil.setMedicineInfo(newMedicine, brandName, genericName, medicineFor, 0.0, 0);
-        long result = medicineUtil.addMedicine(newMedicine);
-        return result == -1 ? false : true;
-    }
-
-
-    public boolean isInputValid(){
-        if(et_genericName.getText().toString().isEmpty()){
-            tilGenericName.setError("Generic name must not be empty.");
-            return false;
-        }
-        return true;
-    }
-
-    public boolean confirmUnsavedAction(){
-        //TODO create a dialogFragment here
-        return true;
-    }
-
-    @OnClick({R.id.selection_lozenge, R.id.selection_capsule, R.id.selection_syrup})
-    public void onMedicineSelectionClick(ImageView imageView){
-
-        Log.wtf("action", "Clicked a medicine type");
-        showAddMedicineInformation(imageView);
+    public void initializeContents(){
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_add_medicine, menu);
-
-        actionAddMedicine = add_medicine_toolbar.getMenu().findItem(R.id.action_add_medicine);
-        actionAddMedicine.setVisible(false);
+        //getMenuInflater().inflate(R.menu.toolbar_add_medicine, menu);
+        //......
         return true;
     }
 
@@ -137,24 +103,47 @@ public class AddMedicineActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch(id){
-            case R.id.action_add_medicine:
-                if(isInputValid()){
-                    if(addMedicine()){
-                        Intent i = new Intent(getBaseContext(), MedicineListActivity.class);
-                        startActivity(i);
-                    }else{
-                        Toast.makeText(getBaseContext(), "ERROR DURING MEDICINE CREATION", Toast.LENGTH_SHORT);
-                    };
-                }else{
-                    Toast.makeText(getBaseContext(), "????", Toast.LENGTH_SHORT);
-                }
-                break;
             case android.R.id.home:
-                confirmUnsavedAction();
                 finish();
                 break;
         }
 
         return false;
+    }
+
+    @Override
+    public void onCompleted(View completeButton) {
+
+    }
+
+    @Override
+    public void onError(VerificationError verificationError) {
+
+    }
+
+    @Override
+    public void onStepSelected(int newStepPosition) {
+
+    }
+
+    @Override
+    public void onReturn() {
+
+    }
+
+    @Override
+    public void onAddMedicineTypeFragmentCancel() {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
+
+    @Override
+    public void OnAddMedicineDetailsFragmentSave(Medicine medicine) {
+        int id = (int) medicineUtil.addMedicine(medicine);
+        medicine.setSqlId(id);
+
+        Intent data = new Intent();
+        setResult(RESULT_OK, data);
+        finish();
     }
 }

@@ -22,42 +22,90 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
 
-            <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
+            <!--<android.support.design.widget.AppBarLayout-->
+            <!--android:id="@+id/appbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">-->
 
-                <!--<com.tech.freak.wizardpager.ui.StepPagerStrip-->
-                    <!--android:id="@+id/strip"-->
+                <!--&lt;!&ndash;<com.tech.freak.wizardpager.ui.StepPagerStrip&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:id="@+id/strip"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_marginLeft="16dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_marginRight="16dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:gravity="left"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:paddingBottom="8dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:paddingLeft="@dimen/list_item_padding_left"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:paddingRight="@dimen/list_item_padding_right"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:paddingTop="16dp" />&ndash;&gt;-->
+
+                <!--<android.support.v7.widget.Toolbar-->
+                    <!--android:id="@+id/toolbar"-->
                     <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginLeft="16dp"-->
-                    <!--android:layout_marginRight="16dp"-->
-                    <!--android:gravity="left"-->
-                    <!--android:paddingBottom="8dp"-->
-                    <!--android:paddingLeft="@dimen/list_item_padding_left"-->
-                    <!--android:paddingRight="@dimen/list_item_padding_right"-->
-                    <!--android:paddingTop="16dp" />-->
+                    <!--android:layout_height="?attr/actionBarSize"-->
+                    <!--android:background="?attr/colorPrimary"-->
+                    <!--app:layout_scrollFlags="scroll|enterAlways"-->
+                    <!--app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay">-->
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay">
+                 <!--</android.support.v7.widget.Toolbar>-->
 
-            </android.support.v7.widget.Toolbar>
+            <!--&lt;!&ndash;<android.support.design.widget.TabLayout&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/tabs"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content" />&ndash;&gt;-->
+            <!--&lt;!&ndash;<me.relex.circleindicator.CircleIndicator&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="fill_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="20dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_centerInParent="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/ci_steps"&ndash;&gt;-->
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
+                <!--&lt;!&ndash;app:ci_animator="@anim/indicator_animator"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:ci_animator_reverse="@anim/indicator_animator_reverse"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:ci_drawable="@drawable/radius_square"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:ci_height="4dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:ci_margin="6dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;app:ci_width="10dp"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;&ndash;&gt;-->
+
+            <!--</android.support.design.widget.AppBarLayout>-->
+
+            <com.stepstone.stepper.StepperLayout
+                android:id="@+id/sl_add_schedule"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:ms_stepperType="tabs"
+                app:ms_backButtonText="BACK"
+                app:ms_nextButtonText="CONTINUE"
+                app:ms_completeButtonText="ADD SCHEDULE"
+                app:ms_backButtonColor="?android:attr/color"
+                app:ms_nextButtonColor="?android:attr/color"
+                app:ms_completeButtonColor="?android:attr/color"
+                app:ms_activeStepColor="?attr/colorAccent"
+                app:ms_inactiveStepColor="?attr/colorPrimaryDark"
+                app:ms_bottomNavigationBackground="?attr/colorPrimary"
+                app:ms_showBackButtonOnFirstStep="true"
+                app:ms_tabStepDividerWidth="40dp"
+                app:ms_stepperLayoutTheme="@style/StepperLayoutTheme"
+                app:ms_tabNavigationEnabled="false"/>
+            <!--android:orientation="vertical"-->
+            <!--app:ms_stepperType="progress_bar"-->
+            <!--app:ms_backButtonText="BACK"-->
+            <!--app:ms_nextButtonText="CONTINUE"-->
+            <!--app:ms_completeButtonText="ADD SCHEDULE"-->
+            <!--app:ms_backButtonColor="?android:attr/color"-->
+            <!--app:ms_nextButtonColor="?android:attr/color"-->
+            <!--app:ms_completeButtonColor="?android:attr/color"-->
+            <!--app:ms_activeStepColor="?android:attr/colorBackground"-->
+            <!--app:ms_inactiveStepColor="?attr/colorPrimaryDark"-->
+            <!--app:ms_bottomNavigationBackground="?attr/colorPrimary"-->
+            <!--app:ms_showBackButtonOnFirstStep="true"/-->
 
-            </android.support.design.widget.AppBarLayout>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/container"
@@ -65,6 +113,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 
         </LinearLayout>
 

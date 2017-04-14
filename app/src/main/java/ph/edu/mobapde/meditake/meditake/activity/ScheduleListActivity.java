@@ -38,10 +38,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.RequestCodes;
-import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.ScheduleAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.recyclerview.ScheduleAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
-import ph.edu.mobapde.meditake.meditake.fragment.ViewSchedule.ViewScheduleDetailsFragment;
-import ph.edu.mobapde.meditake.meditake.fragment.ViewSchedule.ViewScheduleFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.schedule.view.ViewScheduleDetailsFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.schedule.view.ViewScheduleFragment;
 import ph.edu.mobapde.meditake.meditake.listener.CustomOnTimeSetListener;
 import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
 import ph.edu.mobapde.meditake.meditake.util.AlarmUtil;
@@ -53,7 +53,7 @@ import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class ScheduleListActivity extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener,
-        ViewScheduleDetailsFragment.OnViewScheduleDetailsFragmentInteractionListener{
+                    ViewScheduleDetailsFragment.OnViewScheduleDetailsFragmentInteractionListener{
 
 
     @BindView(R.id.snackbar_position)
@@ -86,7 +86,6 @@ public class ScheduleListActivity extends AppCompatActivity
 
     FragmentTransaction ft;
 
-    int CREATING_NEW_ITEM;
     private boolean doubleBackToExitPressedOnce;
 
     @Override
@@ -99,6 +98,7 @@ public class ScheduleListActivity extends AppCompatActivity
                 if(addedScheudle.isActivated()) {
                     setAlarmForSchedule(addedScheudle);
                 }
+                rvSchedule.smoothScrollToPosition(scheduleAdapter.getItemCount()-1);
             }else if(resultCode == RESULT_CANCELED){
                 showGenericSnackbar("Medicine creation cancelled", Snackbar.LENGTH_SHORT);
             }
@@ -130,14 +130,16 @@ public class ScheduleListActivity extends AppCompatActivity
                     setSnooze(schedule, snoozeTime);
                 }
             }
+            scheduleAdapter.notifyDataSetChanged();
+            updateList();
         }
     }
 
     public void setSnooze(Schedule schedule, int snoozeTime){
-        snoozeTime = snoozeTime == 0 ? 5 : snoozeTime;
         schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + snoozeTime * DateUtil.MILLIS_TO_MINUTES);
 
         scheduleUtil.updateSchedule(schedule);
+        scheduleAdapter.notifyDataSetChanged();
         updateList();
         setAlarmForSchedule(schedule);
     }
@@ -146,14 +148,17 @@ public class ScheduleListActivity extends AppCompatActivity
         Log.wtf("NEW", "PREV DRINKING SCHED IS " + schedule.getNextDrinkingTime());
         Log.wtf("NEW", "DRINKING INTERVAL   IS " + schedule.getDrinkingInterval());
         Log.wtf("NEW", "NEXT TIME AFTER " + schedule.getDrinkingInterval() * DateUtil.MILLIS_TO_MINUTES);
+
         if (schedule.getDrinkingInterval() == 0) {
             schedule.setActivated(false);
+            AlarmUtil.stopAssociatedAlarmsWithSchedule(getBaseContext(), schedule);
         } else {
             schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + schedule.getDrinkingInterval() * DateUtil.MILLIS_TO_MINUTES);
+            setAlarmForSchedule(schedule);
         }
         scheduleUtil.updateSchedule(schedule);
+        scheduleAdapter.notifyDataSetChanged();
         updateList();
-        setAlarmForSchedule(schedule);
     }
 
     @Override
@@ -173,9 +178,13 @@ public class ScheduleListActivity extends AppCompatActivity
         initializeDrawer();
         initializeAdapter();
         initializeContent();
-        CREATING_NEW_ITEM = -1;
 
         checkIntent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     public void initializeDrawer(){
@@ -222,27 +231,6 @@ public class ScheduleListActivity extends AppCompatActivity
 //                expand(id);
                 view(id);
             }
-
-            @Override
-            public void onItemDeleteClick(int id) {
-                delete(id);
-            }
-
-            @Override
-            public void onItemEditClick(int id) {
-                edit(id);
-            }
-
-            @Override
-            public void onItemSaveClick(Schedule schedule) {
-                save(schedule);
-            }
-
-            @Override
-            public void onItemCancelClick(int id) {
-                cancel(id);
-            }
-
             @Override
             public void onSwitchClick(Schedule schedule) {
                 toggleSwitch(schedule);
@@ -250,9 +238,7 @@ public class ScheduleListActivity extends AppCompatActivity
         });
     }
 
-    private void returnToView(int id) {
-        boolean isEditing = scheduleAdapter.isEditing(id);
-        scheduleAdapter.setEditingPositionId(isEditing ? -1 : id);
+    private void returnToView() {
         scheduleAdapter.notifyDataSetChanged();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.remove(viewScheduleFragment);
@@ -261,22 +247,8 @@ public class ScheduleListActivity extends AppCompatActivity
     }
 
     public void addNewSchedule(){
-        if(CREATING_NEW_ITEM == -1) {
-            //showAddScheduleFragment();
-            Intent i = new Intent(getBaseContext(), AddScheduleActivity.class);
-            startActivityForResult(i, RequestCodes.REQUEST_ADD_SCHEDULE);
-        } else {
-            Toast.makeText(getBaseContext(), "No medicines in list. Adding Schedule without any medicine not yet supported.", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void cancel(int id){
-        if(CREATING_NEW_ITEM == -1){
-            returnToView(id);
-        }else{
-            delete(CREATING_NEW_ITEM);
-            CREATING_NEW_ITEM = -1;
-        }
+        Intent i = new Intent(getBaseContext(), AddScheduleActivity.class);
+        startActivityForResult(i, RequestCodes.REQUEST_ADD_SCHEDULE);
     }
 
     public void delete(int id){
@@ -287,24 +259,6 @@ public class ScheduleListActivity extends AppCompatActivity
         Toast.makeText(getBaseContext(), R.string.notf_schedule_delete, Toast.LENGTH_SHORT).show();
     }
 
-    public void edit(int id){
-        boolean isEditing = scheduleAdapter.isEditing(id);
-        Log.wtf("action", "IS EDITING (AT ID" + id + ")? " + isEditing);
-        scheduleAdapter.setEditingPositionId(isEditing ? -1 : id);
-        scheduleAdapter.notifyDataSetChanged();
-    }
-
-    public void expand(int id){
-        if(CREATING_NEW_ITEM == -1){
-            boolean isExpanded = scheduleAdapter.isExpanded(id);
-            scheduleAdapter.setExpandedPositionId(isExpanded ? -1 : id);
-            TransitionManager.beginDelayedTransition(rvSchedule);
-            scheduleAdapter.notifyDataSetChanged();
-        }else{
-            delete((int)CREATING_NEW_ITEM);
-            CREATING_NEW_ITEM = -1;
-        }
-    }
 
     public void save(Schedule schedule){
         Log.wtf("action", "TO UPDATE SCHEDULE WITH ID " + schedule.getSqlId());
@@ -312,11 +266,7 @@ public class ScheduleListActivity extends AppCompatActivity
         scheduleAdapter.notifyDataSetChanged();
 
         updateList();
-        if(scheduleAdapter.isEditing(schedule.getSqlId()))
-            returnToView(schedule.getSqlId());
-
-        if(CREATING_NEW_ITEM != -1)
-            CREATING_NEW_ITEM = -1;
+        returnToView();
     }
 
     public void toggleSwitch(Schedule schedule){
@@ -348,6 +298,7 @@ public class ScheduleListActivity extends AppCompatActivity
         Cursor c = scheduleUtil.getAllSchedule();
         Log.d("count", "FOUND " + c.getCount() + " ROWS IN SCHEDULE");
         scheduleAdapter.changeCursor(c);
+        TransitionManager.beginDelayedTransition(rvSchedule);
 
         int rvVisibility = scheduleAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
         int linVisibility = scheduleAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE;
@@ -360,6 +311,14 @@ public class ScheduleListActivity extends AppCompatActivity
     public void view(int id){
         Log.wtf("SCHEDLIST", "SCHEDULE IS " + scheduleUtil.getSchedule(id));
         viewScheduleFragment = ViewScheduleFragment.newInstance(scheduleUtil.getSchedule(id));
+        viewScheduleFragment.setOnViewScheduleFragmentInteractionListener(new ViewScheduleFragment.OnViewScheduleFragmentInteractionListener() {
+            @Override
+            public void onViewScheduleBackgroundClick(Schedule schedule) {
+                save(schedule);
+                closeViewScheduleFragment();
+                setAlarmForSchedule(schedule);
+            }
+        });
         ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
         ft.replace(R.id.fragment_medicine_list_placeholder, viewScheduleFragment);

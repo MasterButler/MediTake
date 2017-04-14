@@ -41,7 +41,7 @@ abstract public class Medicine {
     //what illness is it used for?
     protected String medicineFor;
     //how much of the medicine do you have?
-    protected double amount;
+    protected long amount;
     //image of the id;
     protected int icon;
     //for the display, e.g. 5mL or 5 tablets where 'mL' and ' tablets' are the extensions
@@ -55,7 +55,7 @@ abstract public class Medicine {
         modifier = " units";
     }
 
-    protected Medicine(String brandName, String genericName, String medicineFor, double amount){
+    protected Medicine(String brandName, String genericName, String medicineFor, long amount){
         setBrandName(brandName);
         setGenericName(genericName);
         setMedicineFor(medicineFor);
@@ -68,7 +68,7 @@ abstract public class Medicine {
     public String getName(){
         String output = this.genericName;
         if(!(brandName == null || brandName.isEmpty())){
-            output = this.brandName + "(" + output + ")";
+            output = output + "(" + this.brandName  + ")";
         }
         return output;
     }
@@ -86,7 +86,7 @@ abstract public class Medicine {
      * @param toDrink
      * @return remainingAmount
      */
-    public double drink(double toDrink) {
+    public long drink(long toDrink) {
         //return this.amount - toDrink > NOT_ENOUGH ? this.amount - toDrink : NOT_ENOUGH;
         this.amount = amount - toDrink;
         this.amount = amount < 0 ? 0 : amount;
@@ -125,11 +125,11 @@ abstract public class Medicine {
         this.medicineFor = medicineFor;
     }
 
-    public double getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 

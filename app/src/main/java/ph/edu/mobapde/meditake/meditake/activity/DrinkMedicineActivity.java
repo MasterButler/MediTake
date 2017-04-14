@@ -1,20 +1,12 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.PowerManager;
-import android.os.SystemClock;
 import android.os.Vibrator;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,10 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.frakbot.glowpadbackport.GlowPadView;
 
@@ -35,9 +25,8 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import ph.edu.mobapde.meditake.meditake.AlarmReceiver;
 import ph.edu.mobapde.meditake.meditake.R;
-import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.AlarmMedicineAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.recyclerview.AlarmMedicineAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.MedicinePlan;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
@@ -46,7 +35,6 @@ import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicinePlanUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
-import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicinePlanInstantiatorUtil;
 
 public class DrinkMedicineActivity extends AppCompatActivity {
 

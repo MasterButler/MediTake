@@ -243,34 +243,48 @@ public class SQLiteConnection extends SQLiteOpenHelper{
         String genericNameLike = "";
         String medicineForLike = "";
         String medicineTypeLike = "";
-        String[] newConditions = new String[conditions.length*4];
+        String[] newConditions;
+        String selection = "";
 
-        for(int i = 0; i < conditions.length; i++){
-            brandNameLike += "lower(" + Medicine.COLUMN_BRAND_NAME + ") LIKE ? ";
-            genericNameLike += "lower(" + Medicine.COLUMN_GENERIC_NAME + ") LIKE ? ";
-            medicineForLike += "lower(" + Medicine.COLUMN_MEDICINE_FOR + ") LIKE ? ";
-            medicineTypeLike += "lower(" + Medicine.COLUMN_MEDICINE_TYPE + ") LIKE ? ";
+        if(conditions[0].equals(Medicine.TABLET) || conditions[0].equals(Medicine.CAPSULE) || conditions[0].equals(Medicine.SYRUP)){
+            newConditions = new String[conditions.length];
 
-            if(i != conditions.length-1){
-                brandNameLike += "OR ";
-                genericNameLike += "OR ";
-                medicineForLike += "OR ";
-                medicineTypeLike += "OR ";
+            for(int i = 0; i < conditions.length; i++){
+                medicineTypeLike += "lower(" + Medicine.COLUMN_MEDICINE_TYPE + ") LIKE ? ";
+
+                if(i != conditions.length-1){
+                    medicineTypeLike += "OR ";
+                }
             }
-        }
 
+            selection = medicineTypeLike;
+        }else{
+            newConditions = new String[conditions.length*3];
+
+            for(int i = 0; i < conditions.length; i++){
+                brandNameLike += "lower(" + Medicine.COLUMN_BRAND_NAME + ") LIKE ? ";
+                genericNameLike += "lower(" + Medicine.COLUMN_GENERIC_NAME + ") LIKE ? ";
+                medicineForLike += "lower(" + Medicine.COLUMN_MEDICINE_FOR + ") LIKE ? ";
+
+                if(i != conditions.length-1){
+                    brandNameLike += "OR ";
+                    genericNameLike += "OR ";
+                    medicineForLike += "OR ";
+                }
+            }
+            selection = brandNameLike + " OR " + genericNameLike + " OR " + medicineForLike;
+        }
 
         for(int i = 0; i < newConditions.length; i++){
             //Log.wtf("AT ARRAY", " AT INDEX " + i + ": " + conditions[i%conditions.length]);
             newConditions[i] = "%" + conditions[i%conditions.length] + "%";
         }
 
+
+
         Cursor cursor = db.query(Medicine.TABLE,
                 null,
-                brandNameLike + " OR " +
-                        genericNameLike + " OR " +
-                        medicineForLike + " OR " +
-                        medicineTypeLike,
+                selection,
                 newConditions,
                 null,
                 null,
@@ -391,7 +405,7 @@ public class SQLiteConnection extends SQLiteOpenHelper{
 //                + " WHERE " + Schedule.TABLE + "." + Schedule.COLUMN_MEDICINE_TO_DRINK
 //                + " = " + Medicine.TABLE + "." + Medicine.COLUMN_ID;
         SQLiteDatabase db = getReadableDatabase();
-        return db.query(Schedule.TABLE, null, null, null, null, null, null);
+        return db.query(Schedule.TABLE, null, null, null, null, null, Schedule.COLUMN_NEXT_DRINKING_TIME + " DESC");
         //return db.rawQuery(sql, null);
     }
 

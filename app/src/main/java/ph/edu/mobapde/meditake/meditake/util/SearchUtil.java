@@ -15,14 +15,20 @@ public class SearchUtil {
                 return null;
             case "mL":
             case "liquid":
+            case "syrup":
+            case "syrups":
                 return new String[]{Medicine.SYRUP};
+            case "lozenges":
+            case "aspirin":
             case "tablet":
             case "tablets":
                 return new String[]{Medicine.TABLET};
+            case "pill":
             case "capsule":
             case "capsules":
                 return new String[]{Medicine.CAPSULE};
             case "solid":
+            case "non-liquid":
                 return new String[]{Medicine.CAPSULE, Medicine.TABLET};
             default:
                 return new String[]{toSearchWith};

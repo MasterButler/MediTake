@@ -53,9 +53,13 @@
     <color name="colorFontDescriptionLightTheme">#212121</color>
     <color name="colorDividerLightTheme">#BDBDBD</color>
 
-    <color name="medicine_background">#FFFFFF</color>
-    <color name="selected_medicine_background">#F5F5F5</color>
+    <color name="medicine_background">#A0A0A0</color>
+    <color name="selected_medicine_background">#FFFFFF</color>
     <color name="pressed_medicine_background">#E0E0E0</color>
+
+    <color name="medicine_syrup_selection_light">#FFD180</color>
+    <color name="medicine_tablet_selection_light">#B9F6CA</color>
+    <color name="medicine_capsule_selection_light">#80D8FF</color>
 
     <color name="medicine_syrup_selection">#EF6C00</color>
     <color name="medicine_tablet_selection">#2E7D32</color>

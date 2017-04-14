@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleDetailsFragment"
+    tools:context=".fragment.schedule.add.AddScheduleDetailsFragment"
     android:background="@android:color/white">
 
     <LinearLayout

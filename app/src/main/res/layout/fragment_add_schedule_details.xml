@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleDetailsFragment"
+    tools:context=".fragment.schedule.add.AddScheduleDetailsFragment"
     android:background="@android:color/white">
 
     <LinearLayout
@@ -301,74 +301,74 @@
                 <!--android:layout_height="1dp"-->
                 <!--android:background="@android:color/darker_gray"/>-->
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                <!--<Space-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"/>-->
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingBottom="8sp"
-                    android:gravity="right|bottom">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:paddingBottom="8sp"-->
+                    <!--android:gravity="right|bottom">-->
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:id="@+id/lin_discard_schedule"
-                        android:gravity="center">
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:paddingTop="2dp"-->
+                        <!--android:paddingBottom="2dp"-->
+                        <!--android:paddingLeft="16dp"-->
+                        <!--android:paddingRight="16dp"-->
+                        <!--android:background="?attr/selectableItemBackgroundBorderless"-->
+                        <!--android:clickable="true"-->
+                        <!--android:id="@+id/lin_discard_schedule"-->
+                        <!--android:gravity="center">-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:text="DISCARD"
-                            android:textSize="14sp"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="2dp"
-                            android:paddingRight="2dp"
-                            android:textAlignment="center"
-                            android:textColor="?attr/colorPrimary"
-                            android:textStyle="bold"/>
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="32dp"-->
+                            <!--android:text="DISCARD"-->
+                            <!--android:textSize="14sp"-->
+                            <!--android:paddingTop="8dp"-->
+                            <!--android:paddingBottom="8dp"-->
+                            <!--android:paddingLeft="2dp"-->
+                            <!--android:paddingRight="2dp"-->
+                            <!--android:textAlignment="center"-->
+                            <!--android:textColor="?attr/colorPrimary"-->
+                            <!--android:textStyle="bold"/>-->
 
-                    </LinearLayout>
+                    <!--</LinearLayout>-->
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:id="@+id/lin_continue_schedule"
-                        android:gravity="center">
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:paddingTop="2dp"-->
+                        <!--android:paddingBottom="2dp"-->
+                        <!--android:paddingLeft="16dp"-->
+                        <!--android:paddingRight="16dp"-->
+                        <!--android:background="?attr/selectableItemBackgroundBorderless"-->
+                        <!--android:clickable="true"-->
+                        <!--android:id="@+id/lin_continue_schedule"-->
+                        <!--android:gravity="center">-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:text="CONTINUE"
-                            android:textSize="14sp"
-                            android:paddingTop="8dp"
-                            android:paddingLeft="2dp"
-                            android:paddingRight="2dp"
-                            android:textAlignment="center"
-                            android:textColor="?attr/colorPrimary"
-                            android:textStyle="bold"/>
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="32dp"-->
+                            <!--android:text="CONTINUE"-->
+                            <!--android:textSize="14sp"-->
+                            <!--android:paddingTop="8dp"-->
+                            <!--android:paddingLeft="2dp"-->
+                            <!--android:paddingRight="2dp"-->
+                            <!--android:textAlignment="center"-->
+                            <!--android:textColor="?attr/colorPrimary"-->
+                            <!--android:textStyle="bold"/>-->
 
-                    </LinearLayout>
+                    <!--</LinearLayout>-->
 
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
             </LinearLayout>
 

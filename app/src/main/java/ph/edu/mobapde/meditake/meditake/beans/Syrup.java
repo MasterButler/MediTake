@@ -19,7 +19,7 @@ public class Syrup extends Medicine{
         setSyrupSpecificInfo();
     }
 
-    public Syrup(String brandName, String genericName, String medicineFor, double amount){
+    public Syrup(String brandName, String genericName, String medicineFor, long amount){
         super(brandName, genericName, medicineFor, amount);
         setSyrupSpecificInfo();
     }

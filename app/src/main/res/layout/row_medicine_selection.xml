@@ -11,8 +11,8 @@
         android:background="?attr/selectableItemBackground">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="60dp"
+            android:layout_height="54dp"
             tools:src="@drawable/selection_lozenge_colored"
             android:paddingRight="8sp"
             android:id="@+id/iv_selection_medicine_type"

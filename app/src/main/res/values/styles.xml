@@ -106,4 +106,36 @@
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+    <style name="StepperLayoutTheme" parent="MSDefaultStepperLayoutTheme">
+        <item name="ms_tabsContainerStyle">@style/TabsContainerStyle</item>
+        <item name="ms_stepTabTitleStyle">@style/StepTabTitleStyle</item>
+        <item name="ms_stepTabNumberStyle">@style/StepTabNumberStyle</item>
+        <item name="ms_stepTabDoneIndicatorStyle">@style/StepTabDoneIndicatorStyle</item>
+        <item name="ms_stepTabDividerStyle">@style/StepTabDividerStyle</item>
+    </style>
+
+    <style name="TabsContainerStyle" parent="MSStepTabsContainer">
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="StepTabTitleStyle" parent="MSStepTabTitle">
+        <item name="android:textColor">?android:attr/color</item>
+    </style>
+
+    <style name="StepTabNumberStyle" parent="MSStepTabNumber">
+        <item name="android:textColor">?android:attr/color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="StepTabDoneIndicatorStyle" parent="MSStepTabDoneIndicator">
+        <item name="android:src">@drawable/ms_ic_check</item>
+        <item name="android:tint">?android:attr/color</item>
+    </style>
+
+    <style name="StepTabDividerStyle" parent="MSStepTabDivider">
+        <item name="android:src">@drawable/ms_vertical_tab_divider</item>
+        <item name="android:tint">?android:attr/color</item>
+    </style>
+
 </resources>

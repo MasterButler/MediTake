@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.transition.TransitionManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -40,12 +41,16 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.RequestCodes;
-import ph.edu.mobapde.meditake.meditake.adapter.RecylerView.MedicineAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.recyclerview.MedicineAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.beans.Syrup;
 import ph.edu.mobapde.meditake.meditake.beans.Tablet;
+import ph.edu.mobapde.meditake.meditake.fragment.medicine.add.AddMedicineDetailsFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.medicine.view.ViewMedicineDetailsFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.medicine.view.ViewMedicineFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.schedule.view.ViewScheduleFragment;
 import ph.edu.mobapde.meditake.meditake.listener.OnMedicineClickListener;
 import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
 import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicineInstantiatorUtil;
@@ -54,16 +59,15 @@ import ph.edu.mobapde.meditake.meditake.util.SearchUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class MedicineListActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements  NavigationView.OnNavigationItemSelectedListener,
+                    ViewMedicineDetailsFragment.OnViewMedicineDetailsFragmentInteractionListener,
+                    ViewMedicineFragment.OnViewMedicineFragmentInteractionListener {
 
     @BindView(R.id.snackbar_position)
     CoordinatorLayout clSnackbar;
 
     @BindView(R.id.rv_medicine)
     RecyclerView rvMedicine;
-
-    @BindView(R.id.fab_add_medicine)
-    FloatingActionsMenu addMedicineMenu;
 
     @BindView(R.id.white_overlay)
     RelativeLayout whiteOverlay;
@@ -80,8 +84,6 @@ public class MedicineListActivity extends AppCompatActivity
     MenuItem actionSearchMedicineIcon;
     SearchView actionSearchMedicineMenu;
 
-    MenuItem actionSortMedicineIcon;
-
     MedicineAdapter medicineAdapter;
     ItemTouchHelper.SimpleCallback simpleItemTouchCallback;
     ItemTouchHelper itemTouchHelper;
@@ -94,6 +96,9 @@ public class MedicineListActivity extends AppCompatActivity
 
     String columnName, order;
     private boolean doubleBackToExitPressedOnce;
+
+    ViewMedicineFragment viewMedicineFragment;
+    FragmentTransaction ft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,15 +124,21 @@ public class MedicineListActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == RequestCodes.REQUEST_SETTINGS_UPDATE){
+        if(requestCode == RequestCodes.REQUEST_ADD_MEDICINE){
+            if(resultCode == RESULT_OK){
+                updateList();
+            }else if(resultCode == RESULT_CANCELED){
+
+            }
+        }else if(requestCode == RequestCodes.REQUEST_SETTINGS_UPDATE){
             ThemeUtil.reloadWithTheme(this);
         }
     }
 
     public void addHardcodedData(){
-        Medicine medA = new Capsule("Capsule A", "Generic capsule", "Something bad", 0.0);
-        Medicine medB = new Syrup("Syrup A", "Generic syrup", "Something bad", 0.0);
-        Medicine medC = new Tablet("Tablet A", "Generic tablet", "Something bad", 0.0);
+        Medicine medA = new Capsule("Capsule A", "Generic capsule", "Something bad", 0);
+        Medicine medB = new Syrup("Syrup A", "Generic syrup", "Something bad", 0);
+        Medicine medC = new Tablet("Tablet A", "Generic tablet", "Something bad", 0);
         medicineUtil.addMedicine(medA);
         medicineUtil.addMedicine(medB);
         medicineUtil.addMedicine(medC);
@@ -165,32 +176,33 @@ public class MedicineListActivity extends AppCompatActivity
         medicineAdapter.setOnMedicineClickListener(new OnMedicineClickListener() {
             @Override
             public void onItemClick(int id) {
-                expand(id);
+                view(id);
+                //expand(id);
             }
 
             @Override
             public void onItemDeleteClick(int id) {
-                delete(id);
+                //delete(id);
             }
 
             @Override
             public void onItemEditClick(int id) {
-                edit(id);
+                //edit(id);
             }
 
             @Override
             public void onItemSaveClick(Medicine medicine) {
-                save(medicine);
+                //save(medicine);
             }
 
             @Override
             public void onItemCancelClick(int id) {
-                cancel(id);
+                //cancel(id);
             }
 
             @Override
             public void onItemSwipe(int id) {
-                delete(id);
+                //delete(id);
             }
         });
 
@@ -230,27 +242,7 @@ public class MedicineListActivity extends AppCompatActivity
     }
 
     public void initializeFAM(){
-        addMedicineMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                whiteOverlay.getBackground().setAlpha(120);
-                whiteOverlay.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        addMedicineMenu.collapse();
-                        return true;
-                    }
-                });
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-                whiteOverlay.getBackground().setAlpha(0);
-                whiteOverlay.setOnTouchListener(null);
-            }
-        });
         whiteOverlay.getBackground().setAlpha(0);
-        addMedicineMenu.collapse();
     }
 
     @Override
@@ -262,7 +254,6 @@ public class MedicineListActivity extends AppCompatActivity
             actionSearchMedicineMenu = (SearchView) actionSearchMedicineIcon.getActionView();
         }
         if(actionSearchMedicineMenu != null){
-            //change stuff here.
             int[] attrs = {android.R.attr.color};
             EditText searchEditText = (EditText) actionSearchMedicineMenu.findViewById(android.support.v7.appcompat.R.id.search_src_text);
             TypedArray typedArray = obtainStyledAttributes(attrs);
@@ -289,8 +280,6 @@ public class MedicineListActivity extends AppCompatActivity
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(addMedicineMenu.isExpanded()){
-            addMedicineMenu.collapse();
         } else if(medicineAdapter.isEditing()){
             cancel(medicineAdapter.getEditingPositionId());
         } else if(medicineAdapter.isExpanded()){
@@ -359,19 +348,24 @@ public class MedicineListActivity extends AppCompatActivity
         return true;
     }
 
-    @OnClick(R.id.fab_option_capsule)
-    public void addCapsule(){
-        addNewMedicine(Capsule.CLASS_NAME);
-    }
-
-    @OnClick(R.id.fab_option_syrup)
-    public void addSyrup(){
-        addNewMedicine(Syrup.CLASS_NAME);
-    }
-
-    @OnClick(R.id.fab_option_tablet)
-    public void addMedicine(){
-        addNewMedicine(Tablet.CLASS_NAME);
+//    @OnClick(R.id.fab_option_capsule)
+//    public void addCapsule(){
+//        addNewMedicine(Capsule.CLASS_NAME);
+//    }
+//
+//    @OnClick(R.id.fab_option_syrup)
+//    public void addSyrup(){
+//        addNewMedicine(Syrup.CLASS_NAME);
+//    }
+//
+//    @OnClick(R.id.fab_option_tablet)
+//    public void addMedicine(){
+//        addNewMedicine(Tablet.CLASS_NAME);
+//    }
+    @OnClick(R.id.fab_add_medicine)
+    public void onClickFab(){
+        Intent i = new Intent(getBaseContext(), AddMedicineActivity.class);
+        startActivityForResult(i, RequestCodes.REQUEST_ADD_MEDICINE);
     }
 
     @Override
@@ -440,7 +434,7 @@ public class MedicineListActivity extends AppCompatActivity
             tempMed.setGenericName("");
             tempMed.setBrandName("");
             tempMed.setMedicineFor("");
-            tempMed.setAmount(0.0);
+            tempMed.setAmount(0);
             tempMed.setDosage(0);
             long tempId = medicineUtil.addMedicine(tempMed);
 
@@ -448,10 +442,8 @@ public class MedicineListActivity extends AppCompatActivity
 
             rvMedicine.smoothScrollToPosition(medicineAdapter.getItemCount() - 1);
             expand((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
-            edit((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
+            //edit((int) medicineAdapter.getItemId(medicineAdapter.getItemCount() - 1));
             CREATING_NEW_ITEM = tempId;
-
-            addMedicineMenu.collapse();
         }else{
             delete((int) CREATING_NEW_ITEM);
             CREATING_NEW_ITEM = -1;
@@ -466,6 +458,14 @@ public class MedicineListActivity extends AppCompatActivity
             delete((int)CREATING_NEW_ITEM);
             CREATING_NEW_ITEM = -1;
         }
+    }
+
+    public void closeViewMedicineFragment(){
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.remove(viewMedicineFragment);
+        ft.commit();
+        getFragmentManager().popBackStack();
     }
 
     public void delete(int id){
@@ -520,7 +520,7 @@ public class MedicineListActivity extends AppCompatActivity
         medicineAdapter.notifyDataSetChanged();
 
         updateList();
-        returnToView(medicine.getSqlId());
+        //returnToView(medicine.getSqlId());
 
         String message = getString(R.string.message_medicine_edit);
         if(CREATING_NEW_ITEM != -1) {
@@ -538,6 +538,22 @@ public class MedicineListActivity extends AppCompatActivity
         }else{
             updateList();
         }
+    }
+
+    public void view(int id){
+        Log.wtf("SCHEDLIST", "SCHEDULE IS " + medicineUtil.getMedicine(id));
+        viewMedicineFragment = ViewMedicineFragment.newInstance(id);
+        viewMedicineFragment.setOnViewScheduleFragmentInteractionListener(new ViewMedicineFragment.OnViewMedicineFragmentInteractionListener() {
+            @Override
+            public void onViewMedicineBackgroundClick(Medicine medicine) {
+                save(medicine);
+                closeViewMedicineFragment();
+            }
+        });
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.replace(R.id.fragment_medicine_view_placeholder, viewMedicineFragment);
+        ft.commit();
     }
 
     public void showUndoSnackbar(){
@@ -596,4 +612,22 @@ public class MedicineListActivity extends AppCompatActivity
         updateList();
     }
 
+    @Override
+    public void onViewScheduleDetailsFragmentClose(Medicine medicine) {
+        save(medicine);
+        updateList();
+        closeViewMedicineFragment();
+    }
+
+    @Override
+    public void onViewScheduleMedicineFragmentDelete(int id) {
+        delete(id);
+        updateList();
+        closeViewMedicineFragment();
+    }
+
+    @Override
+    public void onViewMedicineBackgroundClick(Medicine medicine) {
+
+    }
 }

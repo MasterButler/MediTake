@@ -5,14 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentTransaction;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,13 +17,17 @@ import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.stepstone.stepper.StepperLayout;
+import com.stepstone.stepper.VerificationError;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
-import ph.edu.mobapde.meditake.meditake.adapter.Page.AddSchedulePagerAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.page.AddSchedulePagerAdapter;
+import ph.edu.mobapde.meditake.meditake.adapter.page.AddScheduleStepAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
-import ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleDetailsFragment;
-import ph.edu.mobapde.meditake.meditake.fragment.AddSchedule.AddScheduleMedicineFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.schedule.add.AddScheduleDetailsFragment;
+import ph.edu.mobapde.meditake.meditake.fragment.schedule.add.AddScheduleMedicineFragment;
 import ph.edu.mobapde.meditake.meditake.listener.CustomOnTimeSetListener;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
@@ -34,25 +35,31 @@ import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class AddScheduleActivity extends AppCompatActivity
         implements  AddScheduleDetailsFragment.OnAddScheduleDetailsFragmentInteractionListener,
-                    AddScheduleMedicineFragment.OnAddScheduleMedicineFragmentInteractionListener{
+                    AddScheduleMedicineFragment.OnAddScheduleMedicineFragmentInteractionListener,
+                    StepperLayout.StepperListener{
 
-    private AddSchedulePagerAdapter mAddSchedulePagerAdapter;
 
-    @BindView(R.id.toolbar)
-    Toolbar add_schedule_toolbar;
-    @BindView(R.id.container)
-    ViewPager mViewPager;
-    @BindView(R.id.tabs)
-    TabLayout tabLayout;
-
+    AddScheduleStepAdapter mAddScheduleStepAdapter;
     ScheduleUtil scheduleUtil;
 
-    public void setUpActionBar(){
-        setSupportActionBar(add_schedule_toolbar);
-        getSupportActionBar().setTitle("Add Schedule");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
-    }
+    @BindView(R.id.sl_add_schedule)
+    StepperLayout slAddSchedule;
+//    @BindView(R.id.toolbar)
+//    Toolbar add_schedule_toolbar;
+//    @BindView(R.id.container)
+//    ViewPager mViewPager;
+//    @BindView(R.id.tabs)
+//    TabLayout tabLayout;
+//    @BindView(R.id.ci_steps)
+//    CircleIndicator ciSteps;
+
+
+//    public void setUpActionBar(){
+//        setSupportActionBar(add_schedule_toolbar);
+//        getSupportActionBar().setTitle("Add Schedule");
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +68,7 @@ public class AddScheduleActivity extends AppCompatActivity
         setContentView(R.layout.activity_add_schedule);
 
         ButterKnife.bind(this);
-        setUpActionBar();
+//        setUpActionBar();
 
         scheduleUtil = new ScheduleUtil(getBaseContext());
 
@@ -71,15 +78,24 @@ public class AddScheduleActivity extends AppCompatActivity
     }
 
     public void initializePager(){
-        mAddSchedulePagerAdapter = new AddSchedulePagerAdapter(getSupportFragmentManager());
-        mAddSchedulePagerAdapter.add(AddScheduleDetailsFragment.newInstance(1));
-        mAddSchedulePagerAdapter.add(AddScheduleMedicineFragment.newInstance(2));
+//        mAddSchedulePagerAdapter = new AddSchedulePagerAdapter(getSupportFragmentManager());
+//        mAddSchedulePagerAdapter.add(AddScheduleDetailsFragment.newInstance(1));
+//        mAddSchedulePagerAdapter.add(AddScheduleMedicineFragment.newInstance(2));
 
-        mViewPager.setAdapter(mAddSchedulePagerAdapter);
+//        mViewPager.setAdapter(mAddSchedulePagerAdapter);
         int[] attrs = {android.R.attr.colorBackground};
         TypedArray typedArray = obtainStyledAttributes(attrs);
-        mViewPager.setBackgroundColor(typedArray.getColor(0, Color.WHITE));
-        tabLayout.setupWithViewPager(mViewPager);
+
+        //mViewPager.setBackgroundColor(typedArray.getColor(0, Color.WHITE));
+        //slAddSchedule.setAdapter();
+        //ciSteps.setViewPager(mViewPager);
+        //tabLayout.setupWithViewPager(mViewPager);
+        mAddScheduleStepAdapter = new AddScheduleStepAdapter(getSupportFragmentManager(), getBaseContext());
+        mAddScheduleStepAdapter.add(AddScheduleDetailsFragment.newInstance(1));
+        mAddScheduleStepAdapter.add(AddScheduleMedicineFragment.newInstance(2));
+        slAddSchedule.setAdapter(mAddScheduleStepAdapter, 0);
+        slAddSchedule.setBackgroundColor(typedArray.getColor(0, Color.WHITE));
+        slAddSchedule.setListener(this);
     }
 
     public void initializeContents(){
@@ -202,7 +218,7 @@ public class AddScheduleActivity extends AppCompatActivity
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface arg0) {
-                int[] attrs = {android.R.attr.colorPrimary};
+                int[] attrs = {android.R.attr.colorAccent};
                 TypedArray typedArray = AddScheduleActivity.this.obtainStyledAttributes(attrs);
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
@@ -234,4 +250,26 @@ public class AddScheduleActivity extends AppCompatActivity
         }
     }
 
+    /********************
+     * STEPPERS LISTENER
+     ********************/
+
+    @Override
+    public void onCompleted(View completeButton) {
+    }
+
+    @Override
+    public void onError(VerificationError verificationError) {
+
+    }
+
+    @Override
+    public void onStepSelected(int newStepPosition) {
+
+    }
+
+    @Override
+    public void onReturn() {
+        finish();
+    }
 }

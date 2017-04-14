@@ -12,9 +12,5 @@ import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 
 public interface OnScheduleClickListener {
     public void onItemClick(int id);
-    public void onItemDeleteClick(int id);
-    public void onItemEditClick(int id);
-    public void onItemSaveClick(Schedule schedule);
-    public void onItemCancelClick(int id);
     public void onSwitchClick(Schedule schedule);
 }
