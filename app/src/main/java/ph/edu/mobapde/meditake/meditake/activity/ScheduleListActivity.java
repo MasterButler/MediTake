@@ -77,6 +77,9 @@ public class ScheduleListActivity extends AppCompatActivity
     @BindView(R.id.lin_rv_schedule_empty)
     LinearLayout linRvEmpty;
 
+    @BindView(R.id.black_overlay)
+    View blackOverlay;
+
     ViewScheduleFragment viewScheduleFragment;
 
     ScheduleAdapter scheduleAdapter;
@@ -238,14 +241,6 @@ public class ScheduleListActivity extends AppCompatActivity
         });
     }
 
-    private void returnToView() {
-        scheduleAdapter.notifyDataSetChanged();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.remove(viewScheduleFragment);
-        ft.addToBackStack(null);
-        ft.commit();
-    }
-
     public void addNewSchedule(){
         Intent i = new Intent(getBaseContext(), AddScheduleActivity.class);
         startActivityForResult(i, RequestCodes.REQUEST_ADD_SCHEDULE);
@@ -266,7 +261,7 @@ public class ScheduleListActivity extends AppCompatActivity
         scheduleAdapter.notifyDataSetChanged();
 
         updateList();
-        returnToView();
+        closeViewScheduleFragment();
     }
 
     public void toggleSwitch(Schedule schedule){
@@ -319,8 +314,9 @@ public class ScheduleListActivity extends AppCompatActivity
                 setAlarmForSchedule(schedule);
             }
         });
+        blackOverlay.animate().alpha(0.54f);
         ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down);
         ft.replace(R.id.fragment_medicine_list_placeholder, viewScheduleFragment);
         ft.commit();
     }
@@ -398,11 +394,14 @@ public class ScheduleListActivity extends AppCompatActivity
     }
 
     public void closeViewScheduleFragment(){
-        ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
-        ft.remove(viewScheduleFragment);
-        ft.commit();
         getFragmentManager().popBackStack();
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_up, R.anim.slide_down, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.hide(viewScheduleFragment);
+//        ft.remove(viewScheduleFragment);
+        ft.commit();
+
+        blackOverlay.animate().alpha(0.0f);
     }
 
     @Override

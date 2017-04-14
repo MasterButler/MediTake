@@ -14,12 +14,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:alpha="0.0"
+        android:animateLayoutChanges="true"
+        android:id="@+id/black_overlay"/>
+
     <FrameLayout
         android:id="@+id/fragment_medicine_view_placeholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>
-
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

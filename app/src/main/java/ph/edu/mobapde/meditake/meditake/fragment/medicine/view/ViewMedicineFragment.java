@@ -2,7 +2,12 @@ package ph.edu.mobapde.meditake.meditake.fragment.medicine.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -29,12 +35,16 @@ public class ViewMedicineFragment extends Fragment {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private int medId;
 
+    @BindView(R.id.content)
+    LinearLayout content;
     @BindView(R.id.black_overlay)
     View bg;
     @BindView(R.id.container)
     ViewPager mViewPager;
 //    @BindView(R.id.tabs)
 //    TabLayout tabLayout;
+
+    private Bitmap b = null;
 
     public ViewMedicineFragment() {
     }

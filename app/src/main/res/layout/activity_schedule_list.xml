@@ -16,6 +16,14 @@
         android:layout_height="match_parent"
         android:id="@+id/layout_schedule_list"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:alpha="0.0"
+        android:animateLayoutChanges="true"
+        android:id="@+id/black_overlay"/>
+
     <FrameLayout
         android:id="@+id/fragment_medicine_list_placeholder"
         android:layout_width="match_parent"

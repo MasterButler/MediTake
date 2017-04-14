@@ -3,6 +3,7 @@ package ph.edu.mobapde.meditake.meditake.activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -80,6 +82,9 @@ public class MedicineListActivity extends AppCompatActivity
 
     @BindView(R.id.lin_rv_medicine_empty)
     LinearLayout linRvEmpty;
+
+    @BindView(R.id.black_overlay)
+    View blackOverlay;
 
     MenuItem actionSearchMedicineIcon;
     SearchView actionSearchMedicineMenu;
@@ -461,11 +466,14 @@ public class MedicineListActivity extends AppCompatActivity
     }
 
     public void closeViewMedicineFragment(){
-        ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
-        ft.remove(viewMedicineFragment);
-        ft.commit();
         getFragmentManager().popBackStack();
+        ft = getSupportFragmentManager().beginTransaction();
+//        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.setCustomAnimations(R.anim.slide_up, R.anim.slide_down, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.hide(viewMedicineFragment);
+//        ft.remove(viewMedicineFragment);
+        ft.commit();
+        blackOverlay.animate().alpha(0.0f);
     }
 
     public void delete(int id){
@@ -542,6 +550,7 @@ public class MedicineListActivity extends AppCompatActivity
 
     public void view(int id){
         Log.wtf("SCHEDLIST", "SCHEDULE IS " + medicineUtil.getMedicine(id));
+        blackOverlay.animate().alpha(0.50f);
         viewMedicineFragment = ViewMedicineFragment.newInstance(id);
         viewMedicineFragment.setOnViewScheduleFragmentInteractionListener(new ViewMedicineFragment.OnViewMedicineFragmentInteractionListener() {
             @Override
@@ -551,9 +560,10 @@ public class MedicineListActivity extends AppCompatActivity
             }
         });
         ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+        ft.setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down);
         ft.replace(R.id.fragment_medicine_view_placeholder, viewMedicineFragment);
         ft.commit();
+
     }
 
     public void showUndoSnackbar(){
