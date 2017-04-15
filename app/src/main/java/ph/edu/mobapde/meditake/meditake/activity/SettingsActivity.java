@@ -150,6 +150,9 @@ public class SettingsActivity extends AppCompatActivity{
         themeSelection.add(ivTheme3);
         themeSelection.add(ivTheme4);
 
+        themeSelection.get(ThemeUtil.getSelectedTheme(getBaseContext())-1)
+                .setImageResource(selectedTheme.get(ThemeUtil.getSelectedTheme(getBaseContext())-1));
+
         for(int i = 0; i < themeSelection.size(); i++){
             Log.wtf("ITERATION", "AT " + i + ": GETTING VALUE");
             themeSelection.get(i).setTag(i);

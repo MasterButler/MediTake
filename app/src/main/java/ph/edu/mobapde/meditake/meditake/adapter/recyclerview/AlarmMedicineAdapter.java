@@ -24,10 +24,24 @@ import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicineInstantiatorUt
 public class AlarmMedicineAdapter extends CursorRecyclerViewAdapter<AlarmMedicineAdapter.MedicineAlertViewHolder> {
     private ArrayList<Medicine> listMedicine;
     Context contextHolder;
+
+    ArrayList<Integer> medicineDrawable;
+    ArrayList<Integer> medicineBackground;
+
     public AlarmMedicineAdapter(Context context, Cursor cursor, String column) {
         super(context, cursor, column);
         this.contextHolder = context;
         setHasStableIds(true);
+
+        medicineDrawable = new ArrayList<>();
+        medicineDrawable.add(R.drawable.pill_capsule_white);
+        medicineDrawable.add(R.drawable.medicine_bottle_white);
+        medicineDrawable.add(R.drawable.aspirins_white);
+
+        medicineBackground = new ArrayList<>();
+        medicineBackground.add(R.drawable.medicine_capsule_background);
+        medicineBackground.add(R.drawable.medicine_syrup_background);
+        medicineBackground.add(R.drawable.medicine_tablet_background);
     }
 
     @Override
@@ -35,7 +49,11 @@ public class AlarmMedicineAdapter extends CursorRecyclerViewAdapter<AlarmMedicin
         int id = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_ID));
         if(id != -1){
             Medicine med = MedicineInstantiatorUtil.createBeanFromCursor(cursor);
-            viewHolder.ivMedicineType.setImageResource(med.getIcon());
+
+            int selected = MedicineInstantiatorUtil.getMedicineInstanceOf(med);
+            viewHolder.ivMedicineBgColor.setImageResource(medicineBackground.get(selected));
+            viewHolder.ivMedicineDrawable.setImageResource(medicineDrawable.get(selected));
+
             viewHolder.tvMedicineName.setText(med.getName());
             viewHolder.tvMedicineDosage.setText(med.getDosage() + med.getModifier());
         }
@@ -50,8 +68,12 @@ public class AlarmMedicineAdapter extends CursorRecyclerViewAdapter<AlarmMedicin
     public class MedicineAlertViewHolder extends RecyclerView.ViewHolder{
 
         View parentView;
-        @BindView(R.id.iv_medicine_alarm_type)
-        ImageView ivMedicineType;
+
+        @BindView(R.id.iv_medicine_background_color)
+        ImageView ivMedicineBgColor;
+        @BindView(R.id.iv_medicine_drawable)
+        ImageView ivMedicineDrawable;
+
         @BindView(R.id.tv_medicine_alarm_name)
         TextView tvMedicineName;
         @BindView(R.id.tv_medicine_alarm_dosage)

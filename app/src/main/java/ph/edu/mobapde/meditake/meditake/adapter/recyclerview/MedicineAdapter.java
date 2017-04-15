@@ -56,9 +56,9 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
         setHasStableIds(true);
 
         medicineDrawable = new ArrayList<>();
-        medicineDrawable.add(R.drawable.pill_capsule_white);
-        medicineDrawable.add(R.drawable.medicine_bottle_white);
-        medicineDrawable.add(R.drawable.aspirins_white);
+        medicineDrawable.add(R.drawable.capsule_white_large);
+        medicineDrawable.add(R.drawable.syrup_white_large);
+        medicineDrawable.add(R.drawable.tablet_white_large);
 
         medicineBackground = new ArrayList<>();
         medicineBackground.add(context.getResources().getColor(R.color.medicine_capsule_selection_light));
@@ -92,23 +92,6 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
             viewHolder.rvMedicineBgColor.setBackgroundColor(medicineBackground.get(selected));
             viewHolder.ivMedicineDrawable.setImageResource(medicineDrawable.get(selected));
 
-//            String displayAmount = (Math.ceil(med.getAmount()) == Math.floor(med.getAmount())) ? String.valueOf(med.getAmount()).split("\\.")[0] +"" : med.getAmount()+"";
-//            viewHolder.tvMedicineAmount.setText(med.getAmount() <= 0 ? NO_AMOUNT : " " + displayAmount + med.getModifier() + " remaining");
-//            viewHolder.ivMedicineType.setImageResource(med.getIcon());
-//            viewHolder.tvMedicineDosage.setText(med.getDosage() <= 0 ? NO_DOSAGE : " " + med.getDosage() + " " + med.getModifier() + " per dosage");
-//
-//            viewHolder.etMedicineGenericName.setText(med.getGenericName());
-//            viewHolder.etMedicineBrandName.setText(med.getBrandName());
-//            viewHolder.etMedicineFor.setText(med.getMedicineFor());
-//            viewHolder.etMedicineAmount.setText(med.getAmount() + "");
-//            viewHolder.tvMedicineAmountLabel.setText(med.getModifier() + " remaining");
-//            viewHolder.etMedicineDosage.setText(med.getDosage() + "");
-//            viewHolder.tvMedicineDosageLabel.setText(med.getModifier() + " per dosage");
-//
-//
-//            final boolean isExpanded = id == expandedPositionId;
-//            viewHolder.linExpandedInformation.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-//            viewHolder.cvHolder.setActivated(isExpanded);
             viewHolder.cvHolder.setTag(id);
             viewHolder.cvHolder.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -119,92 +102,6 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
                     }
                 }
             });
-//
-//            boolean isEditing = id == editingPositionId;
-//            viewHolder.linEditMedicine.setTag(id);
-//            setMode(viewHolder, isEditing ? MedicineViewHolder.EDIT_MODE : MedicineViewHolder.VIEW_MODE);
-//            viewHolder.linEditMedicine.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(onMedicineClickListener != null){
-//                        int value = (int)v.getTag();
-//                        onMedicineClickListener.onItemEditClick(value);
-//                    }
-//                }
-//            });
-//
-//            boolean isDone = !(id == editingPositionId);
-//            setMode(viewHolder, isDone ? MedicineViewHolder.VIEW_MODE : MedicineViewHolder.EDIT_MODE);
-//            viewHolder.linCancelMedicine.setTag(id);
-//            viewHolder.linCancelMedicine.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(onMedicineClickListener != null){
-//                        int value = (int)v.getTag();
-//                        if(value != -1){
-//                            onMedicineClickListener.onItemCancelClick(value);
-//                        }
-//                    }
-//                }
-//            });
-//
-//            viewHolder.linSaveMedicine.setTag(R.string.MEDICINE_TYPE, med.getClass());
-//            viewHolder.linSaveMedicine.setTag(R.string.MEDICINE_ID, id);
-//            viewHolder.linSaveMedicine.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.wtf("action", "SAVING EDITS");
-//                    if(onMedicineClickListener != null){
-//                        boolean isGenericNameEmpty = viewHolder.etMedicineGenericName.getText().toString().trim().isEmpty();
-//                        boolean isAmountEmpty = viewHolder.etMedicineAmount.getText().toString().trim().isEmpty();
-//
-//                        if(isGenericNameEmpty || isAmountEmpty){
-//                            viewHolder.etMedicineGenericName.setError(isGenericNameEmpty ? "Generic name must not be empty" : null);
-//                            viewHolder.etMedicineAmount.setError(isAmountEmpty ? "Amount must not be empty" : null);
-//                        }else {
-//                            Class clazz = (Class) v.getTag(R.string.MEDICINE_TYPE);
-//                            int id = (int) v.getTag(R.string.MEDICINE_ID);
-//
-//                            Medicine updatedMedicine = null;
-//
-//                            updatedMedicine = MedicineInstantiatorUtil.createMedicineInstanceFromString(clazz.getSimpleName());
-//                            String updatedBrandName = viewHolder.etMedicineBrandName.getText().toString();
-//                            String updatedGenericName = viewHolder.etMedicineGenericName.getText().toString();
-//                            long updatedAmount = Long.valueOf(viewHolder.etMedicineAmount.getText().toString());
-//                            String updatedMedicineFor = viewHolder.etMedicineFor.getText().toString();
-//                            int updatedDosage = Integer.valueOf(viewHolder.etMedicineDosage.getText().toString());
-//
-//                            updatedMedicine.setSqlId(id);
-//                            updatedMedicine.setBrandName(updatedBrandName);
-//                            updatedMedicine.setGenericName(updatedGenericName);
-//                            updatedMedicine.setAmount(updatedAmount);
-//                            updatedMedicine.setMedicineFor(updatedMedicineFor);
-//                            updatedMedicine.setDosage(updatedDosage);
-//
-//                            Log.wtf("before the checking", "BRAND NAME: " + updatedMedicine.getBrandName());
-//                            Log.wtf("before the checking", "GENERIC NM: " + updatedMedicine.getGenericName());
-//                            Log.wtf("before the checking", "MEDICN  FOR: " + updatedMedicine.getMedicineFor());
-//                            Log.wtf("before the checking", "MED AMOUNT: " + updatedMedicine.getAmount() + "");
-//                            Log.wtf("before the checking", "MED DOSAGE: " + updatedMedicine.getDosage() + "");
-//
-//                            onMedicineClickListener.onItemSaveClick(updatedMedicine);
-//                        }
-//                    }
-//                }
-//            });
-//
-//            viewHolder.linDeleteMedicine.setTag(id);
-//            viewHolder.linDeleteMedicine.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(onMedicineClickListener != null){
-//                        int value = (int)v.getTag();
-//                        if(value != -1){
-//                            onMedicineClickListener.onItemDeleteClick(value);
-//                        }
-//                    }
-//                }
-//            });
         }
     }
 
@@ -247,10 +144,6 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
         this.editingPositionId = editingPositionId;
     }
 
-//    public void setMode(MedicineViewHolder viewHolder, int mode){
-//        viewHolder.setMode(mode);
-//    }
-
     public void setOnMedicineClickListener(OnMedicineClickListener onMedicineClickListener) {
         this.onMedicineClickListener = onMedicineClickListener;
     }
@@ -274,84 +167,11 @@ public class MedicineAdapter extends CursorRecyclerViewAdapter<MedicineAdapter.M
         @BindView(R.id.tv_medicine_for)
         TextView tvMedicineFor;
 
-//        @BindView(R.id.lin_holder)
-//        LinearLayout linHolder;
-//        @BindView(R.id.tv_medicine_amount)
-//        TextView tvMedicineAmount;
-//        @BindView(R.id.tv_medicine_dosage)
-//        TextView tvMedicineDosage;
-//        @BindView(R.id.iv_medicine_type)
-//        ImageView ivMedicineType;
-//
-//
-//        @BindView(R.id.et_medicine_generic_name)
-//        EditText etMedicineGenericName;
-//        @BindView(R.id.et_medicine_brand_name)
-//        EditText etMedicineBrandName;
-//        @BindView(R.id.et_medicine_for)
-//        EditText etMedicineFor;
-//        @BindView(R.id.et_medicine_amount)
-//        EditText etMedicineAmount;
-//        @BindView(R.id.tv_medicine_amount_label)
-//        TextView tvMedicineAmountLabel;
-//        @BindView(R.id.et_medicine_dosage)
-//        EditText etMedicineDosage;
-//        @BindView(R.id.tv_medicine_dosage_label)
-//        TextView tvMedicineDosageLabel;
-//
-//        @BindView(R.id.lin_expanded_information)
-//        LinearLayout linExpandedInformation;
-//        @BindView(R.id.lin_expanded_edit_information)
-//        LinearLayout linExpandedEditInformation;
-//        @BindView(R.id.lin_edit_amount)
-//        LinearLayout linEditAmount;
-//        @BindView(R.id.lin_action_editing_medicine)
-//        LinearLayout linActionsEditing;
-//        @BindView(R.id.lin_action_viewing_medicine)
-//        LinearLayout linActionsViewing;
-//
-//        @BindView(R.id.lin_edit_medicine)
-//        LinearLayout linEditMedicine;
-//        @BindView(R.id.lin_delete_medicine)
-//        LinearLayout linDeleteMedicine;
-//
-//        @BindView(R.id.lin_save_medicine)
-//        LinearLayout linSaveMedicine;
-//        @BindView(R.id.lin_cancel_medicine)
-//        LinearLayout linCancelMedicine;
-//
-//
-//        @BindView(R.id.card_view_medicine)
-//        LinearLayout viewLayout;
-//        @BindView(R.id.card_edit_medicine)
-//        LinearLayout editLayout;
-//        public static final int VIEW_MODE = 1;
-//        public static final int EDIT_MODE = 2;
-//
-//        private int originalHeight = 0;
-//        private boolean isViewExpanded = false;
-
-
         public MedicineViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.parentView = itemView;
-//            itemView.setOnClickListener(this);
-//
-//            if (isViewExpanded == false) {
-//                linExpandedInformation.setVisibility(View.GONE);
-//                linExpandedInformation.setEnabled(false);
-//            }
         }
-//
-//        public void setMode(int mode){
-//            int view_mode = mode == VIEW_MODE ? View.VISIBLE : View.GONE;
-//            int edit_mode = mode == EDIT_MODE ? View.VISIBLE : View.GONE;
-//            viewLayout.setVisibility(view_mode);
-//            viewLayout.setEnabled(view_mode == View.VISIBLE);
-//            editLayout.setVisibility(edit_mode);
-//            editLayout.setEnabled(edit_mode == View.VISIBLE);
-//        }
     }
 
 

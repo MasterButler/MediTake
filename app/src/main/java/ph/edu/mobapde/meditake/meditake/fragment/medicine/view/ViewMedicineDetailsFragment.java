@@ -153,8 +153,8 @@ public class ViewMedicineDetailsFragment extends Fragment {
         tvGenericName.setText(genericName);
         tvBrandName.setText(brandName);
         tvMedicineFor.setText(medicineFor);
-        tvDosage.setText(dosage + " " + medicine.getModifier());
-        tvAmount.setText(amount + " " + medicine.getModifier());
+        tvDosage.setText(dosage + " " + medicine.getModifier() + " per dosage");
+        tvAmount.setText(amount + " " + medicine.getModifier() + " remaining");
 
         tvGenericName.setOnClickListener(new OnClickListener() {
             @Override

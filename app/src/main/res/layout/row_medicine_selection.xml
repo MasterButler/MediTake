@@ -8,15 +8,34 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground">
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground"
+        android:id="@+id/lin_holder">
 
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="54dp"
-            tools:src="@drawable/selection_lozenge_colored"
-            android:paddingRight="8sp"
-            android:id="@+id/iv_selection_medicine_type"
-            android:paddingLeft="16sp"/>
+        <RelativeLayout
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                tools:background="@drawable/medicine_capsule_background"
+                android:id="@+id/iv_medicine_background_color"/>
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/pill_capsule_white"
+                android:id="@+id/iv_medicine_drawable"/>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"

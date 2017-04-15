@@ -9,7 +9,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,12 +30,26 @@ public class AddScheduleMedicineAdapter extends CursorRecyclerViewAdapter<AddSch
     Context contextHolder;
     RecyclerView mRecyclerView;
 
+    ArrayList<Integer> medicineDrawable;
+    ArrayList<Integer> medicineBackground;
+
     private OnAddScheduleMedicineClickListener onAddScheduleMedicineClickListener;
 
     public AddScheduleMedicineAdapter(Context context, Cursor cursor, String column) {
         super(context, cursor, column);
         this.contextHolder = context;
         setHasStableIds(true);
+
+        medicineDrawable = new ArrayList<>();
+        medicineDrawable.add(R.drawable.pill_capsule_white);
+        medicineDrawable.add(R.drawable.medicine_bottle_white);
+        medicineDrawable.add(R.drawable.aspirins_white);
+
+        medicineBackground = new ArrayList<>();
+        medicineBackground.add(R.drawable.medicine_capsule_background);
+        medicineBackground.add(R.drawable.medicine_syrup_background);
+        medicineBackground.add(R.drawable.medicine_tablet_background);
+
     }
 
     @Override
@@ -42,15 +60,19 @@ public class AddScheduleMedicineAdapter extends CursorRecyclerViewAdapter<AddSch
 
 
     @Override
-    public void onBindViewHolder(AddScheduleMedicineViewHolder viewHolder, Cursor cursor) {
+    public void onBindViewHolder(final AddScheduleMedicineViewHolder viewHolder, Cursor cursor) {
         int id = cursor.getInt(cursor.getColumnIndex(Medicine.COLUMN_ID));
 
         if(id != -1){
             Medicine med = MedicineInstantiatorUtil.createBeanFromCursor(cursor);
-            viewHolder.ivMedicineType.setImageResource(med.getIcon());
+
+            int selected = MedicineInstantiatorUtil.getMedicineInstanceOf(med);
+            viewHolder.ivMedicineBgColor.setImageResource(medicineBackground.get(selected));
+            viewHolder.ivMedicineDrawable.setImageResource(medicineDrawable.get(selected));
+
             viewHolder.tvMedicineName.setText(med.getName());
-            viewHolder.parentView.setTag(viewHolder.cbSelected);
-            viewHolder.parentView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.linHolder.setTag(viewHolder.cbSelected);
+            viewHolder.linHolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     CheckBox value = (CheckBox) v.getTag();
@@ -85,8 +107,14 @@ public class AddScheduleMedicineAdapter extends CursorRecyclerViewAdapter<AddSch
     public class AddScheduleMedicineViewHolder extends RecyclerView.ViewHolder{
         View parentView;
 
-        @BindView(R.id.iv_selection_medicine_type)
-        ImageView ivMedicineType;
+        @BindView(R.id.lin_holder)
+        LinearLayout linHolder;
+
+        @BindView(R.id.iv_medicine_background_color)
+        ImageView ivMedicineBgColor;
+        @BindView(R.id.iv_medicine_drawable)
+        ImageView ivMedicineDrawable;
+
         @BindView(R.id.tv_selection_medicine_name)
         TextView tvMedicineName;
         @BindView(R.id.cb_selection_medicine_selected)

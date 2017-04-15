@@ -108,9 +108,9 @@ public class AddMedicineDetailsFragment extends Fragment implements BlockingStep
         }
 
         medicineDrawable = new ArrayList<>();
-        medicineDrawable.add(R.drawable.pill_capsule_white);
-        medicineDrawable.add(R.drawable.medicine_bottle_white);
-        medicineDrawable.add(R.drawable.aspirins_white);
+        medicineDrawable.add(R.drawable.capsule_white_large);
+        medicineDrawable.add(R.drawable.syrup_white_large);
+        medicineDrawable.add(R.drawable.tablet_white_large);
 
         medicineBackground = new ArrayList<>();
         medicineBackground.add(getResources().getColor(R.color.medicine_capsule_selection));

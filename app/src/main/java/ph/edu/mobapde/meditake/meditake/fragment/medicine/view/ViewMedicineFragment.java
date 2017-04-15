@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.ViewDragHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +32,8 @@ import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 public class ViewMedicineFragment extends Fragment {
 
     private static final String ARG_MEDICINE = "medicine";
-    OnViewMedicineFragmentInteractionListener onViewMedicineFragmentInteractionListener;
+
+    private ViewDragHelper mDragHelper;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private int medId;
 
@@ -41,10 +43,8 @@ public class ViewMedicineFragment extends Fragment {
     View bg;
     @BindView(R.id.container)
     ViewPager mViewPager;
-//    @BindView(R.id.tabs)
-//    TabLayout tabLayout;
 
-    private Bitmap b = null;
+    OnViewMedicineFragmentInteractionListener onViewMedicineFragmentInteractionListener;
 
     public ViewMedicineFragment() {
     }
