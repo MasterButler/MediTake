@@ -315,7 +315,9 @@ public class DrinkMedicineActivity extends AppCompatActivity {
             v.cancel();
         }
 
-        Intent i = new Intent(getBaseContext(), ScheduleListActivity.class);
+        Intent i = new Intent();
+        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        i.setClass(getBaseContext(), ScheduleListActivity.class);
         i.putExtra(Schedule.TABLE, schedule);
         i.putExtra(getString(R.string.schedule_snooze), 5);
         startActivity(i);

@@ -22,27 +22,25 @@ import ph.edu.mobapde.meditake.meditake.util.DateUtil;
  * Created by Winfred Villaluna on 4/11/2017.
  */
 
-public class BasicTextInputDialogFragment extends DialogFragment {
+public class BasicRepeatingTimePickerDialogFragment extends DialogFragment {
+
     OnDialogClickListener onClickListener;
     String title;
     String positiveText;
     String negativeText;
-    String inputText;
+    String repeatTime;
     int type;
 
-    EditText input;
-
-    public BasicTextInputDialogFragment(){
+    public BasicRepeatingTimePickerDialogFragment(){
 
     }
 
     @SuppressLint("ValidFragment")
-    public BasicTextInputDialogFragment(String title, String positiveText, String negativeText, String inputText, int type){
+    public BasicRepeatingTimePickerDialogFragment(String title, String positiveText, String negativeText, String repeatTime){
         this.title = title;
         this.positiveText = positiveText;
         this.negativeText = negativeText;
-        this.inputText = inputText;
-        this.type = type;
+        this.repeatTime = repeatTime;
     }
 
     @Override
@@ -50,16 +48,47 @@ public class BasicTextInputDialogFragment extends DialogFragment {
         FrameLayout container = new FrameLayout(getActivity());
         FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_left_margin);
-        params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_right_margin);
+//        params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_left_margin);
+//        params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_right_margin);
 
-        input = new EditText(getActivity());
-        input.setText(inputText);
-        input.setLayoutParams(params);
-        input.setSingleLine();
-        input.setInputType(type);
+        View v = getActivity().getLayoutInflater().inflate(R.layout.fragment_repeating_time_picker, null);
+        final NumberPicker npHour = (NumberPicker) v.findViewById(R.id.number_picker_hours);
+        final NumberPicker npMinutes = (NumberPicker) v.findViewById(R.id.number_picker_minutes);
 
-        container.addView(input);
+        container.addView(v);
+
+        npHour.setMinValue(0);
+        npHour.setMaxValue(24);
+        npMinutes.setMinValue(0);
+        npMinutes.setMaxValue(59);
+
+        Log.wtf("REPEATTIME", "REPEATING TIME IS " + repeatTime);
+
+        if(repeatTime != null){
+            int hourValue = 0;
+            int minuteValue = 1;
+            int[] timeValues;
+            if(!repeatTime.equals(DateUtil.REPEATING_TIME_NOT_SET)){
+                timeValues = DateUtil.parseFromTimePicker(repeatTime);
+
+                Log.wtf("GOT VALUES", timeValues[hourValue] + " hour(s) and " + timeValues[minuteValue] + " minutes");
+                npHour.setValue(npHour.getMinValue() <= timeValues[hourValue] && npHour.getMaxValue() >= timeValues[hourValue] ? timeValues[hourValue] : 0);
+                npMinutes.setValue(npMinutes.getMinValue() <= timeValues[minuteValue] && npMinutes.getMaxValue() >= timeValues[minuteValue] ? timeValues[minuteValue] : 0);
+            }else{
+                timeValues = new int[]{0, 0};
+            }
+        }
+
+        npMinutes.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                if(oldVal == npMinutes.getMinValue() && newVal == npMinutes.getMaxValue()){
+                    npHour.setValue(npHour.getValue() != npHour.getMinValue() ? npHour.getValue()-1 : npHour.getValue());
+                }else if(oldVal == npMinutes.getMaxValue() && newVal == npMinutes.getMinValue()){
+                    npHour.setValue(npHour.getValue() != npHour.getMaxValue() ? npHour.getValue()+1 : npHour.getValue());
+                }
+            }
+        });
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle(title)
@@ -68,7 +97,7 @@ public class BasicTextInputDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(onClickListener != null){
-                            onClickListener.onPositiveSelected(input.getText().toString());
+                            onClickListener.onPositiveSelected(npHour.getValue(), npMinutes.getValue());
                         }
                     }})
                 .setNegativeButton(negativeText, new DialogInterface.OnClickListener() {
@@ -76,6 +105,7 @@ public class BasicTextInputDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         if(onClickListener != null){
                             onClickListener.onNegativeSelected();
+
                         }
                     }
                 }).create();
@@ -95,7 +125,7 @@ public class BasicTextInputDialogFragment extends DialogFragment {
     }
 
     public interface OnDialogClickListener{
-        void onPositiveSelected(String msg);
+        void onPositiveSelected(int hourValue, int minuteValue);
         void onNegativeSelected();
     }
 }

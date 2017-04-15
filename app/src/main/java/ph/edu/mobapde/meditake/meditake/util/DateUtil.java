@@ -137,9 +137,9 @@ public class DateUtil {
         int minuteValue = 0;
 
         if(contents.length == 3){
-            if(contents[2].equals("hour(s)")){
+            if(contents[2].equals("hours") || contents[2].equals("hour") ){
                 hourValue = Integer.valueOf(contents[1]);
-            }else if(contents[2].equals("minutes")){
+            }else if(contents[2].equals("minutes") || contents[2].equals("minute")){
                 minuteValue = Integer.valueOf(contents[1]);
             }
         }else if(contents.length == 6){
@@ -152,13 +152,19 @@ public class DateUtil {
     public static String parseToTimePickerDisplay(int hourValue, int minuteValue) {
         String output = "";
         if(hourValue != 0){
-            output += hourValue + " hour(s) ";
+            output += hourValue + " hour";
+            if(hourValue != 1)
+                output += "s";
+            output+= " ";
         }
         if(minuteValue != 0){
             if(!output.isEmpty()){
                 output += "and ";
             }
-            output += minuteValue + " minutes";
+            output += minuteValue + " minute";
+            if(minuteValue != 1){
+                output+="s";
+            }
         }
         if(!output.isEmpty()){
             output = "Every " + output;

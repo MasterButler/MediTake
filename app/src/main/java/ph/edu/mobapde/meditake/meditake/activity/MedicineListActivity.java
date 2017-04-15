@@ -3,12 +3,10 @@ package ph.edu.mobapde.meditake.meditake.activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.transition.TransitionManager;
@@ -25,16 +23,12 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
 
@@ -46,15 +40,12 @@ import ph.edu.mobapde.meditake.meditake.RequestCodes;
 import ph.edu.mobapde.meditake.meditake.adapter.recyclerview.MedicineAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Capsule;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
-import ph.edu.mobapde.meditake.meditake.beans.Schedule;
 import ph.edu.mobapde.meditake.meditake.beans.Syrup;
 import ph.edu.mobapde.meditake.meditake.beans.Tablet;
-import ph.edu.mobapde.meditake.meditake.fragment.medicine.add.AddMedicineDetailsFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.medicine.view.ViewMedicineDetailsFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.medicine.view.ViewMedicineFragment;
-import ph.edu.mobapde.meditake.meditake.fragment.schedule.view.ViewScheduleFragment;
 import ph.edu.mobapde.meditake.meditake.listener.OnMedicineClickListener;
-import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
+import ph.edu.mobapde.meditake.meditake.util.DrawerUtil;
 import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicineInstantiatorUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.SearchUtil;
@@ -131,6 +122,8 @@ public class MedicineListActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == RequestCodes.REQUEST_ADD_MEDICINE){
             if(resultCode == RESULT_OK){
+                medicineAdapter.notifyDataSetChanged();
+                updateListVisibility();
                 updateList();
             }else if(resultCode == RESULT_CANCELED){
 
@@ -167,11 +160,7 @@ public class MedicineListActivity extends AppCompatActivity
 
         itemTouchHelper.attachToRecyclerView(rvMedicine);
 
-        int rvVisibility = medicineAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
-        int linVisibility = medicineAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE;
-
-        rvMedicine.setVisibility(rvVisibility);
-        linRvEmpty.setVisibility(linVisibility);
+        updateListVisibility();
     }
 
     public void initializeAdapter(){
@@ -348,7 +337,7 @@ public class MedicineListActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        DrawerManager.execute(this, item);
+        DrawerUtil.execute(this, item);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -422,6 +411,14 @@ public class MedicineListActivity extends AppCompatActivity
 
     public void updateList(){
         medicineAdapter.changeCursor(getMedicineList(columnName, order));
+    }
+
+    public void updateListVisibility(){
+        int rvVisibility = medicineAdapter.getItemCount() == 0 ? View.GONE : View.VISIBLE;
+        int linVisibility = medicineAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE;
+
+        rvMedicine.setVisibility(rvVisibility);
+        linRvEmpty.setVisibility(linVisibility);
     }
 
     public void updateList(Cursor c){
@@ -568,8 +565,8 @@ public class MedicineListActivity extends AppCompatActivity
 
     public void showUndoSnackbar(){
         int[] attrs = {android.R.attr.color};
-        final Snackbar snackbarRestore = Snackbar.make(clSnackbar, R.string.message_medicine_restore, Snackbar.LENGTH_LONG);
-        Snackbar snackbarDelete = Snackbar.make(clSnackbar, R.string.message_medicine_delete, Snackbar.LENGTH_SHORT);
+        final Snackbar snackbarRestore = Snackbar.make(clSnackbar, R.string.message_medicine_restore, Snackbar.LENGTH_SHORT);
+        Snackbar snackbarDelete = Snackbar.make(clSnackbar, R.string.message_medicine_delete, Snackbar.LENGTH_LONG);
         snackbarDelete.setAction("UNDO", new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -16,9 +16,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/black"
-            android:alpha="0.0"
-            android:id="@+id/black_overlay"/>
+            android:background="@android:color/transparent"
+            android:id="@+id/overlay"/>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"

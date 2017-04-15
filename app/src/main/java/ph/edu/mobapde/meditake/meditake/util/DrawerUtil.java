@@ -15,7 +15,7 @@ import ph.edu.mobapde.meditake.meditake.activity.SettingsActivity;
  * Created by Winfred Villaluna on 3/12/2017.
  */
 
-public class DrawerManager {
+public class DrawerUtil {
     public static void execute(Activity activity, MenuItem item){
         // TODO check if i.setFlags() will cause a problem in onActivityResult(). Will remove if problem is found within it.
         // Handle navigation view item clicks here.

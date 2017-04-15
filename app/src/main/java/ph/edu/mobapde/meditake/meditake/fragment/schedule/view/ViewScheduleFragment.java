@@ -28,7 +28,7 @@ public class ViewScheduleFragment extends Fragment {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private Schedule schedule;
 
-    @BindView(R.id.black_overlay)
+    @BindView(R.id.overlay)
     View bg;
     @BindView(R.id.container)
     ViewPager mViewPager;

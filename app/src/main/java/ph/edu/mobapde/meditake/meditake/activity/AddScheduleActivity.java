@@ -26,6 +26,7 @@ import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.adapter.page.AddSchedulePagerAdapter;
 import ph.edu.mobapde.meditake.meditake.adapter.page.AddScheduleStepAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
+import ph.edu.mobapde.meditake.meditake.dialog.BasicRepeatingTimePickerDialogFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.schedule.add.AddScheduleDetailsFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.schedule.add.AddScheduleMedicineFragment;
 import ph.edu.mobapde.meditake.meditake.listener.CustomOnTimeSetListener;
@@ -157,74 +158,22 @@ public class AddScheduleActivity extends AppCompatActivity
      ***********************/
 
     public void editRepeatingTime(final TextView tvRepeat){
-        final AlertDialog.Builder alert = new AlertDialog.Builder(AddScheduleActivity.this);
-        View repeatingTimeSelection = this.getLayoutInflater().inflate(R.layout.fragment_repeating_time_picker, null);
+        BasicRepeatingTimePickerDialogFragment repeatingTimePickerDialogFragment
+                = new BasicRepeatingTimePickerDialogFragment("Drinking Interval", "CHANGE", "CANCEL", String.valueOf((Object)tvRepeat.getText().toString()));
 
-        ButterKnife.bind(repeatingTimeSelection, this);
-
-        Log.wtf("ACTION", "OPENING THE SELCTOR");
-
-        final NumberPicker npHour = (NumberPicker) repeatingTimeSelection.findViewById(R.id.number_picker_hours);
-        final NumberPicker npMinutes = (NumberPicker) repeatingTimeSelection.findViewById(R.id.number_picker_minutes);
-
-
-        npHour.setMinValue(0);
-        npHour.setMaxValue(168);
-        npMinutes.setMinValue(0);
-        npMinutes.setMaxValue(59);
-
-        if(tvRepeat != null){
-            int hourValue = 0;
-            int minuteValue = 1;
-            int[] timeValues;
-            if(!tvRepeat.getText().toString().equals(DateUtil.REPEATING_TIME_NOT_SET)){
-                timeValues = DateUtil.parseFromTimePicker(tvRepeat.getText().toString());
-
-                Log.wtf("GOT VALUES", timeValues[hourValue] + " hour(s) and " + timeValues[minuteValue] + " minutes");
-                npHour.setValue(npHour.getMinValue() <= timeValues[hourValue] && npHour.getMaxValue() >= timeValues[hourValue] ? timeValues[hourValue] : 0);
-                npMinutes.setValue(npMinutes.getMinValue() <= timeValues[minuteValue] && npMinutes.getMaxValue() >= timeValues[minuteValue] ? timeValues[minuteValue] : 0);
-            }else{
-                timeValues = new int[]{0, 0};
-            }
-        }
-
-        npMinutes.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        repeatingTimePickerDialogFragment.setOnClickListener(new BasicRepeatingTimePickerDialogFragment.OnDialogClickListener() {
             @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                if(oldVal == npMinutes.getMinValue() && newVal == npMinutes.getMaxValue()){
-                    npHour.setValue(npHour.getValue() != npHour.getMinValue() ? npHour.getValue()-1 : npHour.getValue());
-                }else if(oldVal == npMinutes.getMaxValue() && newVal == npMinutes.getMinValue()){
-                    npHour.setValue(npHour.getValue() != npHour.getMaxValue() ? npHour.getValue()+1 : npHour.getValue());
-                }
+            public void onPositiveSelected(int hourValue, int minuteValue) {
+                tvRepeat.setText(DateUtil.parseToTimePickerDisplay(hourValue, minuteValue));
             }
-        });
 
-        alert.setView(repeatingTimeSelection);
-        alert.setTitle("Drinking Interval");
-        alert.setPositiveButton("CHANGE", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                tvRepeat.setText(DateUtil.parseToTimePickerDisplay(npHour.getValue(), npMinutes.getValue()));
-                dialog.dismiss();
-            }
-        });
-
-        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-
-        final AlertDialog dialog = alert.create();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onShow(DialogInterface arg0) {
-                int[] attrs = {android.R.attr.colorAccent};
-                TypedArray typedArray = AddScheduleActivity.this.obtainStyledAttributes(attrs);
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
+            public void onNegativeSelected() {
+
             }
         });
-        dialog.show();
+
+        repeatingTimePickerDialogFragment.show(getFragmentManager(), BasicRepeatingTimePickerDialogFragment.class.getSimpleName());
     }
 
     public void editTime(TextView tvTime, TextView tvTimePeriod){

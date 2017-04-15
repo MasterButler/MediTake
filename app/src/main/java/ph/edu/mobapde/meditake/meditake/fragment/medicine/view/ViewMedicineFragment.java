@@ -37,7 +37,7 @@ public class ViewMedicineFragment extends Fragment {
 
     @BindView(R.id.content)
     LinearLayout content;
-    @BindView(R.id.black_overlay)
+    @BindView(R.id.overlay)
     View bg;
     @BindView(R.id.container)
     ViewPager mViewPager;
@@ -88,8 +88,7 @@ public class ViewMedicineFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ViewMedicineDetailsFragment viewMedicineDetailsFragment = (ViewMedicineDetailsFragment) mSectionsPagerAdapter.getFragment(0);
-                ViewMedicineDetailsFragment viewScheduleDetailsFragment = (ViewMedicineDetailsFragment) ((SectionsPagerAdapter)mViewPager.getAdapter()).getFragment(0);
-                onViewMedicineFragmentInteractionListener.onViewMedicineBackgroundClick(viewScheduleDetailsFragment.updateMedicineFromUserInput(viewMedicineDetailsFragment.getMedicine()));
+                onViewMedicineFragmentInteractionListener.onViewMedicineBackgroundClick(viewMedicineDetailsFragment.updateMedicineFromUserInput(viewMedicineDetailsFragment.getMedicine()));
             }
         });
 

@@ -1,7 +1,6 @@
 package ph.edu.mobapde.meditake.meditake.activity;
 
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
@@ -17,7 +16,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,13 +37,14 @@ import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.RequestCodes;
 import ph.edu.mobapde.meditake.meditake.adapter.recyclerview.ScheduleAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
+import ph.edu.mobapde.meditake.meditake.dialog.BasicRepeatingTimePickerDialogFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.schedule.view.ViewScheduleDetailsFragment;
 import ph.edu.mobapde.meditake.meditake.fragment.schedule.view.ViewScheduleFragment;
 import ph.edu.mobapde.meditake.meditake.listener.CustomOnTimeSetListener;
 import ph.edu.mobapde.meditake.meditake.listener.OnScheduleClickListener;
 import ph.edu.mobapde.meditake.meditake.util.AlarmUtil;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
-import ph.edu.mobapde.meditake.meditake.util.DrawerManager;
+import ph.edu.mobapde.meditake.meditake.util.DrawerUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
 import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
@@ -55,6 +53,7 @@ public class ScheduleListActivity extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener,
                     ViewScheduleDetailsFragment.OnViewScheduleDetailsFragmentInteractionListener{
 
+    public static final float alphaValue = 0.54f;
 
     @BindView(R.id.snackbar_position)
     CoordinatorLayout clSnackbar;
@@ -121,17 +120,12 @@ public class ScheduleListActivity extends AppCompatActivity
 
         if(data != null) {
             Schedule schedule = data.getParcelable(Schedule.TABLE);
-            if(data.get(getString(R.string.schedule_snooze)) == null){
+            int snoozeTime = data.getInt(getString(R.string.schedule_snooze));
+            if(snoozeTime == 0){
                 setNextDrinking(schedule);
-//                view(schedule.getSqlId());
-            }else{
-                int snoozeTime = data.getInt(getString(R.string.schedule_snooze));
-                if(snoozeTime == 0){
-                    setNextDrinking(schedule);
 //                    view(schedule.getSqlId());
-                }else {
-                    setSnooze(schedule, snoozeTime);
-                }
+            }else {
+                setSnooze(schedule, snoozeTime);
             }
             scheduleAdapter.notifyDataSetChanged();
             updateList();
@@ -309,12 +303,13 @@ public class ScheduleListActivity extends AppCompatActivity
         viewScheduleFragment.setOnViewScheduleFragmentInteractionListener(new ViewScheduleFragment.OnViewScheduleFragmentInteractionListener() {
             @Override
             public void onViewScheduleBackgroundClick(Schedule schedule) {
+                Log.wtf("????", "???????????????????");
                 save(schedule);
                 closeViewScheduleFragment();
                 setAlarmForSchedule(schedule);
             }
         });
-        blackOverlay.animate().alpha(0.54f);
+        blackOverlay.animate().alpha(alphaValue);
         ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.slide_up, R.anim.slide_down, R.anim.slide_up, R.anim.slide_down);
         ft.replace(R.id.fragment_medicine_list_placeholder, viewScheduleFragment);
@@ -376,7 +371,7 @@ public class ScheduleListActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        DrawerManager.execute(this, item);
+        DrawerUtil.execute(this, item);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -430,79 +425,32 @@ public class ScheduleListActivity extends AppCompatActivity
     }
 
 
+    /**********************************
+     * REPEATING TIME PICKER FRAGMENT
+     **********************************/
+
+    public void editRepeatingTime(final TextView tvRepeat){
+        BasicRepeatingTimePickerDialogFragment repeatingTimePickerDialogFragment
+                = new BasicRepeatingTimePickerDialogFragment("Drinking Interval", "CHANGE", "CANCEL", String.valueOf((Object)tvRepeat.getText().toString()));
+
+        repeatingTimePickerDialogFragment.setOnClickListener(new BasicRepeatingTimePickerDialogFragment.OnDialogClickListener() {
+            @Override
+            public void onPositiveSelected(int hourValue, int minuteValue) {
+                tvRepeat.setText(DateUtil.parseToTimePickerDisplay(hourValue, minuteValue));
+            }
+
+            @Override
+            public void onNegativeSelected() {
+
+            }
+        });
+
+        repeatingTimePickerDialogFragment.show(getFragmentManager(), BasicRepeatingTimePickerDialogFragment.class.getSimpleName());
+    }
+
     /***********************
      * TIME PICKER FRAGMENT
      ***********************/
-
-    public void editRepeatingTime(final TextView tvRepeat){
-        final AlertDialog.Builder alert = new AlertDialog.Builder(ScheduleListActivity.this);
-        View repeatingTimeSelection = this.getLayoutInflater().inflate(R.layout.fragment_repeating_time_picker, null);
-
-        ButterKnife.bind(repeatingTimeSelection, this);
-
-        Log.wtf("ACTION", "OPENING THE SELCTOR");
-
-        final NumberPicker npHour = (NumberPicker) repeatingTimeSelection.findViewById(R.id.number_picker_hours);
-        final NumberPicker npMinutes = (NumberPicker) repeatingTimeSelection.findViewById(R.id.number_picker_minutes);
-
-        npHour.setMinValue(0);
-        npHour.setMaxValue(168);
-        npMinutes.setMinValue(0);
-        npMinutes.setMaxValue(59);
-
-        if(tvRepeat != null){
-            int hourValue = 0;
-            int minuteValue = 1;
-            int[] timeValues;
-            if(!tvRepeat.getText().toString().equals(DateUtil.REPEATING_TIME_NOT_SET)){
-                timeValues = DateUtil.parseFromTimePicker(tvRepeat.getText().toString());
-
-                Log.wtf("GOT VALUES", timeValues[hourValue] + " hour(s) and " + timeValues[minuteValue] + " minutes");
-                npHour.setValue(npHour.getMinValue() <= timeValues[hourValue] && npHour.getMaxValue() >= timeValues[hourValue] ? timeValues[hourValue] : 0);
-                npMinutes.setValue(npMinutes.getMinValue() <= timeValues[minuteValue] && npMinutes.getMaxValue() >= timeValues[minuteValue] ? timeValues[minuteValue] : 0);
-            }else{
-                timeValues = new int[]{0, 0};
-            }
-        }
-
-        npMinutes.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                if(oldVal == npMinutes.getMinValue() && newVal == npMinutes.getMaxValue()){
-                    npHour.setValue(npHour.getValue() != npHour.getMinValue() ? npHour.getValue()-1 : npHour.getValue());
-                }else if(oldVal == npMinutes.getMaxValue() && newVal == npMinutes.getMinValue()){
-                    npHour.setValue(npHour.getValue() != npHour.getMaxValue() ? npHour.getValue()+1 : npHour.getValue());
-                }
-            }
-        });
-
-        alert.setView(repeatingTimeSelection);
-        alert.setTitle("Drinking Interval");
-        alert.setPositiveButton("CHANGE", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                tvRepeat.setText(DateUtil.parseToTimePickerDisplay(npHour.getValue(), npMinutes.getValue()));
-                dialog.dismiss();
-            }
-        });
-
-        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-
-        final AlertDialog dialog = alert.create();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface arg0) {
-                int[] attrs = {android.R.attr.colorPrimary};
-                TypedArray typedArray = ScheduleListActivity.this.obtainStyledAttributes(attrs);
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
-            }
-        });
-        dialog.show();
-    }
 
     public void editTime(TextView tvTime, TextView tvTimePeriod){
         if(tvTime != null){

@@ -196,7 +196,7 @@ public class AddMedicineDetailsFragment extends Fragment implements BlockingStep
             }
         });
 
-        textInput.show(getActivity().getFragmentManager(), BasicTextInputDialogFragment.class.toString());
+        textInput.show(getActivity().getFragmentManager(), BasicTextInputDialogFragment.class.getSimpleName());
     }
 
     public void removeErrorWarnings(){
