@@ -55,13 +55,13 @@
             android:layout_marginRight="20dp">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="108dp"
                 android:orientation="vertical"
                 android:id="@+id/lin_rv_empty">
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="108dp"
                     android:text="No Medicine to Drink"
                     android:id="@+id/tv_rv_empty"
                     android:textSize="20sp"
