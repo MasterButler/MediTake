@@ -5,99 +5,104 @@
     tools:context=".fragment.schedule.add.AddScheduleMedicineFragment"
     android:background="@android:color/white">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:id="@+id/lin_schedule_add_new_medicine">
-
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="54dp"
-                android:src="@drawable/ic_add_circle_outline_black_24dp"
-                android:paddingRight="6sp"
-                android:paddingLeft="12sp"
-                android:paddingTop="4dp"
-                android:alpha="0.54"
-                android:id="@+id/iv_selection_medicine_type"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:id="@+id/lin_schedule_add_new_medicine">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="54dp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"
+                    android:paddingRight="6sp"
+                    android:paddingLeft="12sp"
+                    android:paddingTop="4dp"
+                    android:alpha="0.54"
+                    android:id="@+id/iv_selection_medicine_type"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingTop="11sp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="14sp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="Add New Medicine"
+                            android:textSize="14sp"
+                            android:gravity="center_vertical"
+                            android:textColor="?attr/editTextColor"
+                            android:paddingRight="16dp"
+                            android:id="@+id/tv_selection_medicine_name"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="11sp">
+                android:layout_weight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="14sp">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:id="@+id/lin_rv_schedule_medicine_empty">
 
+                    <ImageView
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
+                        android:src="@drawable/capsule_black_large"
+                        android:gravity="center"
+                        android:alpha="0.54"/>
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Add New Medicine"
-                        android:textSize="14sp"
-                        android:gravity="center_vertical"
-                        android:textColor="?attr/editTextColor"
-                        android:paddingRight="16dp"
-                        android:id="@+id/tv_selection_medicine_name"/>
-
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Your medicine list is empty"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:textSize="18sp"
+                        android:alpha="0.54"
+                        />
                 </LinearLayout>
 
-                <View
+                <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:id="@+id/lin_rv_schedule_medicine_empty">
-
-                <ImageView
-                    android:layout_width="128dp"
-                    android:layout_height="128dp"
-                    android:src="@drawable/capsule_black_large"
-                    android:gravity="center"
-                    android:alpha="0.54"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Your medicine list is empty"
-                    android:gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:textSize="18sp"
-                    android:alpha="0.54"
-                    />
+                    android:layout_height="match_parent"
+                    android:id="@+id/rv_schedule_medicine_selection"/>
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/rv_schedule_medicine_selection"/>
-        </LinearLayout>
-
-        <!--<LinearLayout-->
+            <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:orientation="horizontal"-->
@@ -105,60 +110,62 @@
             <!--android:gravity="right|bottom">-->
 
             <!--<LinearLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:paddingTop="2dp"-->
-                <!--android:paddingBottom="2dp"-->
-                <!--android:paddingLeft="16dp"-->
-                <!--android:paddingRight="16dp"-->
-                <!--android:background="?attr/selectableItemBackgroundBorderless"-->
-                <!--android:clickable="true"-->
-                <!--android:id="@+id/lin_back_schedule"-->
-                <!--android:gravity="center">-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingTop="2dp"-->
+            <!--android:paddingBottom="2dp"-->
+            <!--android:paddingLeft="16dp"-->
+            <!--android:paddingRight="16dp"-->
+            <!--android:background="?attr/selectableItemBackgroundBorderless"-->
+            <!--android:clickable="true"-->
+            <!--android:id="@+id/lin_back_schedule"-->
+            <!--android:gravity="center">-->
 
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="32dp"-->
-                    <!--android:text="BACK"-->
-                    <!--android:textSize="14sp"-->
-                    <!--android:paddingTop="8dp"-->
-                    <!--android:paddingBottom="8dp"-->
-                    <!--android:paddingLeft="2dp"-->
-                    <!--android:paddingRight="2dp"-->
-                    <!--android:textAlignment="center"-->
-                    <!--android:textColor="?attr/colorPrimary"-->
-                    <!--android:textStyle="bold"/>-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:text="BACK"-->
+            <!--android:textSize="14sp"-->
+            <!--android:paddingTop="8dp"-->
+            <!--android:paddingBottom="8dp"-->
+            <!--android:paddingLeft="2dp"-->
+            <!--android:paddingRight="2dp"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textColor="?attr/colorPrimary"-->
+            <!--android:textStyle="bold"/>-->
 
             <!--</LinearLayout>-->
 
             <!--<LinearLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:paddingTop="2dp"-->
-                <!--android:paddingBottom="2dp"-->
-                <!--android:paddingLeft="16dp"-->
-                <!--android:paddingRight="16dp"-->
-                <!--android:background="?attr/selectableItemBackgroundBorderless"-->
-                <!--android:clickable="true"-->
-                <!--android:id="@+id/lin_save_schedule"-->
-                <!--android:gravity="center">-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingTop="2dp"-->
+            <!--android:paddingBottom="2dp"-->
+            <!--android:paddingLeft="16dp"-->
+            <!--android:paddingRight="16dp"-->
+            <!--android:background="?attr/selectableItemBackgroundBorderless"-->
+            <!--android:clickable="true"-->
+            <!--android:id="@+id/lin_save_schedule"-->
+            <!--android:gravity="center">-->
 
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="32dp"-->
-                    <!--android:text="ADD SCHEDULE"-->
-                    <!--android:textSize="14sp"-->
-                    <!--android:paddingTop="8dp"-->
-                    <!--android:paddingLeft="2dp"-->
-                    <!--android:paddingRight="2dp"-->
-                    <!--android:textAlignment="center"-->
-                    <!--android:textColor="?attr/colorPrimary"-->
-                    <!--android:textStyle="bold"/>-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:text="ADD SCHEDULE"-->
+            <!--android:textSize="14sp"-->
+            <!--android:paddingTop="8dp"-->
+            <!--android:paddingLeft="2dp"-->
+            <!--android:paddingRight="2dp"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textColor="?attr/colorPrimary"-->
+            <!--android:textStyle="bold"/>-->
 
             <!--</LinearLayout>-->
 
 
-        <!--</LinearLayout>-->
-    </LinearLayout>
+            <!--</LinearLayout>-->
+        </LinearLayout>
+
+    </ScrollView>
 
 </FrameLayout>

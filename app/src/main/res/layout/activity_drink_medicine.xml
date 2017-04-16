@@ -72,9 +72,9 @@
             </LinearLayout>
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingRight ="16dp"
-                android:background="?android:attr/colorBackground">
+                android:layout_height="108dp"
+                android:background="?android:attr/colorBackground"
+                android:fadeScrollbars="false">
                 <!--android:layout_weight="1"-->
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
@@ -106,10 +106,7 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:gravity="center">
-
+            android:layout_gravity="center">
             <net.frakbot.glowpadbackport.GlowPadView
                 android:id="@+id/gpv_alarm_medicine"
                 android:layout_width="match_parent"
@@ -127,6 +124,24 @@
                 app:glowRadius="@dimen/glowpadview_glow_radius"
                 app:pointDrawable="@drawable/ic_lockscreen_glowdot"/>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:id="@+id/lin_text">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Swipe to drink medicine"
+                android:textSize="16dp"
+                android:textColor="?android:attr/colorBackground"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
 
         <!--<Button-->
             <!--android:id="@+id/btn_toggle_padmult"-->
@@ -165,5 +180,4 @@
             <!--android:textSize="20dp"/>-->
 
     </LinearLayout>
-
 </RelativeLayout>

@@ -5,14 +5,19 @@
     tools:context=".fragment.schedule.add.AddScheduleDetailsFragment"
     android:background="@android:color/white">
 
-    <LinearLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-        <!--android:layout_marginLeft="36dp"-->
-        <!--android:layout_marginRight="36dp"-->
-        <!--android:layout_marginTop="60dp"-->
-        <!--android:layout_marginBottom="60dp"-->
+            <!--android:layout_marginLeft="36dp"-->
+            <!--android:layout_marginRight="36dp"-->
+            <!--android:layout_marginTop="60dp"-->
+            <!--android:layout_marginBottom="60dp"-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -302,70 +307,70 @@
                 <!--android:background="@android:color/darker_gray"/>-->
 
                 <!--<Space-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1"/>-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"/>-->
 
 
                 <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:paddingBottom="8sp"-->
-                    <!--android:gravity="right|bottom">-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:paddingBottom="8sp"-->
+                <!--android:gravity="right|bottom">-->
 
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:paddingTop="2dp"-->
-                        <!--android:paddingBottom="2dp"-->
-                        <!--android:paddingLeft="16dp"-->
-                        <!--android:paddingRight="16dp"-->
-                        <!--android:background="?attr/selectableItemBackgroundBorderless"-->
-                        <!--android:clickable="true"-->
-                        <!--android:id="@+id/lin_discard_schedule"-->
-                        <!--android:gravity="center">-->
+                <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingTop="2dp"-->
+                <!--android:paddingBottom="2dp"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:paddingRight="16dp"-->
+                <!--android:background="?attr/selectableItemBackgroundBorderless"-->
+                <!--android:clickable="true"-->
+                <!--android:id="@+id/lin_discard_schedule"-->
+                <!--android:gravity="center">-->
 
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="32dp"-->
-                            <!--android:text="DISCARD"-->
-                            <!--android:textSize="14sp"-->
-                            <!--android:paddingTop="8dp"-->
-                            <!--android:paddingBottom="8dp"-->
-                            <!--android:paddingLeft="2dp"-->
-                            <!--android:paddingRight="2dp"-->
-                            <!--android:textAlignment="center"-->
-                            <!--android:textColor="?attr/colorPrimary"-->
-                            <!--android:textStyle="bold"/>-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="32dp"-->
+                <!--android:text="DISCARD"-->
+                <!--android:textSize="14sp"-->
+                <!--android:paddingTop="8dp"-->
+                <!--android:paddingBottom="8dp"-->
+                <!--android:paddingLeft="2dp"-->
+                <!--android:paddingRight="2dp"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textColor="?attr/colorPrimary"-->
+                <!--android:textStyle="bold"/>-->
 
-                    <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
 
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:paddingTop="2dp"-->
-                        <!--android:paddingBottom="2dp"-->
-                        <!--android:paddingLeft="16dp"-->
-                        <!--android:paddingRight="16dp"-->
-                        <!--android:background="?attr/selectableItemBackgroundBorderless"-->
-                        <!--android:clickable="true"-->
-                        <!--android:id="@+id/lin_continue_schedule"-->
-                        <!--android:gravity="center">-->
+                <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingTop="2dp"-->
+                <!--android:paddingBottom="2dp"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:paddingRight="16dp"-->
+                <!--android:background="?attr/selectableItemBackgroundBorderless"-->
+                <!--android:clickable="true"-->
+                <!--android:id="@+id/lin_continue_schedule"-->
+                <!--android:gravity="center">-->
 
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="32dp"-->
-                            <!--android:text="CONTINUE"-->
-                            <!--android:textSize="14sp"-->
-                            <!--android:paddingTop="8dp"-->
-                            <!--android:paddingLeft="2dp"-->
-                            <!--android:paddingRight="2dp"-->
-                            <!--android:textAlignment="center"-->
-                            <!--android:textColor="?attr/colorPrimary"-->
-                            <!--android:textStyle="bold"/>-->
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="32dp"-->
+                <!--android:text="CONTINUE"-->
+                <!--android:textSize="14sp"-->
+                <!--android:paddingTop="8dp"-->
+                <!--android:paddingLeft="2dp"-->
+                <!--android:paddingRight="2dp"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textColor="?attr/colorPrimary"-->
+                <!--android:textStyle="bold"/>-->
 
-                    <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
 
 
                 <!--</LinearLayout>-->
@@ -373,6 +378,8 @@
             </LinearLayout>
 
         </LinearLayout>
+
+    </ScrollView>
 
     <FrameLayout
         android:id="@+id/fragment_schedule_options_selection"
