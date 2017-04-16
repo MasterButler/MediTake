@@ -5,14 +5,19 @@
     tools:context=".fragment.schedule.add.AddScheduleDetailsFragment"
     android:background="@android:color/white">
 
-    <LinearLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-        <!--android:layout_marginLeft="36dp"-->
-        <!--android:layout_marginRight="36dp"-->
-        <!--android:layout_marginTop="60dp"-->
-        <!--android:layout_marginBottom="60dp"-->
+            <!--android:layout_marginLeft="36dp"-->
+            <!--android:layout_marginRight="36dp"-->
+            <!--android:layout_marginTop="60dp"-->
+            <!--android:layout_marginBottom="60dp"-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -381,9 +386,9 @@
                 <!--android:background="@android:color/darker_gray"/>-->
 
                 <!--<Space-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_weight="1"/>-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"/>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -469,6 +474,8 @@
             </LinearLayout>
 
         </LinearLayout>
+
+    </ScrollView>
 
     <FrameLayout
         android:id="@+id/fragment_schedule_options_selection"

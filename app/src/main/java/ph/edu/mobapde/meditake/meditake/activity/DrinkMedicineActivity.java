@@ -34,6 +34,7 @@ import ph.edu.mobapde.meditake.meditake.util.AlarmUtil;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicinePlanUtil;
 import ph.edu.mobapde.meditake.meditake.util.MedicineUtil;
+import ph.edu.mobapde.meditake.meditake.util.ScheduleUtil;
 import ph.edu.mobapde.meditake.meditake.util.ThemeUtil;
 
 public class DrinkMedicineActivity extends AppCompatActivity {
@@ -43,6 +44,9 @@ public class DrinkMedicineActivity extends AppCompatActivity {
     public static final int PENDING_NEXT_ACTIVITY=55;
     public static final int NOTIFICATION_ANNOUNCEMENT=55;
     public static final int PENDING_ALARM_RECEIVER=56;
+
+    @BindView(R.id.lin_text)
+    LinearLayout linTextHint;
 
     @BindView(R.id.lin_rv_empty)
     LinearLayout linEmptyMedicineList;
@@ -60,6 +64,7 @@ public class DrinkMedicineActivity extends AppCompatActivity {
 
     AlarmMedicineAdapter alarmMedicineAdapter;
 
+    ScheduleUtil scheduleUtil;
     MedicinePlanUtil medicinePlanUtil;
     MedicineUtil medicineUtil;
 
@@ -96,6 +101,7 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         medicineUtil = new MedicineUtil(getBaseContext());
+        scheduleUtil = new ScheduleUtil(getBaseContext());
         medicinePlanUtil = new MedicinePlanUtil(getBaseContext());
 
         isMilitary = false;
@@ -149,6 +155,8 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
 
+//        linTextHint.setVisibility(View.GONE);
+
         String displayTime = DateUtil.format(hour, minute, isMilitary);
         this.tvAlarmTime.setText(displayTime.split("\\s+")[0]);
         this.tvAlarmTimePeriod.setText(displayTime.split("\\s+")[1]);
@@ -167,11 +175,13 @@ public class DrinkMedicineActivity extends AppCompatActivity {
             @Override
             public void onGrabbed(View v, int handle) {
                 setClicked(true);
+//                linTextHint.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onReleased(View v, int handle) {
                 setClicked(false);
+//                linTextHint.setVisibility(View.GONE);
             }
 
             @Override
@@ -279,10 +289,16 @@ public class DrinkMedicineActivity extends AppCompatActivity {
         if(v.hasVibrator()){
             v.cancel();
         }
-        Intent i = new Intent(getBaseContext(), ScheduleListActivity.class);
-        i.putExtra(Schedule.TABLE, schedule);
-        i.putExtra(getString(R.string.schedule_snooze), 0);
-        startActivity(i);
+
+        if (schedule.getDrinkingInterval() == 0) {
+            schedule.setActivated(false);
+            AlarmUtil.stopAssociatedAlarmsWithSchedule(getBaseContext(), schedule);
+        } else {
+            schedule.setNextDrinkingTime(schedule.getNextDrinkingTime() + schedule.getDrinkingInterval() * DateUtil.MILLIS_TO_MINUTES);
+            AlarmUtil.setAlarmForSchedule(getBaseContext(), schedule);
+        }
+        scheduleUtil.updateSchedule(schedule);
+
         finish();
     }
 
