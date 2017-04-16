@@ -39,7 +39,7 @@ public class AlertDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        return new AlertDialog.Builder(getActivity())
+        return new android.app.AlertDialog.Builder(getActivity())
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(positiveButton, new DialogInterface.OnClickListener(){
@@ -65,8 +65,8 @@ public class AlertDialogFragment extends DialogFragment {
         super.onStart();
         int[] attrs = {android.R.attr.colorAccent};
         TypedArray typedArray = getActivity().obtainStyledAttributes(attrs);
-        ((AlertDialog) getDialog()).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
-        ((AlertDialog) getDialog()).getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
+        ((android.app.AlertDialog) getDialog()).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
+        ((android.app.AlertDialog) getDialog()).getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(typedArray.getColor(0, Color.BLACK));
     }
 
     public void setOnDialogClickListener(OnDialogClickListener mOnDialogClickListener) {

@@ -13,43 +13,37 @@
         android:label="MediTake - Medicine Cabinet"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-
         <activity
             android:name=".activity.AddMedicineActivity"
             android:label="@string/add_medicine"
             android:parentActivityName=".activity.MedicineListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.MedicineListActivity"
+            android:hardwareAccelerated="true"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="true" />
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ViewMedicineActivity"
             android:label="@string/view_medicine"
             android:parentActivityName=".activity.MedicineListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.EditMedicineActivity"
             android:label="@string/edit_medicine_info"
             android:parentActivityName=".activity.ViewMedicineActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.ScheduleListActivity"
+            android:hardwareAccelerated="true"
             android:label="@string/title_activity_schedule_list"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="true" />
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AddScheduleActivity"
             android:label="@string/title_activity_add_schedule"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity android:name=".activity.WelcomeScreenActivity">
+
             <!-- INTENT FILTER NAME WILL ON -->
 
             <intent-filter android:label="@string/app_name">
@@ -58,13 +52,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.DrinkMedicineActivity"/>
-
-        <activity android:name=".activity.SettingsActivity"
+        <activity android:name=".activity.DrinkMedicineActivity" />
+        <activity
+            android:name=".activity.SettingsActivity"
             android:label="@string/settings"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver
             android:name=".service.AlarmReceiver"
@@ -75,6 +67,7 @@
             android:name=".service.AlarmService"
             android:exported="false" />
 
+        <activity android:name=".activity.AboutActivity"></activity>
     </application>
 
 </manifest>

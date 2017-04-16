@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import ph.edu.mobapde.meditake.meditake.R;
 import ph.edu.mobapde.meditake.meditake.RequestCodes;
+import ph.edu.mobapde.meditake.meditake.activity.AboutActivity;
 import ph.edu.mobapde.meditake.meditake.activity.MedicineListActivity;
 import ph.edu.mobapde.meditake.meditake.activity.ScheduleListActivity;
 import ph.edu.mobapde.meditake.meditake.activity.SettingsActivity;
@@ -40,6 +41,12 @@ public class DrawerUtil {
                 i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 i.setClass(activity.getBaseContext(), SettingsActivity.class);
                 activity.startActivityForResult(i, RequestCodes.REQUEST_SETTINGS_UPDATE);
+                break;
+            case R.id.nav_about:
+                i = new Intent();
+                i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                i.setClass(activity.getBaseContext(), AboutActivity.class);
+                activity.startActivity(i);
                 break;
             default: Toast.makeText(activity.getBaseContext(), "Unexpected error encountered. Please try again", Toast.LENGTH_SHORT);
         }

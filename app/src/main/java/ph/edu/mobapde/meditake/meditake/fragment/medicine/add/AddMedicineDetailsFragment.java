@@ -1,13 +1,8 @@
 package ph.edu.mobapde.meditake.meditake.fragment.medicine.add;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,12 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,21 +22,16 @@ import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ph.edu.mobapde.meditake.meditake.R;
-import ph.edu.mobapde.meditake.meditake.adapter.page.AddMedicineStepAdapter;
-import ph.edu.mobapde.meditake.meditake.adapter.page.AddScheduleStepAdapter;
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
-import ph.edu.mobapde.meditake.meditake.beans.Schedule;
-import ph.edu.mobapde.meditake.meditake.dialog.AlertDialogFragment;
+import ph.edu.mobapde.meditake.meditake.dialog.BasicNumberPickerDialogFragment;
 import ph.edu.mobapde.meditake.meditake.dialog.BasicTextInputDialogFragment;
-import ph.edu.mobapde.meditake.meditake.fragment.schedule.add.AddScheduleDetailsFragment;
-import ph.edu.mobapde.meditake.meditake.util.AlarmUtil;
-import ph.edu.mobapde.meditake.meditake.util.DateUtil;
 import ph.edu.mobapde.meditake.meditake.util.instantiator.MedicineInstantiatorUtil;
 
 import static android.widget.FrameLayout.OnClickListener;
@@ -58,6 +44,12 @@ public class AddMedicineDetailsFragment extends Fragment implements BlockingStep
     public static final String TITLE = "Add Information";
     private static final String ARG_SECTION_NUMBER = "section_number";
     private int sectionNumber;
+
+    public static final int DOSAGE_LOWER_LIMIT = 0;
+    public static final int DOSAGE_UPPER_LIMIT = 20;
+
+    public static final int AMOUNT_LOWER_LIMIT = 0;
+    public static final int AMOUNT_UPPER_LIMIT = 1000;
 
     @BindView(R.id.rv_medicine_background_color)
     RelativeLayout rvMedicineBgColor;
@@ -80,6 +72,7 @@ public class AddMedicineDetailsFragment extends Fragment implements BlockingStep
 
     ArrayList<Integer> medicineDrawable;
     ArrayList<Integer> medicineBackground;
+    ArrayList<String> medicineType;
 
     private Uri ringtoneUriUsed;
     boolean isMilitary;
@@ -116,6 +109,11 @@ public class AddMedicineDetailsFragment extends Fragment implements BlockingStep
         medicineBackground.add(getResources().getColor(R.color.medicine_capsule_selection));
         medicineBackground.add(getResources().getColor(R.color.medicine_syrup_selection));
         medicineBackground.add(getResources().getColor(R.color.medicine_tablet_selection));
+
+        medicineType = new ArrayList<>();
+        medicineType.add("capsules");
+        medicineType.add("mL");
+        medicineType.add("tablets");
     }
 
     @Override
@@ -148,14 +146,14 @@ public class AddMedicineDetailsFragment extends Fragment implements BlockingStep
         tvDosage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                showEditDialog("Dosage", tvDosage);
+                showNumberPickerDialog("Dosage", tvDosage, DOSAGE_LOWER_LIMIT, DOSAGE_UPPER_LIMIT);
             }
         });
 
         tvAmount.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                showEditDialog("Amount remaining", tvAmount);
+                showNumberPickerDialog("Amount remaining", tvAmount, AMOUNT_LOWER_LIMIT, AMOUNT_UPPER_LIMIT);
             }
         });
 
@@ -180,7 +178,7 @@ public class AddMedicineDetailsFragment extends Fragment implements BlockingStep
     }
 
     public void showEditDialog(String title, final TextView tvEdit){
-        BasicTextInputDialogFragment textInput = new BasicTextInputDialogFragment(title, "Ok", "Cancel", tvEdit.getText().toString(), EditorInfo.TYPE_CLASS_TEXT);
+        BasicTextInputDialogFragment textInput = new BasicTextInputDialogFragment(title, "SET", "CANCEL", tvEdit.getText().toString(), EditorInfo.TYPE_CLASS_TEXT);
         textInput.setOnClickListener(new BasicTextInputDialogFragment.OnDialogClickListener() {
             @Override
             public void onPositiveSelected(String msg) {
@@ -197,6 +195,23 @@ public class AddMedicineDetailsFragment extends Fragment implements BlockingStep
         });
 
         textInput.show(getActivity().getFragmentManager(), BasicTextInputDialogFragment.class.getSimpleName());
+    }
+
+    public void showNumberPickerDialog(String title, final TextView tvEdit, int lowerLimit, int upperLimit){
+        BasicNumberPickerDialogFragment numberPicker = new BasicNumberPickerDialogFragment(title, "SET", "CANCEL", tvEdit.getText().toString(), lowerLimit, upperLimit);
+        numberPicker.setOnClickListener(new BasicNumberPickerDialogFragment.OnDialogClickListener() {
+            @Override
+            public void onPositiveSelected(String msg) {
+                editTextView(tvEdit, msg);
+            }
+
+            @Override
+            public void onNegativeSelected() {
+
+            }
+        });
+
+        numberPicker.show(getActivity().getFragmentManager(), BasicNumberPickerDialogFragment.class.getSimpleName());
     }
 
     public void removeErrorWarnings(){
@@ -220,8 +235,8 @@ public class AddMedicineDetailsFragment extends Fragment implements BlockingStep
         med.setGenericName(tvGenericName.getText().toString());
         med.setBrandName(tvBrandName.getText().toString());
         med.setMedicineFor(tvMedicineFor.getText().toString());
-        med.setDosage(0);
-        med.setAmount(0);
+        med.setDosage(Integer.valueOf(tvDosage.getText().toString().trim().split("\\s+")[0]));
+        med.setAmount(Long.valueOf(tvAmount.getText().toString().trim().split("\\s+")[0]));
 
         return med;
     }
@@ -231,6 +246,9 @@ public class AddMedicineDetailsFragment extends Fragment implements BlockingStep
         this.selectedValue = selected;
         rvMedicineBgColor.setBackgroundColor(medicineBackground.get(selected));
         ivMedicineDrawable.setImageResource(medicineDrawable.get(selected));
+
+        tvDosage.setText("0 " + medicineType.get(selected));
+        tvAmount.setText("0 " + medicineType.get(selected));
     }
 
     /**************
