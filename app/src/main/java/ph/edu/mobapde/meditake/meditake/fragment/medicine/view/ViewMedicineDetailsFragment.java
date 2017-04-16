@@ -45,6 +45,7 @@ import ph.edu.mobapde.meditake.meditake.adapter.recyclerview.ViewScheduleMedicin
 import ph.edu.mobapde.meditake.meditake.beans.Medicine;
 import ph.edu.mobapde.meditake.meditake.beans.MedicinePlan;
 import ph.edu.mobapde.meditake.meditake.beans.Schedule;
+import ph.edu.mobapde.meditake.meditake.dialog.BasicNumberPickerDialogFragment;
 import ph.edu.mobapde.meditake.meditake.dialog.BasicTextInputDialogFragment;
 import ph.edu.mobapde.meditake.meditake.util.AlarmUtil;
 import ph.edu.mobapde.meditake.meditake.util.DateUtil;
@@ -62,6 +63,12 @@ public class ViewMedicineDetailsFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_MEDICINE = "medicine";
+
+    public static final int DOSAGE_LOWER_LIMIT = 0;
+    public static final int DOSAGE_UPPER_LIMIT = 20;
+
+    public static final int AMOUNT_LOWER_LIMIT = 0;
+    public static final int AMOUNT_UPPER_LIMIT = 1000;
 
     @BindView(R.id.rv_medicine_background_color)
     RelativeLayout rvMedicineBgColor;
@@ -123,9 +130,9 @@ public class ViewMedicineDetailsFragment extends Fragment {
         medicine = medicineUtil.getMedicine(medId);
 
         medicineDrawable = new ArrayList<>();
-        medicineDrawable.add(R.drawable.pill_capsule_white);
-        medicineDrawable.add(R.drawable.medicine_bottle_white);
-        medicineDrawable.add(R.drawable.aspirins_white);
+        medicineDrawable.add(R.drawable.capsule_white_large);
+        medicineDrawable.add(R.drawable.syrup_white_large);
+        medicineDrawable.add(R.drawable.tablet_white_large);
 
         medicineBackground = new ArrayList<>();
         medicineBackground.add(getResources().getColor(R.color.medicine_capsule_selection));
@@ -180,14 +187,14 @@ public class ViewMedicineDetailsFragment extends Fragment {
         tvDosage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                showEditDialog("Dosage", tvDosage);
+                showNumberPickerDialog("Dosage", tvDosage, DOSAGE_LOWER_LIMIT, DOSAGE_UPPER_LIMIT);
             }
         });
 
         tvAmount.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                showEditDialog("Amount remaining", tvAmount);
+                showNumberPickerDialog("Amount remaining", tvAmount, AMOUNT_LOWER_LIMIT, AMOUNT_UPPER_LIMIT);
             }
         });
 
@@ -237,6 +244,22 @@ public class ViewMedicineDetailsFragment extends Fragment {
         textInput.show(getActivity().getFragmentManager(), BasicTextInputDialogFragment.class.toString());
     }
 
+    public void showNumberPickerDialog(String title, final TextView tvEdit, int lowerLimit, int upperLimit){
+        BasicNumberPickerDialogFragment numberPicker = new BasicNumberPickerDialogFragment(title, "SET", "CANCEL", tvEdit.getText().toString(), lowerLimit, upperLimit);
+        numberPicker.setOnClickListener(new BasicNumberPickerDialogFragment.OnDialogClickListener() {
+            @Override
+            public void onPositiveSelected(String msg) {
+                editTextView(tvEdit, msg);
+            }
+
+            @Override
+            public void onNegativeSelected() {
+
+            }
+        });
+
+        numberPicker.show(getActivity().getFragmentManager(), BasicNumberPickerDialogFragment.class.getSimpleName());
+    }
 
     public void removeErrorWarnings(){
         if(!tvGenericName.getText().toString().isEmpty()) {
