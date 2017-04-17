@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -71,8 +72,8 @@ public class ViewScheduleMedicineSelectionAdapter extends CursorRecyclerViewAdap
             viewHolder.ivMedicineDrawable.setImageResource(medicineDrawable.get(selected));
 
             viewHolder.tvMedicineName.setText(med.getName());
-            viewHolder.parentView.setTag(viewHolder.cbSelected);
-            viewHolder.parentView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.linHolder.setTag(viewHolder.cbSelected);
+            viewHolder.linHolder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     CheckBox value = (CheckBox) v.getTag();
@@ -107,6 +108,9 @@ public class ViewScheduleMedicineSelectionAdapter extends CursorRecyclerViewAdap
 
     public class ViewScheduleMedicineSelectionViewHolder extends RecyclerView.ViewHolder{
         View parentView;
+
+        @BindView(R.id.lin_holder)
+        LinearLayout linHolder;
 
         @BindView(R.id.iv_medicine_background_color)
         ImageView ivMedicineBgColor;
