@@ -13,7 +13,7 @@
             android:layout_width="80dp"
             android:layout_height="30dp"
             android:layout_gravity="top"
-            android:src="@drawable/pills_1_colored" />
+            android:src="@drawable/aspirins_black" />
 
         <TextView
             android:id="@+id/et_add_brand_name"

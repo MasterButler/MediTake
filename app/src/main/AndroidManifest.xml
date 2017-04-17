@@ -27,18 +27,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:screenOrientation="portrait"
-            android:name=".activity.ViewMedicineActivity"
-            android:label="@string/view_medicine"
-            android:parentActivityName=".activity.MedicineListActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:screenOrientation="portrait"
-            android:name=".activity.EditMedicineActivity"
-            android:label="@string/edit_medicine_info"
-            android:parentActivityName=".activity.ViewMedicineActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:screenOrientation="portrait"
             android:name=".activity.ScheduleListActivity"
             android:hardwareAccelerated="true"
             android:label="@string/title_activity_schedule_list"

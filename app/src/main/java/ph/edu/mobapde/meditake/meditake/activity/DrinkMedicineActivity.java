@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import net.frakbot.glowpadbackport.GlowPadView;
@@ -56,6 +57,9 @@ public class DrinkMedicineActivity extends AppCompatActivity {
 
     @BindView(R.id.gpv_alarm_medicine)
     GlowPadView glowPad;
+
+    @BindView(R.id.sv_medicine_container)
+    ScrollView svMedicineContainer;
 
     @BindView(R.id.tv_alarm_display_time)
     TextView tvAlarmTime;
@@ -163,10 +167,10 @@ public class DrinkMedicineActivity extends AppCompatActivity {
 
         if(alarmMedicineAdapter.getItemCount() == 0){
             linEmptyMedicineList.setVisibility(View.VISIBLE);
-            rvMedicineAlert.setVisibility(View.GONE);
+            svMedicineContainer.setVisibility(View.GONE);
         }else{
             linEmptyMedicineList.setVisibility(View.GONE);
-            rvMedicineAlert.setVisibility(View.VISIBLE);
+            svMedicineContainer.setVisibility(View.VISIBLE);
         }
 
         //final int[] mults = {1, 2, 3, 4, 6, 8, 10, 12, 16, 20, 32};

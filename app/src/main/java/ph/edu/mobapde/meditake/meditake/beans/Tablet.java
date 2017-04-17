@@ -27,7 +27,7 @@ public class Tablet extends Medicine{
 
     public void setTabletSpecificInfo(){
         this.modifier = " tablets";
-        this.icon = R.drawable.selection_lozenge_colored;
+        this.icon = R.drawable.aspirins_white;
 //        this.color = Color.parseColor("#DCEDC8");
 //        this.color = Color.parseColor("#00C853");
 //        this.color = Color.parseColor("#283593");

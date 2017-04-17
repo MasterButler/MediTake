@@ -12,6 +12,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -95,7 +96,7 @@ public class ViewScheduleDetailsFragment extends Fragment {
     Switch switchIsVibrate;
 
     @BindView(R.id.siv_schedule_medicine_list)
-    ScrollView sivMedicineList;
+    NestedScrollView sivMedicineList;
 
     ViewScheduleMedicineAdapter viewScheduleMedicineAdapter;
 

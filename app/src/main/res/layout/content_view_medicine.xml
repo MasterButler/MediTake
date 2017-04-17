@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:src="@drawable/pills_1_colored"
+            android:src="@drawable/pill_capsule_black"
             android:id="@+id/imageView"
             android:layout_margin="8dp"
             android:layout_height="match_parent"

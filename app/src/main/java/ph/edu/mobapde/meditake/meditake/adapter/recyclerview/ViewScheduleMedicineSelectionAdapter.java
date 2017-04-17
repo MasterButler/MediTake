@@ -30,6 +30,9 @@ public class ViewScheduleMedicineSelectionAdapter extends CursorRecyclerViewAdap
 
     ArrayList<Integer> checkedIds;
 
+    ArrayList<Integer> medicineDrawable;
+    ArrayList<Integer> medicineBackground;
+
     private OnViewScheduleMedicineSelectionClickListener onViewScheduleMedicineSelectionClickListener;
 
     public ViewScheduleMedicineSelectionAdapter(Context context, Cursor cursor, String column, ArrayList<Integer> idsToRemove) {
@@ -37,6 +40,16 @@ public class ViewScheduleMedicineSelectionAdapter extends CursorRecyclerViewAdap
         this.contextHolder = context;
         setHasStableIds(true);
         checkedIds = idsToRemove;
+
+        medicineDrawable = new ArrayList<>();
+        medicineDrawable.add(R.drawable.pill_capsule_white);
+        medicineDrawable.add(R.drawable.medicine_bottle_white);
+        medicineDrawable.add(R.drawable.aspirins_white);
+
+        medicineBackground = new ArrayList<>();
+        medicineBackground.add(R.drawable.medicine_capsule_background);
+        medicineBackground.add(R.drawable.medicine_syrup_background);
+        medicineBackground.add(R.drawable.medicine_tablet_background);
     }
 
     @Override
@@ -52,7 +65,11 @@ public class ViewScheduleMedicineSelectionAdapter extends CursorRecyclerViewAdap
 
         if(id != -1){
             Medicine med = MedicineInstantiatorUtil.createBeanFromCursor(cursor);
-            viewHolder.ivMedicineType.setImageResource(med.getIcon());
+
+            int selected = MedicineInstantiatorUtil.getMedicineInstanceOf(med);
+            viewHolder.ivMedicineBgColor.setImageResource(medicineBackground.get(selected));
+            viewHolder.ivMedicineDrawable.setImageResource(medicineDrawable.get(selected));
+
             viewHolder.tvMedicineName.setText(med.getName());
             viewHolder.parentView.setTag(viewHolder.cbSelected);
             viewHolder.parentView.setOnClickListener(new View.OnClickListener() {
@@ -91,8 +108,11 @@ public class ViewScheduleMedicineSelectionAdapter extends CursorRecyclerViewAdap
     public class ViewScheduleMedicineSelectionViewHolder extends RecyclerView.ViewHolder{
         View parentView;
 
-        @BindView(R.id.iv_selection_medicine_type)
-        ImageView ivMedicineType;
+        @BindView(R.id.iv_medicine_background_color)
+        ImageView ivMedicineBgColor;
+        @BindView(R.id.iv_medicine_drawable)
+        ImageView ivMedicineDrawable;
+
         @BindView(R.id.tv_selection_medicine_name)
         TextView tvMedicineName;
         @BindView(R.id.cb_selection_medicine_selected)

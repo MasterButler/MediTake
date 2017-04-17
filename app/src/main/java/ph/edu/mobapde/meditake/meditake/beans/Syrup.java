@@ -27,7 +27,7 @@ public class Syrup extends Medicine{
 
     public void setSyrupSpecificInfo(){
         this.modifier = " mL";
-        this.icon = R.drawable.selection_syrup_colored;
+        this.icon = R.drawable.medicine_bottle_white;
 //        this.color = Color.parseColor("#FFCDD2");
 //        this.color = Color.parseColor("#D50000");
 //        this.color = Color.parseColor("#EF6C00");
